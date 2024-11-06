@@ -42,6 +42,7 @@ public class SocketServerService {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine); // 받은 메시지 출력
+                out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
                 messagingTemplate.convertAndSend("/topic/messages", inputLine); // 클라이언트에 실시간 전송
                 out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
                 out.flush(); // 명시적으로 flush 호출
