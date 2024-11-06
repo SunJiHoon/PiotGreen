@@ -31,7 +31,10 @@ public class SocketServerService {
 
                 while (true) {
                     Socket clientSocket = serverSocket.accept(); // 클라이언트 연결 대기
-                    handleClient(clientSocket);
+                    // 새 클라이언트 연결마다 독립적인 스레드로 처리
+                    new Thread(() -> handleClient(clientSocket)).start();
+//                    Socket clientSocket = serverSocket.accept(); // 클라이언트 연결 대기
+//                    handleClient(clientSocket);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
