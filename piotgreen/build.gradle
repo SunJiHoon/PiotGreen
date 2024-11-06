@@ -28,6 +28,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// WebSocket 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// STOMP 프로토콜을 통한 메시지 브로커 기능을 제공하는 의존성
+	implementation 'org.springframework:spring-messaging'
+
 }
 
 tasks.named('test') {
