@@ -15,9 +15,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
     }
 
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/websocket").withSockJS();
+//    }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").withSockJS();
+        registry.addEndpoint("/websocket")
+                .setAllowedOrigins("http://main.putiez.com", "ws://main.putiez.com") // WebSocket 도메인 추가
+                .withSockJS();
     }
 
 }
