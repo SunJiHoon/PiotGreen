@@ -12,9 +12,9 @@ import java.net.Socket;
 public class LightingPiClientService {
 //    ## 각 모듈간 tcp server를 사용한다.
 //- piotgreen: 8088
-//- intrusion: 8089 *
+//- intrusion: 8089
 //- irrigation: 8090
-//- lighting: 8091
+//- lighting: 8091 *
     private static final String SUB_PI_IP = "lighting.putiez.com"; // 서브 Pi IP 주소
     private static final int SUB_PI_PORT = 8091; // 서브 Pi의 포트 번호
 

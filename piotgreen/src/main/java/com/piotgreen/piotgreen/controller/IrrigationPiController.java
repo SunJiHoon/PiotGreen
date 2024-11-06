@@ -12,7 +12,7 @@ public class IrrigationPiController {
     @Autowired
     private IrrigationPiClientService irrigationPiClientService;
 
-    @GetMapping("/send-command")
+    @GetMapping("/send-irrigation-command")
     public String sendCommand(@RequestParam String command) {
         return irrigationPiClientService.sendCommand(command);
     }
