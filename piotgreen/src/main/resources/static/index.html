@@ -15,13 +15,24 @@
     const socket = new SockJS('/websocket');
     const stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function () {
-        stompClient.subscribe('/topic/messages', function (message) {
+    stompClient.subscribe('/topic/messages', function (message) {
+        console.log("Received message body:", message.body); // 메시지 본문 확인
+        if (message.body) {
             const msgElement = document.createElement("p");
-            msgElement.textContent = "Received: " + message.body;
-            messagesDiv.appendChild(msgElement);
-        });
+            msgElement.textContent = message.body;
+            document.getElementById("messages").appendChild(msgElement);
+        } else {
+            console.log("Received an empty message body."); // 빈 메시지 여부 확인
+        }
     });
+
+    // stompClient.connect({}, function () {
+    //     stompClient.subscribe('/topic/messages', function (message) {
+    //         const msgElement = document.createElement("p");
+    //         msgElement.textContent = "Received: " + message.body;
+    //         messagesDiv.appendChild(msgElement);
+    //     });
+    // });
 </script>
 </body>
 </html>
