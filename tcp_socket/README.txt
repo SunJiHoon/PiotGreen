@@ -12,8 +12,19 @@
 
 ## 각 파일 build 방법
 - gcc -o server tcpserver.c -lpthread -lwiringPi
+- gcc -o server_intrusion tcpserver_intrusion.c -lpthread -lwiringPi
+- gcc -o server_irrigation tcpserver_irrigation.c -lpthread -lwiringPi
+- gcc -o server_lighting tcpserver_lighting.c -lpthread -lwiringPi
+
 - gcc -o client tcpclient.c
 
 ## 각 실행 파일 실행법
 - ./server
 - ./client serverip
+
+## 각 모듈간 tcp server를 사용한다.
+- piotgreen: 8088
+- intrusion: 8089
+- irrigation: 8090
+- lighting: 8091
+
