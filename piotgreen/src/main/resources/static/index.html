@@ -19,7 +19,8 @@
 
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/messages', function (message) {
-            console.log("Received message body:", message.body); // 메시지 본문 확인
+            console.log("Received message :", message); // 메시지 본문 확인
+            // console.log("Received message body:", message.body); // 메시지 본문 확인
             if (message.body) {
                 const msgElement = document.createElement("p");
                 msgElement.textContent = message.body;
