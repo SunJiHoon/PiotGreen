@@ -23,7 +23,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
-                .setAllowedOrigins("http://main.putiez.com", "ws://main.putiez.com") // WebSocket 도메인 추가
+                .setAllowedOrigins("*") // WebSocket 도메인 추가
+//                .setAllowedOrigins("http://main.putiez.com", "ws://main.putiez.com") // WebSocket 도메인 추가
                 .withSockJS();
     }
 
