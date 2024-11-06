@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Socket Message Display</title>
+    <title>Socket Server Messages</title>
 </head>
 <body>
-<h1>Server Message</h1>
+<h1>Received Messages</h1>
 <div id="messages"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
@@ -18,7 +18,7 @@
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/messages', function (message) {
             const msgElement = document.createElement("p");
-            msgElement.textContent = message.body;
+            msgElement.textContent = "Received: " + message.body;
             messagesDiv.appendChild(msgElement);
         });
     });

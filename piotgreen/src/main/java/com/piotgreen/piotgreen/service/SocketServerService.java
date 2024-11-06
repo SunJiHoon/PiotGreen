@@ -1,6 +1,8 @@
 package com.piotgreen.piotgreen.service;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -12,6 +14,9 @@ import java.net.Socket;
 @Service
 public class SocketServerService {
     private static final int SERVER_PORT = 8088; // 서버 포트 설정
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate; // WebSocket 메시지 전송 템플릿
 
     @PostConstruct
     public void startServer() {
@@ -37,6 +42,7 @@ public class SocketServerService {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine); // 받은 메시지 출력
+                messagingTemplate.convertAndSend("/topic/messages", inputLine); // 클라이언트에 실시간 전송
                 out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
             }
         } catch (Exception e) {
