@@ -13,6 +13,11 @@ import java.net.Socket;
 
 @Service
 public class SocketServerService {
+//    ## 각 모듈간 tcp server를 사용한다.
+//- piotgreen: 8088 *
+//- intrusion: 8089
+//- irrigation: 8090
+//- lighting: 8091
     private static final int SERVER_PORT = 8088; // 서버 포트 설정
 
     @Autowired
