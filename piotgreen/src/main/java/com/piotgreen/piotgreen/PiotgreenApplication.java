@@ -18,18 +18,11 @@ public class PiotgreenApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOriginPatterns("http://localhost:8080", "http://192.168.59.194", "http://main.putiez.com")
+						.allowedOriginPatterns("http://localhost:8080", "http://192.168.59.*", "http://main.putiez.com")
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 						.allowCredentials(true)
 						.allowedHeaders("*");
 
-//				registry.addMapping("/**")
-//						.allowedOrigins("http://localhost:8080", "http://192.168.59.194/",
-//								"http://main.putiez.com")
-//						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTION")
-//						.allowCredentials(true).allowedHeaders("*");//;;
-
-				////.allowedHeaders("*");;
 			}
 		};
 	}

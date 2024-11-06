@@ -20,12 +20,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //        registry.addEndpoint("/websocket").withSockJS();
 //    }
 
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/websocket")
+//                .setAllowedOrigins("http://localhost:8080", "http://192.168.59.194", "http://main.putiez.com") // WebSocket 도메인 추가
+//                .withSockJS();
+//    }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
-                .setAllowedOrigins("http://localhost:8080", "http://192.168.59.194", "http://main.putiez.com") // WebSocket 도메인 추가
-//                .setAllowedOrigins("http://main.putiez.com", "ws://main.putiez.com") // WebSocket 도메인 추가
+                .setAllowedOriginPatterns("http://localhost:8080", "http://192.168.59.*", "http://main.putiez.com") // 패턴 매칭 허용
                 .withSockJS();
     }
-
 }
