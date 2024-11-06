@@ -38,32 +38,35 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	/* 사용자로부터 문자열을 입력받아 소켓에 씀 */
-	while (1) {
-		memset(buf, 0, BUFSIZE);
-		printf("서버로 보낼 메시지: ");
-		fgets(buf, BUFSIZE, stdin);
-		
-		if (send(sockfd, buf, BUFSIZE, MSG_DONTWAIT) <= 0) {
-			perror("send()");
-			break;
-		}
+while (1) {
+    memset(buf, 0, BUFSIZE);
+    printf("서버로 보낼 메시지: ");
+    fgets(buf, BUFSIZE, stdin);
+    
+    if (send(sockfd, buf, strlen(buf), 0) <= 0) { // MSG_DONTWAIT 제거, strlen(buf) 사용
+        perror("send()");
+        break;
+    }
 
-		/* 서버로부터 응답 데이터를 읽어서 출력 */
-		memset(buf, 0, BUFSIZE);
-		if (recv(sockfd, buf, BUFSIZE, 0) <= 0) {
-			perror("recv()");
-			return -1;
-		}
-		printf("서버에서 받은 메시지: %s", buf);
+    // 서버로부터 응답 데이터를 읽어서 출력
+    ssize_t received = recv(sockfd, buf, BUFSIZE, 0);
+    if (received <= 0) {
+        if (received == 0) {
+            printf("서버가 연결을 종료했습니다.\n");
+        } else {
+            perror("recv()");
+        }
+        break;
+    }
+    buf[received] = '\0'; // 받은 데이터의 끝에 NULL 문자 추가
+    printf("서버에서 받은 메시지: %s", buf);
 
-		/* 서버와 연결 종료 */
-		if (strncmp(buf, "q", 1) == 0) {
-			break;
-		}
-		fflush(stdin);
+    // 'q'로 연결 종료
+    if (strncmp(buf, "q", 1) == 0) {
+        break;
+    }
+}
 
-	}
 
 	/* 소켓을 닫음 */
 	close(sockfd);
