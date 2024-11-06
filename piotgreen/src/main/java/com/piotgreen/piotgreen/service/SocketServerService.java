@@ -44,7 +44,7 @@ public class SocketServerService {
                 System.out.println("Received: " + inputLine); // 받은 메시지 출력
                 out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
 //                messagingTemplate.convertAndSend("/topic/messages", inputLine); // 클라이언트에 실시간 전송
-                out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
+//                out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
             }
         } catch (Exception e) {
             e.printStackTrace();
