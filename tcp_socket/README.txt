@@ -17,6 +17,7 @@
 - gcc -o server_lighting tcpserver_lighting.c -lpthread -lwiringPi
 
 - gcc -o client tcpclient.c
+- gcc -o client_past tcpclient_past.c
 
 ## 각 실행 파일 실행법
 - ./server
