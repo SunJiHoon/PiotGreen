@@ -5,5 +5,6 @@ void setup();
 void changeMode();
 int changeLEDstatus();
 void sendLight();
+void autoMode();
 
 #endif
