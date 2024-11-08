@@ -1,9 +1,13 @@
 #include <light_control.h>
 #include <wiringPi.h>
 #include <pthread.h>
+#include <mcp3004.h>
+#include <wiringPiSPI.h>
 
 #define LEDPIN 1
 #define LIGHT_THRESHOLD 100
+#define BASE 100
+#define SPI_CHAN 0
 
 // server 코드에는 wiringPi관련 코드 없애고 여기로 옮기기
 // 메인서버로 조도 측정값을 실시간으로 보내기 위한 스레드 추가로 만들기
@@ -17,6 +21,8 @@ void setup()
 {
     wiringPiSetup();
     pinMode(LEDPIN, OUTPUT);
+    // wiringPiSPISetup();
+    // mcp3004Setup(BASE, SPI_CHAN);
 }
 
 void changeMode(int t_mode, int init)
@@ -43,7 +49,7 @@ void autoMode()
     // 자동모드일 때 사용할 함수
     // 광량 측정해서 기준 보다 밝으면 LED 끄기
 
-    light = 1; // 칩셋 받아서 광량 받아오는 함수 추가하기
+    // light = analogRead(BASE+2);
     if (light <= LIGHT_THRESHOLD)
         LEDstatus = 0;
     else
