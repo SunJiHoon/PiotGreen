@@ -58,20 +58,31 @@ void *client_thread_loop(void *aux)
 
 		/* 클라이언트가 보낸 데이터에 따라 LED 제어 */
 		printf("클라이언트 %s 에서 보낸 데이터: %s", fromstr, buf);
-		if (strncmp("on", buf, 2) == 0)
+		if (strstr(buf, "LED"))
 		{
-			printf("LED를 켭니다\n");
-			// digitalWrite(LEDPIN, HIGH);
+			char *endptr;
+			if (strstr(buf, "on"))
+			{
+				//"LED: on[i]"
+				changeLEDstatus(1, strtol(buf + 8, endptr, 10));
+			}
+			else
+			{
+				//"LED: off[i]"
+				changeLEDstatus(1, strtol(buf + 9, endptr, 10));
+			}
 		}
-		else if (strncmp("off", buf, 3) == 0)
-		{
-			printf("LED를 끕니다\n");
-			// digitalWrite(LEDPIN, LOW);
-		}
-		else if (strncmp("MODE", buf, 4) == 0)
+		else if (strstr(buf, "MODE"))
 		{
 			// MODE: auto,0
-			// changeMode();
+			if (strstr(buf, "auto"))
+			{
+				changeMode(0);
+			}
+			else
+			{
+				changeMode(1);
+			}
 		}
 
 		/* buf에 있는 문자열 전송 */
