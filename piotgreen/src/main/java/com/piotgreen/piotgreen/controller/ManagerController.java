@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ManagerController {
     @GetMapping("/lighting")
     public String manageLighting() {
-        return "manageLighting"; // This should correspond to manageLighting.html or a similar template
+        return "manage/lighting"; // This should correspond to manageLighting.html or a similar template
     }
 
     @GetMapping("/irrigation")
     public String manageIrrigation() {
-        return "manageIrrigation"; // This should correspond to manageIrrigation.html or a similar template
+        return "manage/irrigation"; // This should correspond to manageIrrigation.html or a similar template
     }
 
     @GetMapping("/intrusion")
     public String monitorFarm() {
-        return "monitorFarm"; // This should correspond to monitorFarm.html or a similar template
+        return "manage/intrusion"; // This should correspond to monitorFarm.html or a similar template
     }
 
 }
