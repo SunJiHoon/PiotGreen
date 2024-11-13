@@ -1,0 +1,94 @@
+/* styles.css */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    background-color: #81c784;
+    color: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.real-time-monitor {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.monitor-item {
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.monitor-item h2 {
+    font-size: 1.5em;
+}
+
+.monitor-item p {
+    font-size: 2em;
+    color: #388e3c;
+    margin: 0;
+}
+
+.control-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.control-buttons button {
+    padding: 15px 30px;
+    font-size: 1em;
+    color: #ffffff;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.control-buttons button:hover {
+    background-color: #388e3c;
+}
+
+.project-introduction, .project-overview {
+    padding: 20px;
+    margin: 10px auto;
+    width: 80%;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+h2, h3 {
+    color: #388e3c;
+}
+
+ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+p, li {
+    line-height: 1.6;
+}
