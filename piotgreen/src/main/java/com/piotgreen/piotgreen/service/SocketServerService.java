@@ -49,10 +49,33 @@ public class SocketServerService {
         ) {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println("Received: " + inputLine); // 받은 메시지 출력
-                out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
-                messagingTemplate.convertAndSend("/topic/messages", inputLine); // 클라이언트에 실시간 전송
+//                System.out.println("Received: " + inputLine); // 받은 메시지 출력
 //                out.println("Echo: " + inputLine); // 클라이언트로 에코 전송
+//                messagingTemplate.convertAndSend("/topic/messages", inputLine); // 클라이언트에 실시간 전송
+
+                System.out.println("Received: " + inputLine); // Received message
+
+                // Split the input into major category, subcategory, and data
+                String[] parts = inputLine.split(":");
+                if (parts.length >= 3) {
+                    String majorCategory = parts[0];
+                    String subCategory = parts[1];
+                    String data = parts[2];
+
+                    // Log received data based on categories
+                    System.out.println("Category: " + majorCategory);
+                    System.out.println("Subcategory: " + subCategory);
+                    System.out.println("Data: " + data);
+
+                    // Send data based on the major category via WebSocket
+                    messagingTemplate.convertAndSend("/topic/" + majorCategory + "/" + subCategory, data);
+                } else {
+                    System.out.println("Invalid data format: " + inputLine);
+                }
+
+                // Echo back to client
+                out.println("Echo: " + inputLine);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
