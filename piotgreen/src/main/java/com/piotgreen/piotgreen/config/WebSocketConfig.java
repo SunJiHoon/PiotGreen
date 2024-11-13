@@ -15,18 +15,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
     }
 
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/websocket").withSockJS();
-//    }
-
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/websocket")
-//                .setAllowedOrigins("http://localhost:8080", "http://192.168.59.194", "http://main.putiez.com") // WebSocket 도메인 추가
-//                .withSockJS();
-//    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket")
