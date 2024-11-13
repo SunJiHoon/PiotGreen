@@ -5,8 +5,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#include <wiringPi.h>
-
 #define TCP_PORT 8089	// 서버 포트 번호 
 #define BUFSIZE 1024	// 메시지 버퍼 크기 
 #define MAX_CLIENT 3   // 동시 클라이언트 수 
@@ -60,10 +58,8 @@ void *client_thread_loop(void *aux)
                 printf("클라이언트 %s 에서 보낸 데이터: %s", fromstr, buf);
 		if (strncmp("on", buf, 2) == 0) {
 			printf("LED를 켭니다\n");
-			digitalWrite(LEDPIN, HIGH);
 		} else if (strncmp("off", buf, 3) == 0) {
 			printf("LED를 끕니다\n");
-			digitalWrite(LEDPIN, LOW);
 		}
 
                 /* buf에 있는 문자열 전송 */
@@ -102,10 +98,6 @@ int main(int argc, char **argv)
 	int server_sockfd, client_sockfd;	// 소켓 디스크립터 
 	char buf[BUFSIZE];
 	int i;
-
-	/* WiringPi 초기화 */
-	wiringPiSetup();
-	pinMode(LEDPIN, OUTPUT);
 
 	/* 스레드 정보 초기화 */
 	for (i=0; i<MAX_CLIENT; i++) {

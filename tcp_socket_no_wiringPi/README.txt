@@ -12,10 +12,10 @@ TCP 소켓 통신을 사용하여 클라이언트와 서버 간의 통신을 구
 이 TCP 소켓 기반의 통신 시스템은 PiotGreen 프로젝트의 제어 인터페이스로 작동하며, 원격으로 장치를 제어하고 모니터링하는 데 중요한 역할을 합니다.
 
 ## 각 파일 build 방법
-- gcc -o server tcpserver.c -lpthread -lwiringPi
-- gcc -o server_intrusion tcpserver_intrusion.c -lpthread -lwiringPi
-- gcc -o server_irrigation tcpserver_irrigation.c -lpthread -lwiringPi
-- gcc -o server_lighting tcpserver_lighting.c -lpthread -lwiringPi
+- gcc -o server tcpserver.c 
+- gcc -o server_intrusion tcpserver_intrusion.c
+- gcc -o server_irrigation tcpserver_irrigation.c
+- gcc -o server_lighting tcpserver_lighting.c 
 
 - gcc -o client tcpclient.c
 - gcc -o client_past tcpclient_past.c
