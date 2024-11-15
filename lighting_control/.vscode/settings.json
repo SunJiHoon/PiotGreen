@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "light_control.h": "c"
+        "light_control.h": "c",
+        "wiringpispi.h": "c"
     }
 }
