@@ -51,11 +51,6 @@ int main(int argc, char **argv)
 	int i;
 	printf("wiringPiSPISetup return=%d\n", wiringPiSPISetup(0, 500000));
 	mcp3004Setup(BASE, SPI_CHAN);
-	while (1)
-	{
-		printf("CDS value : %d\n", analogRead(BASE + 2));
-		delay(500);
-	}
 
 	while (1)
 	{
@@ -64,7 +59,7 @@ int main(int argc, char **argv)
 		// fgets(buf, BUFSIZE, stdin);
 		light = analogRead(BASE + 2);
 		sprintf(buf, "LIGHT: %d", light);
-		printf("light value : %d\n", light);
+		printf("%s\n", buf);
 		delay(500);
 
 		if (send(sockfd, buf, strlen(buf), 0) <= 0)
