@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket Server Messages</title>
+</head>
+<body>
+<h1>Received Messages</h1>
+<div id="messages"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    const messagesDiv = document.getElementById("messages");
+    const socket = new SockJS('/websocket');
+    const stompClient = Stomp.over(socket);
+
+
+
+    stompClient.connect({}, function () {
+        stompClient.subscribe('/topic/irrigation_system/moisture', function (message) {
+            console.log("현재 습도 :", message); // 메시지 본문 확인
+            // console.log("Received message body:", message.body); // 메시지 본문 확인
+            if (message.body) {
+                const msgElement = document.createElement("p");
+                msgElement.textContent = message.body;
+                document.getElementById("messages").appendChild(msgElement);
+            } else {
+                console.log("Received an empty message body."); // 빈 메시지 여부 확인
+            }
+        });
+        // stompClient.subscribe('/topic/messages', function (message) {
+        //     const msgElement = document.createElement("p");
+        //     msgElement.textContent = "Received: " + message.body;
+        //     messagesDiv.appendChild(msgElement);
+        // });
+    });
+</script>
+</body>
+</html>
