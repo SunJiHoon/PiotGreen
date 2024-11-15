@@ -12,6 +12,9 @@
 #define BUFSIZE 1024  // 메시지 버퍼 크기
 #define MAX_CLIENT 3  // 동시 클라이언트 수
 
+extern int mode;
+extern int light;
+
 struct client_thread_info
 {
 	pthread_t thread;
@@ -43,6 +46,7 @@ void *client_thread_loop(void *aux)
 	inet_ntop(AF_INET, &cti->client_addr.sin_addr, fromstr, 64);
 	printf("클라이언트 %s 와 연결되었습니다.\n", fromstr);
 
+	setup();
 	/* 클라이언트 loop 시작 */
 	do
 	{
