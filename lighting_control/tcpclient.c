@@ -8,7 +8,7 @@
 #include <mcp3004.h>
 #include <wiringPiSPI.h>
 
-#define TCP_PORT 8088
+#define TCP_PORT 8091
 #define BUFSIZE 1024
 
 #define BASE 100
