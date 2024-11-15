@@ -1,4 +1,4 @@
-#include <light_control.h>
+#include <light_control_server.h>
 #include <wiringPi.h>
 #include <pthread.h>
 #include <mcp3004.h>

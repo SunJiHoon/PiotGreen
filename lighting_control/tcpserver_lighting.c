@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #include <wiringPi.h>
-#include "light_control.h"
+#include "light_control_server.h"
 
 #define TCP_PORT 8091 // 서버 포트 번호
 #define BUFSIZE 1024  // 메시지 버퍼 크기
