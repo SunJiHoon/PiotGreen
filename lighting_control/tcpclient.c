@@ -13,12 +13,14 @@
 
 #define BASE 100
 #define SPI_CHAN 0
+#define NUM_SECTION 5
 
 int main(int argc, char **argv)
 {
 	int sockfd, light;
 	struct sockaddr_in server_addr;
-	char buf[BUFSIZE];
+	char lightBuf[BUFSIZE], ledBuf[BUFSIZE];
+	int ledStatus[NUM_SECTION]={0,};
 
 	if (argc < 2)
 	{
@@ -54,40 +56,22 @@ int main(int argc, char **argv)
 
 	while (1)
 	{
-		memset(buf, 0, BUFSIZE);
-		printf("서버로 보낼 메시지: ");
-		// fgets(buf, BUFSIZE, stdin);
-		light = analogRead(BASE + 2);
-		sprintf(buf, "LIGHT: %d", light);
-		printf("%s\n", buf);
-		delay(500);
+		delay(1000);
+		memset(lightBuf, 0, BUFSIZE);
+		memset(ledBuf, 0, BUFSIZE);
 
-		if (send(sockfd, buf, strlen(buf), 0) <= 0)
+		light = analogRead(BASE + 2);
+		sprintf(lightBuf, "LIGHT: %d\n", light);
+		sprintf(ledBuf, "LED: [%d, %d, %d]\n",ledStatus[0],ledStatus[1],ledStatus[2]);
+
+		if (send(sockfd, lightBuf, strlen(lightBuf), 0) <= 0)
 		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
 			perror("send()");
 			break;
 		}
-
-		// 서버로부터 응답 데이터를 읽어서 출력
-		ssize_t received = recv(sockfd, buf, BUFSIZE, 0);
-		if (received <= 0)
-		{
-			if (received == 0)
-			{
-				printf("서버가 연결을 종료했습니다.\n");
-			}
-			else
-			{
-				perror("recv()");
-			}
-			break;
-		}
-		buf[received] = '\0'; // 받은 데이터의 끝에 NULL 문자 추가
-		printf("서버에서 받은 메시지: %s", buf);
-
-		// 'q'로 연결 종료
-		if (strncmp(buf, "q", 1) == 0)
-		{
+		if (send(sockfd, ledBuf, strlen(ledBuf), 0) <= 0)
+		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
+			perror("send()");
 			break;
 		}
 	}
