@@ -3,26 +3,60 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <stdlib.h>
-#include <wiringPi.h>
-#include <mcp3004.h>
-#include <wiringPiSPI.h>
+#include <sqlite3.h>
 
 #define TCP_PORT 8091
 #define BUFSIZE 1024
 
-#define BASE 100
-#define SPI_CHAN 0
-#define NUM_SECTION 5
+int sockfd;
+
+void update_callback(void *arg, int action, const char *db_name, const char *table_name, sqlite3_int64 row_id)
+{
+	if (action == SQLITE_INSERT)
+	{
+		// `INSERT`가 실행된 경우, 해당 데이터를 조회하는 SQL 실행
+		sqlite3 *db = (sqlite3 *)arg;
+		sqlite3_stmt *stmt;
+		char sql[256];
+
+		// 삽입된 데이터의 row_id를 이용해 실제 데이터 조회
+		snprintf(sql, sizeof(sql), "SELECT * FROM %s WHERE Id = %lld;", table_name, row_id);
+
+		// SQL 실행
+		if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK)
+		{
+			if (sqlite3_step(stmt) == SQLITE_ROW)
+			{
+				// 삽입된 데이터 추출 (예: 첫 번째 컬럼의 값을 가져오는 경우)
+				const char *inserted_data = (const char *)sqlite3_column_text(stmt, 0);
+
+				// 데이터를 소켓으로 송신
+				if (send(sockfd, inserted_data, strlen(inserted_data), 0) <= 0)
+				{ // MSG_DONTWAIT 제거, strlen(buf) 사용
+					perror("send()");
+				}
+			}
+			sqlite3_finalize(stmt);
+		}
+	}
+}
 
 int main(int argc, char **argv)
 {
-	int sockfd, light;
 	struct sockaddr_in server_addr;
-	char lightBuf[BUFSIZE], ledBuf[BUFSIZE];
-	int ledStatus[NUM_SECTION] = {
-		0,
-	};
+	char buf[BUFSIZE];
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+
+	char *err_msg = 0, user_input;
+	int rc = sqlite3_open("light.db", &db);
+
+	if (rc != SQLITE_OK) // 오류처리구문
+	{
+		fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return 1;
+	}
 
 	if (argc < 2)
 	{
@@ -52,30 +86,15 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	int i;
-	printf("wiringPiSPISetup return=%d\n", wiringPiSPISetup(0, 500000));
-	mcp3004Setup(BASE, SPI_CHAN);
+	sqlite3_update_hook(db, update_callback, db);
 
+	printf("Waiting for database changes...\n");
+
+	// 데이터베이스 변경 감지를 위해 계속 실행
 	while (1)
 	{
-		delay(1000);
-		memset(lightBuf, 0, BUFSIZE);
-		memset(ledBuf, 0, BUFSIZE);
-
-		light = analogRead(BASE + 2);
-		sprintf(lightBuf, "LIGHT: %d\n", light);
-		sprintf(ledBuf, "LED: [%d, %d, %d]\n", ledStatus[0], ledStatus[1], ledStatus[2]);
-
-		if (send(sockfd, lightBuf, strlen(lightBuf), 0) <= 0)
-		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
-			perror("send()");
-			break;
-		}
-		if (send(sockfd, ledBuf, strlen(ledBuf), 0) <= 0)
-		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
-			perror("send()");
-			break;
-		}
+		sqlite3_exec(db, "SELECT 1;", NULL, NULL, NULL); // Keep connection alive
+		sleep(1);										 // Prevent busy looping
 	}
 
 	/* 소켓을 닫음 */
