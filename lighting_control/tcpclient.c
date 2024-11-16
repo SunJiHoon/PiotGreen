@@ -20,7 +20,9 @@ int main(int argc, char **argv)
 	int sockfd, light;
 	struct sockaddr_in server_addr;
 	char lightBuf[BUFSIZE], ledBuf[BUFSIZE];
-	int ledStatus[NUM_SECTION]={0,};
+	int ledStatus[NUM_SECTION] = {
+		0,
+	};
 
 	if (argc < 2)
 	{
@@ -62,7 +64,7 @@ int main(int argc, char **argv)
 
 		light = analogRead(BASE + 2);
 		sprintf(lightBuf, "LIGHT: %d\n", light);
-		sprintf(ledBuf, "LED: [%d, %d, %d]\n",ledStatus[0],ledStatus[1],ledStatus[2]);
+		sprintf(ledBuf, "LED: [%d, %d, %d]\n", ledStatus[0], ledStatus[1], ledStatus[2]);
 
 		if (send(sockfd, lightBuf, strlen(lightBuf), 0) <= 0)
 		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
