@@ -7,3 +7,7 @@
 - 실시간 광량 모니터링 및 LED 조명을 통한 빛의 양 조절
 - 작물 생장에 필요한 광량을 일정하게 유지하여 생장 환경 최적화
 - 필요 시 LED를 자동으로 활성화하여 에너지 효율성을 높임
+
+컴파일 명령어:
+- gcc -o sensor2db sensor2db.c -lsqlite3 -lwiringPi
+- gcc -o tcpclient tcpclient.c -lsqlite3

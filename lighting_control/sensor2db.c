@@ -1,6 +1,3 @@
-// 할 것: ctrl+c로 종료하면 비정상 종료이므로
-// 트리거 만들기
-
 #include <sqlite3.h>
 #include <stdio.h>
 #include <wiringPi.h>
