@@ -86,19 +86,33 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	sqlite3_update_hook(db, update_callback, db);
+	// 5초마다 테이블을 반복해서 검색
+    const char *sql = "SELECT * FROM LIGHT;";
+    while (1)
+    {
+        sqlite3_stmt *stmt;
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+        if (rc != SQLITE_OK)
+        {
+            fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return 1;
+        }
 
-	printf("Waiting for database changes...\n");
+        // 테이블에서 행을 한 개씩 가져와 출력
+        while (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
+            printf("Data: %s\n", col1);
+        }
 
-	// 데이터베이스 변경 감지를 위해 계속 실행
-	while (1)
-	{
-		sqlite3_exec(db, "SELECT 1;", NULL, NULL, NULL); // Keep connection alive
-		sleep(1);										 // Prevent busy looping
-	}
+        sqlite3_finalize(stmt);
 
-	/* 소켓을 닫음 */
+        // 5초 대기
+        sleep(5);
+    }
 	close(sockfd);
 
 	return 0;
 }
+
