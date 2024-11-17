@@ -56,7 +56,7 @@ int main(void)
         return 1;
     }
 
-    sql = "INSERT INTO LIGHT (Value,led) VALUES (?,?);";
+    sql = "UPDATE LIGHT SET Value = ?, Led = ? WHERE rowid = 1;";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK)
     {
