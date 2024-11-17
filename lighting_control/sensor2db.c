@@ -77,7 +77,7 @@ int main(void)
                 break;
             }
         }
-        light = analogRead(BASE + 2);
+        light = analogRead(BASE + 3);
         char led[20] = "[0,0,0,0,0]";
         sqlite3_bind_int(stmt, 1, light);
         sqlite3_bind_text(stmt, 2, led, -1, SQLITE_STATIC);
