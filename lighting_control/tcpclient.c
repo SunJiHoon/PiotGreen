@@ -87,32 +87,32 @@ int main(int argc, char **argv)
 	}
 
 	// 5초마다 테이블을 반복해서 검색
-    const char *sql = "SELECT * FROM LIGHT;";
-    while (1)
-    {
-        sqlite3_stmt *stmt;
-        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
-        if (rc != SQLITE_OK)
-        {
-            fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
-            sqlite3_close(db);
-            return 1;
-        }
+	const char *sql = "SELECT * FROM LIGHT;";
+	while (1)
+	{
+		sqlite3_stmt *stmt;
+		rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+		if (rc != SQLITE_OK)
+		{
+			fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
+			sqlite3_close(db);
+			return 1;
+		}
 
-        // 테이블에서 행을 한 개씩 가져와 출력
-        while (sqlite3_step(stmt) == SQLITE_ROW)
-        {
-            const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
-            printf("Data: %s\n", col1);
-        }
+		// 테이블에서 행을 한 개씩 가져와 출력
+		while (sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
+			const char *col2 = (const char *)sqlite3_column_text(stmt, 1);
+			printf("Data: %s,%s\n", col1, col2);
+		}
 
-        sqlite3_finalize(stmt);
+		sqlite3_finalize(stmt);
 
-        // 5초 대기
-        sleep(5);
-    }
+		// 5초 대기
+		sleep(1);
+	}
 	close(sockfd);
 
 	return 0;
 }
-

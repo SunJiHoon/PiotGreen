@@ -29,8 +29,8 @@ int main(void)
 
     const char *sql = "DROP TABLE IF EXISTS LIGHT;"
                       "CREATE TABLE LIGHT("
-                      "Id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                      "Value INTEGER);";
+                      "Value INTEGER,"
+                      "Led TEXT);";
 
     rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 
@@ -43,7 +43,20 @@ int main(void)
         return 1;
     }
 
-    sql = "INSERT INTO LIGHT (Value) VALUES (?);";
+    sql = "INSERT INTO LIGHT (Value, Led) VALUES (0, '[0,0,0,0,0]');";
+
+    rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+
+    if (rc != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+
+        return 1;
+    }
+
+    sql = "INSERT INTO LIGHT (Value,led) VALUES (?,?);";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK)
     {
@@ -65,7 +78,9 @@ int main(void)
             }
         }
         light = analogRead(BASE + 2);
+        char led[20] = "[0,0,0,0,0]";
         sqlite3_bind_int(stmt, 1, light);
+        sqlite3_bind_text(stmt, 2, led, -1, SQLITE_STATIC);
 
         rc = sqlite3_step(stmt);
 
@@ -75,7 +90,7 @@ int main(void)
         }
         else
         {
-            printf("Inserted Value: %d\n", light);
+            printf("Inserted Value: %d, %s\n", light, led);
         }
         sqlite3_reset(stmt);
         delay(1000);
