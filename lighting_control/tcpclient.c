@@ -104,7 +104,14 @@ int main(int argc, char **argv)
 		{
 			const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
 			const char *col2 = (const char *)sqlite3_column_text(stmt, 1);
-			printf("Data: %s,%s\n", col1, col2);
+			snprintf(buf, sizeof(buf), "Data: %s, %s\n", col1, col2);
+			printf("%s", buf);
+		}
+
+		if (send(sockfd, buf, strlen(buf), 0) <= 0)
+		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
+			perror("send()");
+			break;
 		}
 
 		sqlite3_finalize(stmt);
