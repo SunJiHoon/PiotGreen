@@ -15,7 +15,7 @@
     측정한 광량 값과 led 상태를 메인서버에 송신 DB<->socket
 - tcpserver_lighting.c
     메인서버에서 받은 데이터(수동/자동모드, led 상태 전환)를 DB에 저장 socket<->DB
-- lighting_control_server.c
+- lighting_control.c
     DB에 저장된 값(수동/자동모드 및 광량)을 통해서 led 제어 DB<->LED
 
 영역은 1번과 2번이 있다고 가정
