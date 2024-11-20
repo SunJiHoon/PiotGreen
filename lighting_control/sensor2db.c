@@ -30,7 +30,9 @@ int main(void)
     const char *sql = "DROP TABLE IF EXISTS LIGHT;"
                       "CREATE TABLE LIGHT("
                       "Value INTEGER,"
-                      "Led TEXT);";
+                      "Led1 INTEGER,"
+                      "Led2 INTEGER,"
+                      "Mode INTEGER);";
 
     rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 
@@ -43,7 +45,7 @@ int main(void)
         return 1;
     }
 
-    sql = "INSERT INTO LIGHT (Value, Led) VALUES (0, '[0,0,0,0,0]');";
+    sql = "INSERT INTO LIGHT (Value, Led1, Led2, Mode) VALUES (0, 0, 0, 0);";
 
     rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 
@@ -56,7 +58,7 @@ int main(void)
         return 1;
     }
 
-    sql = "UPDATE LIGHT SET Value = ?, Led = ? WHERE rowid = 1;";
+    sql = "UPDATE LIGHT SET Value = ? WHERE rowid = 1;";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK)
     {

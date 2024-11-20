@@ -5,9 +5,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
-
-#include <wiringPi.h>
-#include "light_control_server.h"
+#include <sqlite3.h>
 
 #define TCP_PORT 8091 // 서버 포트 번호
 #define BUFSIZE 1024  // 메시지 버퍼 크기
@@ -40,6 +38,21 @@ void *client_thread_loop(void *aux)
 	char fromstr[64];
 	char buf[BUFSIZE];
 
+	// DB관련 변수
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int rc = sqlite3_open("light.db", &db);
+	if (rc != SQLITE_OK) // 오류처리구문
+	{
+		fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		pthread_exit((void *)1);
+	}
+	const char *sql_Mode = "UPDATE LIGHT SET Mode = ? WHERE rowid = 1;";
+	const char *sql_Led1 = "UPDATE LIGHT SET Led1 = ? WHERE rowid = 1;";
+	const char *sql_Led2 = "UPDATE LIGHT SET Led2 = ? WHERE rowid = 1;";
+	const char *tar_sql;
+
 	/* 스레드 종료 핸들러 설정 */
 	pthread_cleanup_push(client_thread_cleanup, (void *)aux);
 
@@ -47,7 +60,7 @@ void *client_thread_loop(void *aux)
 	inet_ntop(AF_INET, &cti->client_addr.sin_addr, fromstr, 64);
 	printf("클라이언트 %s 와 연결되었습니다.\n", fromstr);
 
-	setup();
+	// setup();
 	/* 클라이언트 loop 시작 */
 	do
 	{
@@ -63,32 +76,42 @@ void *client_thread_loop(void *aux)
 
 		/* 클라이언트가 보낸 데이터에 따라 LED 제어 */
 		printf("클라이언트 %s 에서 보낸 데이터: %s", fromstr, buf);
+		int val = 0;
 		if (strstr(buf, "LED"))
 		{
 			char *endptr;
 			if (strstr(buf, "on"))
 			{
 				//"LED: on[i]"
-				changeLEDstatus(1, strtol(buf + 8, endptr, 10));
+				int led_num = strtol(buf + 8, &endptr, 10);
+				tar_sql = led_num == 1 ? sql_Led1 : sql_Led2;
+				val = 1;
 			}
 			else
 			{
 				//"LED: off[i]"
-				changeLEDstatus(1, strtol(buf + 9, endptr, 10));
+				int led_num = strtol(buf + 9, &endptr, 10);
+				tar_sql = led_num == 1 ? sql_Led1 : sql_Led2;
+				val = 0;
 			}
 		}
 		else if (strstr(buf, "MODE"))
 		{
 			// MODE: auto,0
+			tar_sql = sql_Mode;
 			if (strstr(buf, "auto"))
 			{
-				changeMode(0);
+				val = 1;
 			}
 			else
 			{
-				changeMode(1);
+				val = 0;
 			}
 		}
+		rc = sqlite3_prepare_v2(db, tar_sql, -1, &stmt, NULL);
+		sqlite3_bind_int64(stmt, 1, val);
+		rc = sqlite3_step(stmt);
+		sqlite3_finalize(stmt);
 
 		/* buf에 있는 문자열 전송 */
 		if (write(cti->sockfd, buf, n) <= 0)
@@ -130,8 +153,6 @@ int main(int argc, char **argv)
 	char buf[BUFSIZE];
 	int i;
 
-	/* WiringPi 초기화 */
-	wiringPiSetup();
 	// pinMode(LEDPIN, OUTPUT);
 
 	/* 스레드 정보 초기화 */
