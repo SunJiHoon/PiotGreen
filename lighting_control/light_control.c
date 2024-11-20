@@ -1,52 +1,63 @@
-#include "light_control_server.h"
 #include <wiringPi.h>
-#include <pthread.h>
 #include <mcp3004.h>
 #include <wiringPiSPI.h>
+#include <sqlite3.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-int LEDstatus[LED_NUM] = {
-    0,
-};
-int mode = 0; // mode: 자동/수동
-int light;    // 공유 메모리이므로 mutex 활용할 것
-pthread_mutex_t mutex_mode, mutex_light;
+#define THRESHOLD 400
+#define LEDPIN 0
 
-void setup()
+void set_led_state()
+{
+}
+
+int main()
 {
     wiringPiSetup();
     pinMode(LEDPIN, OUTPUT);
-    wiringPiSPISetup(0, 500000);
-    mcp3004Setup(BASE, SPI_CHAN);
-}
 
-void changeMode(int t_mode)
-{
-    mode = t_mode;
-}
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
 
-int changeLEDstatus(int t_status, int num_led)
-{
-    if (mode == 0)
-        return 1;
-    LEDstatus[num_led] = t_status;
-    return 0;
-}
+    char *err_msg = 0, user_input;
+    int rc = sqlite3_open("light.db", &db);
 
-void sendLight()
-{
-}
-void autoMode()
-{
-    // 자동모드일 때 사용할 함수
-    // 광량 측정해서 기준 보다 밝으면 LED 끄기
-
-    light = analogRead(BASE + 2);
-    int target_status = (light <= LIGHT_THRESHOLD ? 0 : 1);
-    for (int i = 0; i < LED_NUM; i++)
+    if (rc != SQLITE_OK) // 오류처리구문
     {
-        LEDstatus[i] = target_status;
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    const char *sql = "SELECT * FROM LIGHT;";
+    while (1)
+    {
+        sqlite3_stmt *stmt;
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+        if (rc != SQLITE_OK)
+        {
+            fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
+            sqlite3_close(db);
+            return 1;
+        }
+
+        // 테이블에서 행을 한 개씩 가져와 출력
+        while (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            const char *Value1 = (const char *)sqlite3_column_text(stmt, 0);
+            const char *Value2 = (const char *)sqlite3_column_text(stmt, 1);
+            const char *led1 = (const char *)sqlite3_column_text(stmt, 2);
+            const char *led2 = (const char *)sqlite3_column_text(stmt, 3);
+            const char *mode = (const char *)sqlite3_column_text(stmt, 4);
+            printf("foundData: Value1: %s, Value2: %s, Led1: %s, Led2: %s, Mode: %s\n", Value1, Value2, led1, led2, mode);
+            if (mode == 1)
+            {
+            }
+        }
+
+        sqlite3_finalize(stmt);
+
+        // 5초 대기
+        sleep(1);
     }
 }
