@@ -104,7 +104,10 @@ int main(int argc, char **argv)
 		{
 			const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
 			const char *col2 = (const char *)sqlite3_column_text(stmt, 1);
-			snprintf(buf, sizeof(buf), "Data: %s, %s\n", col1, col2);
+			const char *col3 = (const char *)sqlite3_column_text(stmt, 2);
+			const char *col4 = (const char *)sqlite3_column_text(stmt, 3);
+			const char *col5 = (const char *)sqlite3_column_text(stmt, 4);
+			snprintf(buf, sizeof(buf), "Data: Value1: %s, Vlue2: %s, Led1: %s, Led2: %s, Mode: %s\n", col1, col2, col3, col4, col5);
 			printf("%s", buf);
 		}
 

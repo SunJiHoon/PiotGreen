@@ -16,7 +16,7 @@ int main(void)
 
     char *err_msg = 0, user_input;
     int rc = sqlite3_open("light.db", &db);
-    int light = 0;
+    int light1 = 0, light2 = 0;
     printf("wiringPiSPISetup return=%d\n", wiringPiSPISetup(0, 500000));
     mcp3004Setup(BASE, SPI_CHAN);
 
@@ -29,7 +29,8 @@ int main(void)
 
     const char *sql = "DROP TABLE IF EXISTS LIGHT;"
                       "CREATE TABLE LIGHT("
-                      "Value INTEGER,"
+                      "Value1 INTEGER,"
+                      "Value2 INTEGER,"
                       "Led1 INTEGER,"
                       "Led2 INTEGER,"
                       "Mode INTEGER);";
@@ -45,7 +46,7 @@ int main(void)
         return 1;
     }
 
-    sql = "INSERT INTO LIGHT (Value, Led1, Led2, Mode) VALUES (0, 0, 0, 0);";
+    sql = "INSERT INTO LIGHT (Value1, Value2, Led1, Led2, Mode) VALUES (0, 0, 0, 0, 0);";
 
     rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 
@@ -58,7 +59,7 @@ int main(void)
         return 1;
     }
 
-    sql = "UPDATE LIGHT SET Value = ? WHERE rowid = 1;";
+    sql = "UPDATE LIGHT SET Value1 = ?, Value2 = ? WHERE rowid = 1;";
     rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     if (rc != SQLITE_OK)
     {
@@ -79,10 +80,10 @@ int main(void)
                 break;
             }
         }
-        light = analogRead(BASE + 3);
-        char led[20] = "[0,0,0,0,0]";
-        sqlite3_bind_int(stmt, 1, light);
-        sqlite3_bind_text(stmt, 2, led, -1, SQLITE_STATIC);
+        light1 = analogRead(BASE + 3);
+        sqlite3_bind_int(stmt, 1, light1);
+        light2 = analogRead(BASE + 2);
+        sqlite3_bind_int(stmt, 2, light2);
 
         rc = sqlite3_step(stmt);
 
@@ -92,7 +93,7 @@ int main(void)
         }
         else
         {
-            printf("Inserted Value: %d, %s\n", light, led);
+            printf("Inserted Value: %d, %d\n", light1, light2);
         }
         sqlite3_reset(stmt);
         delay(1000);
