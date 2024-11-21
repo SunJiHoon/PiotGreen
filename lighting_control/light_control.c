@@ -1,6 +1,4 @@
 #include <wiringPi.h>
-#include <mcp3004.h>
-#include <wiringPiSPI.h>
 #include <sqlite3.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -8,9 +6,7 @@
 #define THRESHOLD 400
 #define LEDPIN 0
 
-void set_led_state()
-{
-}
+// 본 프로그램은 자동/수종모드 여부에 따라 led를 제어합니다.
 
 int main()
 {
@@ -56,6 +52,7 @@ int main()
             printf("foundData: Value1: %d, Value2: %d, Led1: %d, Led2: %d, Mode: %d\n", Value1, Value2, led1, led2, mode);
             if (mode == 1)
             {
+                // 자동모드
                 if (Value1 > THRESHOLD)
                 {
                     digitalWrite(LEDPIN, HIGH);
@@ -86,6 +83,26 @@ int main()
                     fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
                     sqlite3_close(db);
                     return 1;
+                }
+            }
+            else
+            {
+                // 수동모드
+                if (led1 == 1)
+                {
+                    digitalWrite(LEDPIN, HIGH);
+                }
+                else
+                {
+                    digitalWrite(LEDPIN, LOW);
+                }
+                if (led2 == 1)
+                {
+                    digitalWrite(LEDPIN, HIGH);
+                }
+                else
+                {
+                    digitalWrite(LEDPIN, LOW);
                 }
             }
         }
