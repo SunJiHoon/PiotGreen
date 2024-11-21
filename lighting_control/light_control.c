@@ -3,6 +3,7 @@
 #include <wiringPiSPI.h>
 #include <sqlite3.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define THRESHOLD 400
 #define LEDPIN 0
@@ -47,12 +48,12 @@ int main()
         // 테이블에서 행을 한 개씩 가져와 출력
         while (sqlite3_step(stmt1) == SQLITE_ROW)
         {
-            const char *Value1 = (const char *)sqlite3_column_text(stmt1, 0);
-            const char *Value2 = (const char *)sqlite3_column_text(stmt1, 1);
-            const char *led1 = (const char *)sqlite3_column_text(stmt1, 2);
-            const char *led2 = (const char *)sqlite3_column_text(stmt1, 3);
-            const char *mode = (const char *)sqlite3_column_text(stmt1, 4);
-            printf("foundData: Value1: %s, Value2: %s, Led1: %s, Led2: %s, Mode: %s\n", Value1, Value2, led1, led2, mode);
+            int Value1 = sqlite3_column_int(stmt1, 0);
+            int Value2 = sqlite3_column_int(stmt1, 1);
+            int led1 = sqlite3_column_int(stmt1, 2);
+            int led2 = sqlite3_column_int(stmt1, 3);
+            int mode = sqlite3_column_int(stmt1, 4);
+            printf("foundData: Value1: %d, Value2: %d, Led1: %d, Led2: %d, Mode: %d\n", Value1, Value2, led1, led2, mode);
             if (mode == 1)
             {
                 if (Value1 > THRESHOLD)

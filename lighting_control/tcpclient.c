@@ -102,12 +102,12 @@ int main(int argc, char **argv)
 		// 테이블에서 행을 한 개씩 가져와 출력
 		while (sqlite3_step(stmt) == SQLITE_ROW)
 		{
-			const char *col1 = (const char *)sqlite3_column_text(stmt, 0);
-			const char *col2 = (const char *)sqlite3_column_text(stmt, 1);
-			const char *col3 = (const char *)sqlite3_column_text(stmt, 2);
-			const char *col4 = (const char *)sqlite3_column_text(stmt, 3);
-			const char *col5 = (const char *)sqlite3_column_text(stmt, 4);
-			snprintf(buf, sizeof(buf), "Data: Value1: %s, Value2: %s, Led1: %s, Led2: %s, Mode: %s\n", col1, col2, col3, col4, col5);
+			int col1 = sqlite3_column_int(stmt, 0);
+			int col2 = sqlite3_column_int(stmt, 1);
+			int col3 = sqlite3_column_int(stmt, 2);
+			int col4 = sqlite3_column_int(stmt, 3);
+			int col5 = sqlite3_column_int(stmt, 4);
+			snprintf(buf, sizeof(buf), "Data: Value1: %d, Value2: %d, Led1: %d, Led2: %d, Mode: %d\n", col1, col2, col3, col4, col5);
 			printf("%s", buf);
 		}
 
