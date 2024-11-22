@@ -55,7 +55,7 @@ int main()
             if (mode == 1)
             {
                 // 자동모드
-                if (Value1 > THRESHOLD)
+                if (Value1 < THRESHOLD)
                 {
                     digitalWrite(LED1PIN, HIGH);
                     led1 = 1;
@@ -65,7 +65,7 @@ int main()
                     digitalWrite(LED1PIN, LOW);
                     led1 = 0;
                 }
-                if (Value2 > THRESHOLD)
+                if (Value2 < THRESHOLD)
                 {
                     digitalWrite(LED2PIN, HIGH);
                     led2 = 1;
