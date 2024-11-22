@@ -20,19 +20,18 @@ object_cascade = cv2.CascadeClassifier(cascade_path)
 # 전역 프레임 변수
 global_frame = None
 lock = threading.Lock()
+stop_event = threading.Event()
 
 # 프레임 캡처 함수
 def capture_frames():
     global global_frame
-    while True:
+    while not stop_event.is_set():
         ret, frame = cap.read()
         if not ret:
             continue
 
-        # 프레임 해상도 줄이기 (320x240)
-        frame = cv2.resize(frame, (320, 240))
-        # 그레이스케일로 변환
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # 프레임 해상도 줄이기 (640x480)
+        frame = cv2.resize(frame, (640, 480))
         
         with lock:
             global_frame = frame
@@ -50,14 +49,14 @@ while True:
 
         frame = global_frame.copy()
 
-    # 1초에 1프레임만 처리
-    time.sleep(1)
+    # 그레이스케일로 변환 (Haar Cascade는 흑백 이미지에서 인식 수행)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # 객체 인식 수행
     objects = object_cascade.detectMultiScale(
-        frame,
-        scaleFactor=1.3,  # 원본보다 더 큰 비율로 이미지 피라미드를 감소시킴 (속도 향상)
-        minNeighbors=3,   # 낮추면 속도 향상, 그러나 false positive가 증가할 수 있음
+        gray,
+        scaleFactor=1.1,  # 속도와 정확도 간의 균형을 맞추기 위해 조정
+        minNeighbors=5,   # false positive를 줄이기 위해 설정
         minSize=(30, 30)
     )
 
@@ -70,8 +69,10 @@ while True:
 
     # 'q' 키를 누르면 종료
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        stop_event.set()
         break
 
 # 자원 해제
 cap.release()
+capture_thread.join()
 cv2.destroyAllWindows()
