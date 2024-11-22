@@ -22,6 +22,7 @@ public class VideoStreamService {
     private void startServer() {
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+                System.out.println("ServerSocket started on port " + PORT);
                 while (true) {
                     Socket socket = serverSocket.accept();
                     InputStream inputStream = socket.getInputStream();
@@ -30,11 +31,13 @@ public class VideoStreamService {
                     int bytesRead;
 
                     while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        System.out.println("Received data of size: " + bytesRead);
 //                        BinaryMessage message = new BinaryMessage(buffer, 0, bytesRead);
                         BinaryMessage message = new BinaryMessage(buffer, 0, bytesRead, true);
 //                        BinaryMessage message = new BinaryMessage(buffer);
                         for (WebSocketSession session : handler.getSessions()) {
                             if (session.isOpen()) {
+                                System.out.println("Sending data to WebSocket session");
                                 session.sendMessage(message);
                             }
                         }

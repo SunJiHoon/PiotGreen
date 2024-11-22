@@ -1,11 +1,13 @@
 package com.piotgreen.piotgreen.handler;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Component
 public class VideoStreamHandlerJpeg extends BinaryWebSocketHandler {
 
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
