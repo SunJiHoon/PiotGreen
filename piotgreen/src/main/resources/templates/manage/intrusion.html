@@ -4,34 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Stream</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Live Video Stream</h1>
-<img id="video" alt="Video Stream" />
+<!--<h1>실시간 농장 모니터링 관리</h1>-->
+<!--<img id="video" alt="Video Stream" />-->
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>실시간 농장 모니터링 관리 페이지</p>
+</header>
 
-<script>
-    const videoElement = document.getElementById("video");
-    const socket = new WebSocket("/video-stream"); // WebSocket 서버 경로
+<section class="real-time-monitor">
+    <div class="monitor-item">
+<!--        <h2>현재 광원량</h2>-->
+<!--        <p id="light-level">0</p>-->
+        <img id="video" alt="Video Stream" src="/assets/images/error_puang.png" style="max-width: 90%; height: auto;" />
 
-    socket.binaryType = "arraybuffer"; // 이진 데이터로 WebSocket 메시지 수신
+    </div>
+</section>
 
-    socket.onopen = () => {
-        console.log("WebSocket connection established");
-    };
+<!--<div class="container">-->
+<!--    <img id="video" alt="Video Stream" src="/images/placeholder.jpg" />-->
+<!--    <div class="controls">-->
+<!--        <button onclick="startStream()">스트리밍 시작</button>-->
+<!--        <button onclick="stopStream()">스트리밍 중지</button>-->
+<!--    </div>-->
+<!--</div>-->
 
-    socket.onmessage = (event) => {
-        const blob = new Blob([event.data], { type: 'image/jpeg' }); // 프레임을 Blob으로 변환
-        const url = URL.createObjectURL(blob); // Blob을 URL로 변환
-        videoElement.src = url; // 이미지의 src로 설정
-    };
+<script src="/js/manage/intrusion.js"></script>
 
-    socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-    };
-
-    socket.onclose = () => {
-        console.log("WebSocket connection closed");
-    };
-</script>
 </body>
 </html>
