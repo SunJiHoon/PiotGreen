@@ -42,9 +42,6 @@ capture_thread = threading.Thread(target=capture_frames)
 capture_thread.daemon = True
 capture_thread.start()
 
-frame_skip = 3  # 프레임 간격 설정 (매 3번째 프레임만 처리)
-frame_count = 0
-
 while True:
     with lock:
         if global_frame is None:
@@ -53,9 +50,8 @@ while True:
 
         frame = global_frame.copy()
 
-    frame_count += 1
-    if frame_count % frame_skip != 0:
-        continue
+    # 1초에 1프레임만 처리
+    time.sleep(1)
 
     # 객체 인식 수행
     objects = object_cascade.detectMultiScale(
