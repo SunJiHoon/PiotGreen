@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # 스트리밍 URL 설정 (Motion의 MJPEG 스트림 URL)
-stream_url = "http://127.0.0.1:8081/"
+stream_url = "http://192.168.0.200:8081/"
 
 # OpenCV로 MJPEG 스트림 열기
 cap = cv2.VideoCapture(stream_url)
