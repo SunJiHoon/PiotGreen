@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import threading
+import time
 
 # 스트리밍 URL 설정 (Motion의 MJPEG 스트림 URL)
 stream_url = "http://192.168.0.200:8081/"
@@ -18,6 +19,7 @@ object_cascade = cv2.CascadeClassifier(cascade_path)
 
 # 전역 프레임 변수
 global_frame = None
+lock = threading.Lock()
 
 # 프레임 캡처 함수
 def capture_frames():
@@ -31,7 +33,9 @@ def capture_frames():
         frame = cv2.resize(frame, (320, 240))
         # 그레이스케일로 변환
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        global_frame = frame
+        
+        with lock:
+            global_frame = frame
 
 # 프레임 캡처 스레드 시작
 capture_thread = threading.Thread(target=capture_frames)
@@ -42,15 +46,16 @@ frame_skip = 3  # 프레임 간격 설정 (매 3번째 프레임만 처리)
 frame_count = 0
 
 while True:
-    if global_frame is None:
-        continue
+    with lock:
+        if global_frame is None:
+            time.sleep(0.01)
+            continue
+
+        frame = global_frame.copy()
 
     frame_count += 1
     if frame_count % frame_skip != 0:
         continue
-
-    # 현재 프레임 가져오기
-    frame = global_frame.copy()
 
     # 객체 인식 수행
     objects = object_cascade.detectMultiScale(
