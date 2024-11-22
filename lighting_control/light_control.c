@@ -4,14 +4,16 @@
 #include <unistd.h>
 
 #define THRESHOLD 400
-#define LEDPIN 0
+#define LED1PIN 0
+#define LED2PIN 1
 
 // 본 프로그램은 자동/수종모드 여부에 따라 led를 제어합니다.
 
 int main()
 {
     wiringPiSetup();
-    pinMode(LEDPIN, OUTPUT);
+    pinMode(LED1PIN, OUTPUT);
+    pinMode(LED2PIN, OUTPUT);
 
     sqlite3 *db;
     sqlite3_stmt *stmt1;
@@ -55,22 +57,22 @@ int main()
                 // 자동모드
                 if (Value1 > THRESHOLD)
                 {
-                    digitalWrite(LEDPIN, HIGH);
+                    digitalWrite(LED1PIN, HIGH);
                     led1 = 1;
                 }
                 else
                 {
-                    digitalWrite(LEDPIN, LOW);
+                    digitalWrite(LED1PIN, LOW);
                     led1 = 0;
                 }
                 if (Value2 > THRESHOLD)
                 {
-                    digitalWrite(LEDPIN, HIGH);
+                    digitalWrite(LED2PIN, HIGH);
                     led2 = 1;
                 }
                 else
                 {
-                    digitalWrite(LEDPIN, LOW);
+                    digitalWrite(LED2PIN, LOW);
                     led2 = 0;
                 }
                 rc = sqlite3_prepare_v2(db, sql_upd, -1, &stmt2, 0);
@@ -90,19 +92,19 @@ int main()
                 // 수동모드
                 if (led1 == 1)
                 {
-                    digitalWrite(LEDPIN, HIGH);
+                    digitalWrite(LED1PIN, HIGH);
                 }
                 else
                 {
-                    digitalWrite(LEDPIN, LOW);
+                    digitalWrite(LED1PIN, LOW);
                 }
                 if (led2 == 1)
                 {
-                    digitalWrite(LEDPIN, HIGH);
+                    digitalWrite(LED2PIN, HIGH);
                 }
                 else
                 {
-                    digitalWrite(LEDPIN, LOW);
+                    digitalWrite(LED2PIN, LOW);
                 }
             }
         }
