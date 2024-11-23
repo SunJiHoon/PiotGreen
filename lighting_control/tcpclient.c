@@ -44,7 +44,7 @@ void update_callback(void *arg, int action, const char *db_name, const char *tab
 int main(int argc, char **argv)
 {
 	struct sockaddr_in server_addr;
-	char buf[BUFSIZE];
+	char buf1[BUFSIZE], buf2[BUFSIZE];
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 
@@ -107,11 +107,18 @@ int main(int argc, char **argv)
 			int col3 = sqlite3_column_int(stmt, 2);
 			int col4 = sqlite3_column_int(stmt, 3);
 			int col5 = sqlite3_column_int(stmt, 4);
-			snprintf(buf, sizeof(buf), "Data: Value1: %d, Value2: %d, Led1: %d, Led2: %d, Mode: %d\n", col1, col2, col3, col4, col5);
-			printf("%s", buf);
+			snprintf(buf1, sizeof(buf1), "lighting_control:light:[%d, %d]\n", col1, col2);
+			printf("%s", buf1);
+			snprintf(buf2, sizeof(buf2), "lighting_control:led:[%d, %d]\n", col3, col4);
+			printf("%s", buf2);
 		}
 
-		if (send(sockfd, buf, strlen(buf), 0) <= 0)
+		if (send(sockfd, buf1, strlen(buf1), 0) <= 0)
+		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
+			perror("send()");
+			break;
+		}
+		if (send(sockfd, buf2, strlen(buf2), 0) <= 0)
 		{ // MSG_DONTWAIT 제거, strlen(buf) 사용
 			perror("send()");
 			break;
