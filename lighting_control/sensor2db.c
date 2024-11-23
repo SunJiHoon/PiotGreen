@@ -80,9 +80,9 @@ int main(void)
                 break;
             }
         }
-        light1 = analogRead(BASE + 3);
+        light1 = analogRead(BASE + 3) / 1024 * 100;
         sqlite3_bind_int(stmt, 1, light1);
-        light2 = analogRead(BASE + 2);
+        light2 = analogRead(BASE + 2) / 1024 * 100;
         sqlite3_bind_int(stmt, 2, light2);
 
         rc = sqlite3_step(stmt);
