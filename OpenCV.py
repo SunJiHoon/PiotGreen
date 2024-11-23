@@ -1,5 +1,5 @@
 import cv2
-import time 
+import time
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
