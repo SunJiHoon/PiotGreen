@@ -15,8 +15,8 @@
 
 <div class="data-display">
     <h2>실시간 데이터</h2>
-    <p><strong>습도:</strong> <span id="light-level">값</span></p>
-    <p><strong>펌프 상태:</strong> <span id="led-status">작동 중</span></p>
+    <p><strong>현재 습도:</strong> <span id="humidity-level">값</span></p>
+    <p><strong>희망 습도:</strong> <span id="target-humidity-display">미설정</span></p>
 </div>
 
 <div class="mode-control">
@@ -26,8 +26,10 @@
 </div>
 
 <div class="manual-controls">
-    <h2>수동 모드 LED 섹션 제어</h2>
-    <button onclick="togglePump()">Pump 섹션</button>
+    <h2>수동 모드 설정</h2>
+    <p>목표 습도를 입력하세요:</p>
+    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">
+    <button onclick="setTargetHumidity()">희망 습도 설정</button>
 </div>
 <script src="/js/manage/irrigation.js"></script>
 

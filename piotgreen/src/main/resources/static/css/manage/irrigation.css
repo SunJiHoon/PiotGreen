@@ -23,9 +23,17 @@ body {
     background-color: #fff;
     width: 80%;
 }
-
 .manual-controls {
     display: none; /* 기본적으로 숨김 */
+    margin-top: 20px;
+}
+
+input[type="number"] {
+    padding: 10px;
+    font-size: 1em;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 button {
@@ -34,7 +42,6 @@ button {
     border: none;
     padding: 10px 20px;
     font-size: 1em;
-    margin: 5px;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -43,9 +50,4 @@ button {
 
 button:hover {
     background-color: #45a049;
-}
-
-button.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
 }
