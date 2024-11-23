@@ -14,6 +14,29 @@ function setMode(mode) {
     } else {
         manualControls.style.display = 'none';
     }
+
+    // Spring 서버에 POST 요청 보내기
+    fetch('/lighting/mode/set', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            mode: mode
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+        })
+        .catch(error => {
+            console.error('POST 요청 실패:', error);
+        });
 }
 
 // LED 상태 토글 함수
@@ -22,6 +45,31 @@ function toggleLed(index) {
 
     ledStates[index] = ledStates[index] === 0 ? 1 : 0; // 토글
     document.getElementById('led-status').textContent = ledStates.join(' ');
+
+    // Spring 서버에 POST 요청 보내기
+    fetch('/lighting/led/toggle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            index: index,
+            state: ledStates[index] // 토글된 상태를 전송
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+        })
+        .catch(error => {
+            console.error('POST 요청 실패:', error);
+        });
+
 }
 
 // 데이터 갱신 예제 (수신된 값으로 업데이트)
