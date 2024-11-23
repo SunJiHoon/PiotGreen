@@ -14,8 +14,18 @@ if not cap.isOpened():
 frame_width, frame_height = 1280, 720
 
 # 초당 프레임 수 제한 설정
-fps_limit = 15
+fps_limit = 30
 prev_time = 0
+
+# 이전 프레임 초기화
+ret, prev_frame = cap.read()
+if not ret:
+    print("초기 프레임을 가져올 수 없습니다.")
+    exit()
+
+prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
+prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
+prev_frame = cv2.GaussianBlur(prev_frame, (5, 5), 0)
 
 while True:
     ret, frame = cap.read()
@@ -37,15 +47,11 @@ while True:
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
     # 프레임 차이를 사용하여 움직임 감지
-    if 'prev_frame' not in locals():
-        prev_frame = blurred
-        continue
-
     frame_delta = cv2.absdiff(prev_frame, blurred)
-    thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(frame_delta, 30, 255, cv2.THRESH_BINARY)[1]
 
     # 노이즈 제거 (모폴로지 연산 사용)
-    thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -60,7 +66,7 @@ while True:
             max_contour = contour
 
     # 가장 큰 윤곽선에 대해 사각형 그리기
-    if max_contour is not None and max_area > 3000:  # 최소 크기 필터링
+    if max_contour is not None and max_area > 5000:  # 최소 크기 필터링
         (x, y, w, h) = cv2.boundingRect(max_contour)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
