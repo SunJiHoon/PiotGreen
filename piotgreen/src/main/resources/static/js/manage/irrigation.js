@@ -93,6 +93,6 @@ function updateCurrentHumidity() {
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
-    setMode('auto'); // 초기 모드는 자동
+    // setMode('auto'); // 초기 모드는 자동
     setInterval(updateCurrentHumidity, 3000); // 3초마다 현재 습도 갱신
 });
