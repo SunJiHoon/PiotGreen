@@ -27,5 +27,7 @@ DB schema(Value, Led1, Led2, Mode):
 - Mode: Led 제어 모드 (수동: 0, 자동: 1)
 
 컴파일 명령어:
-- gcc -o sensor2db sensor2db.c -lsqlite3 -lwiringPi
-- gcc -o tcpclient tcpclient.c -lsqlite3
+- $ gcc -o control light_control.c -lwiringPi -lsqlite3
+- $ gcc -o sensor2db sensor2db.c -lsqlite3 -lwiringPi
+- $ gcc -o server tcpserver_lighting.c -lsqlite3
+- $ gcc -o client tcpclient.c -lsqlite3
