@@ -18,10 +18,10 @@ while True:
         continue
 
     # YOLOv8 모델로 객체 탐지 수행
-    results = model(frame)
+    results = model(frame, stream=False)  # 각 프레임마다 탐지 수행
 
     # 결과를 프레임에 그려서 출력
-    annotated_frame = results[0].plot()
+    annotated_frame = results[0].plot()  # 인식 결과를 프레임에 그리기
 
     # 결과를 화면에 표시
     cv2.imshow('YOLOv8 Object Detection', annotated_frame)
