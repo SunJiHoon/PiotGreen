@@ -80,9 +80,9 @@ int main(void)
                 break;
             }
         }
-        light1 = analogRead(BASE + 3) / 1024 * 100;
+        light1 = analogRead(BASE + 3) * 100 / 1024;
         sqlite3_bind_int(stmt, 1, light1);
-        light2 = analogRead(BASE + 2) / 1024 * 100;
+        light2 = analogRead(BASE + 2) * 100 / 1024;
         sqlite3_bind_int(stmt, 2, light2);
 
         rc = sqlite3_step(stmt);
@@ -93,7 +93,7 @@ int main(void)
         }
         else
         {
-            printf("sensor2db: Inserted Value: %d, %d\n", light1, light2);
+            printf("sensor2db: Inserted Value: %d%, %d%\n", light1, light2);
         }
         sqlite3_reset(stmt);
         delay(1000);
