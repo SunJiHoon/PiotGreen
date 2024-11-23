@@ -32,6 +32,30 @@ function setTargetHumidity() {
     // 희망 습도 값 화면에 반영
     const targetHumidityDisplay = document.getElementById('target-humidity-display');
     targetHumidityDisplay.textContent = `${targetHumidity}%`;
+
+    // Spring 서버에 POST 요청 보내기
+    fetch('/irrigation/humidity/set', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            targetHumidity: targetHumidity
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+        })
+        .catch(error => {
+            console.error('POST 요청 실패:', error);
+        });
+
 }
 
 // 실시간 데이터 업데이트 함수 (예제용)
