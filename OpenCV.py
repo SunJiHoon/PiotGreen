@@ -32,14 +32,23 @@ while True:
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # 가장 큰 윤곽선 찾기
+    max_contour = None
+    max_area = 0
     for contour in contours:
-        if cv2.contourArea(contour) < 500:
-            continue
-        (x, y, w, h) = cv2.boundingRect(contour)
+        area = cv2.contourArea(contour)
+        if area > max_area:
+            max_area = area
+            max_contour = contour
+
+    # 가장 큰 윤곽선에 대해 사각형 그리기
+    if max_contour is not None and max_area > 1000:  # 최소 크기 필터링
+        (x, y, w, h) = cv2.boundingRect(max_contour)
         cv2.rectangle(frame2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
-    cv2.imshow('Motion Detection', frame2)
+    cv2.imshow('Largest Motion Detection', frame2)
 
     # 'q' 키를 누르면 종료
     if cv2.waitKey(1) & 0xFF == ord('q'):
