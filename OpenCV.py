@@ -1,5 +1,6 @@
 import cv2
 import time
+import numpy as np
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
@@ -19,9 +20,8 @@ if not ret:
 frame1 = cv2.resize(frame1, (320, 240))  # 해상도 키우기
 gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
 
-# 프레임 스킵 설정
-frame_skip = 30  # 1초에 1프레임만 처리 (30fps 기준)
-frame_count = 0
+# 배경 제거기 설정 (BackgroundSubtractorMOG2 사용)
+fgbg = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=50, detectShadows=False)
 
 while True:
     ret, frame2 = cap.read()
@@ -32,16 +32,14 @@ while True:
     frame2 = cv2.resize(frame2, (320, 240))
     gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
 
-    frame_count += 1
-    if frame_count % frame_skip != 0:
-        continue
+    # 배경 제거를 통해 움직임 감지
+    fgmask = fgbg.apply(gray2)
 
-    # 고정된 배경 프레임과 현재 프레임 비교
-    frame_delta = cv2.absdiff(gray1, gray2)
-    thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
+    # 노이즈 제거 (모폴로지 연산 사용)
+    fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
 
     # 윤곽선 찾기
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(fgmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # 가장 큰 윤곽선 찾기
     max_contour = None
@@ -55,10 +53,10 @@ while True:
     # 가장 큰 윤곽선에 대해 사각형 그리기
     if max_contour is not None and max_area > 1000:  # 최소 크기 필터링
         (x, y, w, h) = cv2.boundingRect(max_contour)
-        cv2.rectangle(gray2, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(frame2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
-    cv2.imshow('Largest Motion Detection', gray2)
+    cv2.imshow('Largest Motion Detection', frame2)
 
     # 'q' 키를 누르면 종료
     if cv2.waitKey(1) & 0xFF == ord('q'):
