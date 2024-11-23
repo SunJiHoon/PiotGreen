@@ -1,4 +1,5 @@
 import cv2
+import time
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
@@ -8,25 +9,36 @@ if not cap.isOpened():
     print("스트림을 열 수 없습니다.")
     exit()
 
-# 첫 번째 프레임 저장
+# 첫 번째 프레임 저장 (고정 배경 프레임으로 사용)
 ret, frame1 = cap.read()
 if not ret:
     print("첫 번째 프레임을 가져올 수 없습니다.")
     exit()
 
+# 해상도 줄이기 (속도 향상을 위해)
+frame1 = cv2.resize(frame1, (160, 120))
 gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
 gray1 = cv2.GaussianBlur(gray1, (21, 21), 0)
 
+# 프레임 스킵 설정
+frame_skip = 5  # 매 5번째 프레임만 처리
+frame_count = 0
+
 while True:
-    # 현재 프레임 가져오기
     ret, frame2 = cap.read()
     if not ret:
         continue
 
+    # 해상도 줄이기
+    frame2 = cv2.resize(frame2, (160, 120))
     gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
     gray2 = cv2.GaussianBlur(gray2, (21, 21), 0)
 
-    # 프레임 간 차이 계산
+    frame_count += 1
+    if frame_count % frame_skip != 0:
+        continue
+
+    # 고정된 배경 프레임과 현재 프레임 비교
     frame_delta = cv2.absdiff(gray1, gray2)
     thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
 
@@ -53,9 +65,6 @@ while True:
     # 'q' 키를 누르면 종료
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
-    # 이전 프레임 업데이트
-    gray1 = gray2
 
 # 자원 해제
 cap.release()
