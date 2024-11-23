@@ -16,12 +16,11 @@ if not ret:
     exit()
 
 # 해상도 줄이기 (속도 향상을 위해)
-frame1 = cv2.resize(frame1, (160, 120))
+frame1 = cv2.resize(frame1, (320, 240))  # 해상도 키우기
 gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-gray1 = cv2.GaussianBlur(gray1, (21, 21), 0)
 
 # 프레임 스킵 설정
-frame_skip = 5  # 매 5번째 프레임만 처리
+frame_skip = 30  # 1초에 1프레임만 처리 (30fps 기준)
 frame_count = 0
 
 while True:
@@ -30,9 +29,8 @@ while True:
         continue
 
     # 해상도 줄이기
-    frame2 = cv2.resize(frame2, (160, 120))
+    frame2 = cv2.resize(frame2, (320, 240))
     gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
-    gray2 = cv2.GaussianBlur(gray2, (21, 21), 0)
 
     frame_count += 1
     if frame_count % frame_skip != 0:
