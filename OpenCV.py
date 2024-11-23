@@ -1,10 +1,4 @@
 import cv2
-from ultralytics import YOLO
-import threading
-import time
-
-# YOLOv8 모델 로드 (경량화된 YOLOv8s 모델 사용)
-model = YOLO('yolov8n.pt')  # 경량화된 YOLOv8 Nano 모델 사용
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
@@ -14,61 +8,45 @@ if not cap.isOpened():
     print("스트림을 열 수 없습니다.")
     exit()
 
-# 전역 프레임 변수
-global_frame = None
-lock = threading.Lock()
+# 첫 번째 프레임 저장
+ret, frame1 = cap.read()
+if not ret:
+    print("첫 번째 프레임을 가져올 수 없습니다.")
+    exit()
 
-# 프레임 캡처 함수 (스레드로 실행)
-def capture_frames():
-    global global_frame
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            continue
-
-        # 프레임 크기 축소 (해상도 줄이기)
-        resized_frame = cv2.resize(frame, (320, 240))
-
-        with lock:
-            global_frame = resized_frame
-
-# 프레임 캡처 스레드 시작
-capture_thread = threading.Thread(target=capture_frames)
-capture_thread.daemon = True
-capture_thread.start()
-
-# YOLO 탐지 설정
-frame_skip = 1  # 매 프레임 처리 (프레임 스킵 없음)
-frame_count = 0
+gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+gray1 = cv2.GaussianBlur(gray1, (21, 21), 0)
 
 while True:
-    with lock:
-        if global_frame is None:
-            time.sleep(0.01)
-            continue
-        frame = global_frame.copy()
-
-    frame_count += 1
-    if frame_count % frame_skip != 0:
+    # 현재 프레임 가져오기
+    ret, frame2 = cap.read()
+    if not ret:
         continue
 
-    # YOLO 모델로 객체 탐지 수행 (scale 설정으로 빠르게)
-    start_time = time.time()
-    results = model(frame, stream=False, conf=0.3, iou=0.3)  # 낮은 confidence와 IoU threshold 설정으로 속도 증가
+    gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.GaussianBlur(gray2, (21, 21), 0)
 
-    # 결과를 프레임에 그려서 출력
-    annotated_frame = results[0].plot()
+    # 프레임 간 차이 계산
+    frame_delta = cv2.absdiff(gray1, gray2)
+    thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
+
+    # 윤곽선 찾기
+    contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for contour in contours:
+        if cv2.contourArea(contour) < 500:
+            continue
+        (x, y, w, h) = cv2.boundingRect(contour)
+        cv2.rectangle(frame2, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
-    cv2.imshow('YOLOv8 Object Detection', annotated_frame)
+    cv2.imshow('Motion Detection', frame2)
 
     # 'q' 키를 누르면 종료
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    end_time = time.time()
-    fps = 1 / (end_time - start_time)
-    print(f"FPS: {fps:.2f}")
+    # 이전 프레임 업데이트
+    gray1 = gray2
 
 # 자원 해제
 cap.release()
