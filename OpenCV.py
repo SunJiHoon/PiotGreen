@@ -10,8 +10,8 @@ if not cap.isOpened():
     print("스트림을 열 수 없습니다.")
     exit()
 
-# 해상도 줄이기 (속도 향상을 위해)
-frame_width, frame_height = 160, 120
+# 해상도를 720p로 설정
+frame_width, frame_height = 1280, 720
 
 while True:
     ret, frame = cap.read()
@@ -31,10 +31,10 @@ while True:
         continue
 
     frame_delta = cv2.absdiff(prev_frame, blurred)
-    thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(frame_delta, 30, 255, cv2.THRESH_BINARY)[1]
 
     # 노이즈 제거 (모폴로지 연산 사용)
-    thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -49,7 +49,7 @@ while True:
             max_contour = contour
 
     # 가장 큰 윤곽선에 대해 사각형 그리기
-    if max_contour is not None and max_area > 500:  # 최소 크기 필터링
+    if max_contour is not None and max_area > 1000:  # 최소 크기 필터링
         (x, y, w, h) = cv2.boundingRect(max_contour)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
