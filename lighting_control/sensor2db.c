@@ -93,7 +93,7 @@ int main(void)
         }
         else
         {
-            printf("Inserted Value: %d, %d\n", light1, light2);
+            printf("sensor2db: Inserted Value: %d, %d\n", light1, light2);
         }
         sqlite3_reset(stmt);
         delay(1000);

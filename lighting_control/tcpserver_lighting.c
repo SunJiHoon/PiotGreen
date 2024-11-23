@@ -75,7 +75,7 @@ void *client_thread_loop(void *aux)
 		}
 
 		/* 클라이언트가 보낸 데이터에 따라 LED 제어 */
-		printf("클라이언트 %s 에서 보낸 데이터: %s", fromstr, buf);
+		printf("server: 클라이언트 %s 에서 보낸 데이터: %s", fromstr, buf);
 		int val = 0;
 		if (strstr(buf, "LED"))
 		{

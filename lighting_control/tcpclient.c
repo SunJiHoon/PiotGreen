@@ -108,9 +108,9 @@ int main(int argc, char **argv)
 			int col4 = sqlite3_column_int(stmt, 3);
 			int col5 = sqlite3_column_int(stmt, 4);
 			snprintf(buf1, sizeof(buf1), "lighting_control:light:[%d, %d]\n", col1, col2);
-			printf("%s", buf1);
+			printf("client: %s", buf1);
 			snprintf(buf2, sizeof(buf2), "lighting_control:led:[%d, %d]\n", col3, col4);
-			printf("%s", buf2);
+			printf("client: %s", buf2);
 		}
 
 		if (send(sockfd, buf1, strlen(buf1), 0) <= 0)
