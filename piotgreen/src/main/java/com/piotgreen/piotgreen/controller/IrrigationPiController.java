@@ -31,4 +31,21 @@ public class IrrigationPiController {
         return ResponseEntity.ok(irrigationPiClientService.sendCommand(command));
     }
 
+
+    @PostMapping("/mode/set")
+    public ResponseEntity<String> setMode(@RequestBody Map<String, String> payload) {
+        String mode = payload.get("mode");
+
+        String command;
+        if (mode.compareTo("manual") == 0){
+            command = "mode:pass";
+            return ResponseEntity.ok(irrigationPiClientService.sendCommand(command));
+        }
+        if (mode.compareTo("auto") == 0){
+            command = "mode:auto";
+            return ResponseEntity.ok(irrigationPiClientService.sendCommand(command));
+        }
+        return ResponseEntity.badRequest().body("bad request");
+    }
+
 }

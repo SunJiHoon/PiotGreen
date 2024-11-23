@@ -14,6 +14,30 @@ function setMode(mode) {
     manualControls.style.display = mode === 'manual' ? 'block' : 'none';
 
     console.log(`현재 모드: ${mode === 'auto' ? '자동' : '수동'}`);
+
+
+    // Spring 서버에 POST 요청 보내기
+    fetch('/irrigation/mode/set', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            mode: mode
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+        })
+        .catch(error => {
+            console.error('POST 요청 실패:', error);
+        });
 }
 
 // 희망 습도 설정 함수
@@ -69,6 +93,6 @@ function updateCurrentHumidity() {
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
-    setMode('auto'); // 초기 모드는 자동
+    // setMode('auto'); // 초기 모드는 자동
     setInterval(updateCurrentHumidity, 3000); // 3초마다 현재 습도 갱신
 });
