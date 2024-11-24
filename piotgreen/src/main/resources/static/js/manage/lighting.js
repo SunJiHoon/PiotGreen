@@ -26,14 +26,18 @@ function setMode(mode) {
             mode: mode
         })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('서버 응답 오류');
-            }
-            return response.json();
-        })
         .then(data => {
+            // 서버 응답 처리
             console.log('서버 응답:', data);
+
+            // 추가적으로 데이터를 화면에 반영할 수 있음
+            if (data.includes("mode:pass")) {
+                console.log("수동 모드로 전환 성공");
+                // 예시: 화면에 상태 업데이트
+                document.getElementById('current-mode-display').textContent = "수동 모드 활성화됨";
+            } else {
+                console.warn("응답에 예상된 데이터가 포함되지 않음:", data);
+            }
         })
         .catch(error => {
             console.error('POST 요청 실패:', error);
