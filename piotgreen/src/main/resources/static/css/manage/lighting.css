@@ -56,6 +56,8 @@ button.disabled {
     display: flex; /* Flexbox를 사용하여 가로로 정렬 */
     gap: 20px; /* 섹션 간 간격 */
     align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+
     margin-top: 10px; /* 위쪽 여백 */
 }
 
