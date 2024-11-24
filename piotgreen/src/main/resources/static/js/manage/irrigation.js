@@ -94,5 +94,42 @@ function updateCurrentHumidity() {
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
     // setMode('auto'); // 초기 모드는 자동
-    setInterval(updateCurrentHumidity, 3000); // 3초마다 현재 습도 갱신
+    // setInterval(updateCurrentHumidity, 3000); // 3초마다 현재 습도 갱신
 });
+
+
+
+
+
+
+
+const soilMoistureElement = document.getElementById("humidity-level");
+const socket = new SockJS('/websocket');
+const stompClient = Stomp.over(socket);
+
+// STOMP 클라이언트 연결
+stompClient.connect({}, function () {
+        console.log("STOMP 클라이언트 연결 성공");
+        // 흙 습도 토픽에 구독
+        stompClient.subscribe('/topic/irrigation_system/moisture', function (message) {
+            console.log("Received moisture message:", message);
+
+            if (message.body) {
+                try {
+                    const data = JSON.parse(message.body);
+                    if (data !== undefined) {
+                        soilMoistureElement.textContent = data;
+                    }
+                } catch (error) {
+                    console.error("흙 습도 메시지 본문을 파싱하는 중 오류 발생:", error);
+                }
+            } else {
+                console.log("Received an empty moisture message body.");
+            }
+        });
+
+
+    }, function (error) {
+        console.error("STOMP 클라이언트 연결 실패:", error);
+    }
+);

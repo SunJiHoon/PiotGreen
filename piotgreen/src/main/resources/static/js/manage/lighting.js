@@ -80,7 +80,42 @@ function updateData(lightLevel, ledArray) {
 
 // 테스트 데이터 (실제 구현에서는 수신 데이터로 대체)
 setInterval(() => {
-    const fakeLightLevel = Math.floor(Math.random() * 100); // 0~1000 범위
+    const fakeLightLevel = Math.floor(Math.random() * 100); // 0~100 범위
     const fakeLedArray = ledStates;
-    updateData(fakeLightLevel, fakeLedArray);
+    // updateData(fakeLightLevel, fakeLedArray);
 }, 1000); // 1초마다 데이터 갱신
+
+
+
+
+
+
+const lightLevelElement = document.getElementById("light-level");
+const socket = new SockJS('/websocket');
+const stompClient = Stomp.over(socket);
+
+// STOMP 클라이언트 연결
+stompClient.connect({}, function () {
+        console.log("STOMP 클라이언트 연결 성공");
+
+        // 광원량 토픽에 구독
+        stompClient.subscribe('/topic/lighting_control/light', function (message) {
+            console.log("Received light level message:", message);
+
+            if (message.body) {
+                try {
+                    const data = JSON.parse(message.body);
+                    if (data !== undefined) {
+                        lightLevelElement.textContent = data;
+                    }
+                } catch (error) {
+                    console.error("광원량 메시지 본문을 파싱하는 중 오류 발생:", error);
+                }
+            } else {
+                console.log("Received an empty light level message body.");
+            }
+        });
+    }, function (error) {
+        console.error("STOMP 클라이언트 연결 실패:", error);
+    }
+);
