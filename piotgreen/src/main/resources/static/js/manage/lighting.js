@@ -41,9 +41,15 @@ function setMode(mode) {
             if (data.includes("mode:pass")) {
                 console.log("수동 모드로 전환 성공");
                 // 예시: 화면에 상태 업데이트
-                document.getElementById('current-mode-display').textContent = "수동 모드 활성화됨";
-            } else {
-                console.warn("응답에 예상된 데이터가 포함되지 않음:", data);
+                // document.getElementById('current-mode-display').textContent = "수동 모드 활성화됨";
+            } else if (data.includes("mode:auto")) {
+                console.log("자동 모드로 전환 성공");
+                // 예시: 화면에 상태 업데이트
+                // document.getElementById('current-mode-display').textContent = "수동 모드 활성화됨";
+            }
+            else{
+                // console.warn("응답에 예상된 데이터가 포함되지 않음:", data);
+                console.log("응답에 예상된 데이터가 포함되지 않음:", data);
             }
         })
         .catch(error => {
