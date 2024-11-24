@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PiotGreen - 스마트 농업 시스템</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <header class="header">
@@ -15,11 +16,25 @@
 <section class="real-time-monitor">
     <div class="monitor-item">
         <h2>현재 광원량</h2>
-        <p id="light-level">0</p>
+<!--        <p id="light-level">0</p>-->
+        <div class="light-sections-container">
+            <!-- 광량 섹션 1 -->
+            <div id="light-section-1" class="light-container">
+                <p><strong>섹션 1:</strong> <span id="light-level-1">0</span><span> %</span></p>
+            </div>
+            <!-- 광량 섹션 2 -->
+            <div id="light-section-2" class="light-container">
+                <p><strong>섹션 2:</strong> <span id="light-level-2">0</span><span> %</span></p>
+            </div>
+        </div>
     </div>
     <div class="monitor-item">
         <h2>현재 흙 습도</h2>
-        <p id="soil-moisture">0</p>
+        <div class="soil-sections-container">
+            <div id="soil-moisture-1" class="light-container">
+                <p><span id="soil-moisture">0</span><span> %</span></p>
+            </div>
+        </div>
     </div>
 </section>
 

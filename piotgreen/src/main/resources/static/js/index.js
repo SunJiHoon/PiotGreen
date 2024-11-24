@@ -15,6 +15,17 @@ const lightLevelElement = document.getElementById("light-level");
 const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 
+
+// 광량 섹션 업데이트 함수
+function updateLightLevel(section, value) {
+    if (section === 1) {
+        document.getElementById('light-level-1').textContent = value;
+    } else if (section === 2) {
+        document.getElementById('light-level-2').textContent = value;
+    }
+}
+
+
 // STOMP 클라이언트 연결
 stompClient.connect({}, function () {
         console.log("STOMP 클라이언트 연결 성공");
@@ -37,16 +48,19 @@ stompClient.connect({}, function () {
                 console.log("Received an empty moisture message body.");
             }
         });
-
-        // 광원량 토픽에 구독
+// 광원량 토픽에 구독
         stompClient.subscribe('/topic/lighting_control/light', function (message) {
             console.log("Received light level message:", message);
 
             if (message.body) {
                 try {
                     const data = JSON.parse(message.body);
-                    if (data !== undefined) {
-                        lightLevelElement.textContent = data;
+                    if (Array.isArray(data) && data.length === 2) {
+                        // data[0]은 섹션 1, data[1]은 섹션 2의 광량 값
+                        updateLightLevel(1, data[0]);
+                        updateLightLevel(2, data[1]);
+                    } else {
+                        console.error("유효하지 않은 광량 데이터 형식:", data);
                     }
                 } catch (error) {
                     console.error("광원량 메시지 본문을 파싱하는 중 오류 발생:", error);

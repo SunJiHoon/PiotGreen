@@ -222,7 +222,7 @@ stompClient.connect({}, function () {
         });
 
 
-    // 광원량 토픽에 구독
+    // 광원 LED 토픽에 구독
     stompClient.subscribe('/topic/lighting_control/led', function (message) {
         console.log("Received light level message:", message);
 
