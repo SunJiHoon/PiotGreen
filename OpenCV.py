@@ -23,7 +23,7 @@ prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
 # 초당 프레임 수 제한 설정
-fps_limit = 30
+fps_limit = 60  # 프레임 수 증가
 prev_time = time.time()
 
 # 이동 경로를 그리기 위한 초기 설정
@@ -35,9 +35,9 @@ while True:
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.01초 단위)
+    # 현재 시간 계산 (0.005초 단위로 변경)
     current_time = time.time()
-    if (current_time - prev_time) < 0.01:
+    if (current_time - prev_time) < 0.005:
         continue
 
     prev_time = current_time
@@ -46,9 +46,12 @@ while True:
     frame = cv2.resize(frame, (frame_width, frame_height))
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+    # 가우시안 블러를 사용하여 노이즈 제거
+    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    _, thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)  # 민감도 높임
+    _, thresh = cv2.threshold(frame_delta, 20, 255, cv2.THRESH_BINARY)  # 민감도 높임
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -63,7 +66,7 @@ while True:
             max_contour = contour
 
     # 트래커 초기화 또는 업데이트
-    if max_contour is not None and max_area > 2000:  # 최소 크기 필터링, 민감도 증가
+    if max_contour is not None and max_area > 1000:  # 최소 크기 필터링, 민감도 증가
         (x, y, w, h) = cv2.boundingRect(max_contour)
         bbox = (x, y, w, h)
         tracker_initialized = True
