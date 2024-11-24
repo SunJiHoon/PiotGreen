@@ -31,9 +31,9 @@ while True:
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.033초 단위로 변경)
+    # 현재 시간 계산 (0.001초 단위로 변경)
     current_time = time.time()
-    if (current_time - prev_time) < (1.0 / fps_limit):
+    if (current_time - prev_time) < 0.001:
         continue
 
     prev_time = current_time
