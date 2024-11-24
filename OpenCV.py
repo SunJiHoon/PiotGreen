@@ -28,16 +28,16 @@ prev_time = time.time()
 
 # 이동 경로를 그리기 위한 초기 설정
 tracker_initialized = False
-tracker = None
+bbox = None
 
 while True:
     ret, frame = cap.read()
     if not ret:
         continue
 
-    # 현재 시간 계산
+    # 현재 시간 계산 (0.01초 단위)
     current_time = time.time()
-    if (current_time - prev_time) < 1.0 / fps_limit:
+    if (current_time - prev_time) < 0.01:
         continue
 
     prev_time = current_time
@@ -48,7 +48,7 @@ while True:
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    _, thresh = cv2.threshold(frame_delta, 50, 255, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(frame_delta, 25, 255, cv2.THRESH_BINARY)  # 민감도 높임
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -63,22 +63,15 @@ while True:
             max_contour = contour
 
     # 트래커 초기화 또는 업데이트
-    if max_contour is not None and max_area > 5000:  # 최소 크기 필터링
+    if max_contour is not None and max_area > 2000:  # 최소 크기 필터링, 민감도 증가
         (x, y, w, h) = cv2.boundingRect(max_contour)
-        if not tracker_initialized:
-            # KCF 트래커 초기화
-            tracker = cv2.TrackerKCF_create()
-            tracker.init(frame, (x, y, w, h))
-            tracker_initialized = True
-        else:
-            tracker.init(frame, (x, y, w, h))
+        bbox = (x, y, w, h)
+        tracker_initialized = True
     
     # 트래커 업데이트 및 바운딩 박스 그리기
-    if tracker_initialized:
-        success, bbox = tracker.update(frame)
-        if success:
-            (x, y, w, h) = [int(v) for v in bbox]
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    if tracker_initialized and bbox is not None:
+        (x, y, w, h) = bbox
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
     cv2.imshow('Motion Tracking', frame)
