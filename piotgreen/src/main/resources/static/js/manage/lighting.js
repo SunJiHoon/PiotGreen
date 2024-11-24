@@ -98,7 +98,7 @@ function updateData(lightLevel, ledArray) {
 // 테스트 데이터 (실제 구현에서는 수신 데이터로 대체)
 setInterval(() => {
     const fakeLightLevel = Math.floor(Math.random() * 100); // 0~100 범위
-    const fakeLedArray = ledStates;
+    // const fakeLedArray = ledStates;
     // updateData(fakeLightLevel, fakeLedArray);
 }, 1000); // 1초마다 데이터 갱신
 
@@ -115,20 +115,20 @@ function updateLedSections(data) {
     // 섹션 1 LED 상태 업데이트
     const section1 = data[0];
     const led1_0 = document.getElementById('led-1-0');
-    const led1_1 = document.getElementById('led-1-1');
+    // const led1_1 = document.getElementById('led-1-1');
 
     // 섹션 2 LED 상태 업데이트
     const section2 = data[1];
     const led2_0 = document.getElementById('led-2-0');
-    const led2_1 = document.getElementById('led-2-1');
+    // const led2_1 = document.getElementById('led-2-1');
 
     // 섹션 1 LED 상태 반영
     updateLedState(led1_0, section1 === 1);
-    updateLedState(led1_1, section1 === 1);
+    // updateLedState(led1_1, section1 === 1);
 
     // 섹션 2 LED 상태 반영
     updateLedState(led2_0, section2 === 1);
-    updateLedState(led2_1, section2 === 1);
+    // updateLedState(led2_1, section2 === 1);
 }
 
 // LED 상태를 on/off로 업데이트하는 함수
