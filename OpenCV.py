@@ -31,9 +31,9 @@ while True:
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.05초 단위로 변경)
+    # 현재 시간 계산 (0.033초 단위로 변경)
     current_time = time.time()
-    if (current_time - prev_time) < 0.05:
+    if (current_time - prev_time) < (1.0 / fps_limit):
         continue
 
     prev_time = current_time
@@ -52,8 +52,7 @@ while True:
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # 가장 큰 윤곽선 찾기
-    max_contour = None
+    # 가장 큰 윤곽선 찾기 및 움직임 감지
     max_area = 0
     for contour in contours:
         area = cv2.contourArea(contour)
@@ -61,10 +60,9 @@ while True:
             max_area = area
             max_contour = contour
 
-    # 가장 큰 윤곽선에 대해 움직임 감지
-    if max_contour is not None and max_area > 500:  # 최소 크기 필터링, 민감도 증가
+    if max_area > 500:  # 최소 크기 필터링, 민감도 증가
         (x, y, w, h) = cv2.boundingRect(max_contour)
-        print(f"Motion detected: Position=({x}, {y}), Size=({w}, {h})")
+        print(f"Motion detected: Position=({x}, {y}), Size=({w}, {h})", flush=True)
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
