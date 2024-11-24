@@ -66,6 +66,27 @@ function toggleLed(index) {
 
     // ledStates[index] = ledStates[index] === 0 ? 1 : 0; // 토글
     // document.getElementById('led-status').textContent = ledStates.join(' ');
+    let currState = 0;
+    if(index === 0){
+        const led1Element = document.getElementById('led-1-0'); // LED 요소 선택
+
+        if (led1Element.classList.contains('on')) {
+            currState = 1; // 켜짐 상태
+        } else if (led1Element.classList.contains('off')) {
+            currState = 0; // 꺼짐 상태
+        }
+    }
+    else if(index===1){
+        const led2Element = document.getElementById('led-2-0'); // LED 요소 선택
+
+        if (led2Element.classList.contains('on')) {
+            currState = 1; // 켜짐 상태
+        } else if (led2Element.classList.contains('off')) {
+            currState = 0; // 꺼짐 상태
+        }
+    }
+    let nextState = currState === 0 ? 1 : 0; // 토글
+
 
     // Spring 서버에 POST 요청 보내기
     fetch('/lighting/led/toggle', {
@@ -75,7 +96,8 @@ function toggleLed(index) {
         },
         body: JSON.stringify({
             index: index,
-            state: ledStates[index] // 토글된 상태를 전송
+            // state: ledStates[index] // 토글된 상태를 전송
+            state: nextState
         })
     })
         .then(response => {
