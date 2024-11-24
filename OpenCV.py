@@ -1,5 +1,8 @@
 import cv2
 import numpy as np
+import torch
+import torchvision.transforms as transforms
+from torchvision import models
 import time
 
 # 스트리밍 URL 설정
@@ -23,8 +26,21 @@ prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
 # 초당 프레임 수 제한 설정
-fps_limit = 60  # 프레임 수 증가
+fps_limit = 30
 prev_time = time.time()
+
+# Pre-trained MobileNet 모델 로드 (경량화된 모델 사용)
+model = models.mobilenet_v2(pretrained=True).eval()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+# 이미지 전처리 설정
+transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
 
 # 이동 경로를 그리기 위한 초기 설정
 tracker_initialized = False
@@ -35,9 +51,9 @@ while True:
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.005초 단위로 변경)
+    # 현재 시간 계산 (0.01초 단위)
     current_time = time.time()
-    if (current_time - prev_time) < 0.005:
+    if (current_time - prev_time) < 0.01:
         continue
 
     prev_time = current_time
@@ -70,10 +86,15 @@ while True:
         (x, y, w, h) = cv2.boundingRect(max_contour)
         bbox = (x, y, w, h)
         tracker_initialized = True
-    
-    # 트래커 업데이트 및 바운딩 박스 그리기
+
+    # MobileNet을 사용하여 객체 인식
     if tracker_initialized and bbox is not None:
-        (x, y, w, h) = bbox
+        x, y, w, h = bbox
+        cropped_frame = frame[y:y + h, x:x + w]
+        input_tensor = transform(cropped_frame).unsqueeze(0).to(device)
+        with torch.no_grad():
+            output = model(input_tensor)
+        # 바운딩 박스 그리기
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
