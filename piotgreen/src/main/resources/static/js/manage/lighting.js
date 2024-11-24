@@ -91,6 +91,7 @@ setInterval(() => {
 
 
 const lightLevelElement = document.getElementById("light-level");
+const ledStatusElement = document.getElementById("led-status");
 const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 
@@ -115,6 +116,25 @@ stompClient.connect({}, function () {
                 console.log("Received an empty light level message body.");
             }
         });
+
+
+    // 광원량 토픽에 구독
+    stompClient.subscribe('/topic/lighting_control/led', function (message) {
+        console.log("Received light level message:", message);
+
+        if (message.body) {
+            try {
+                const data = JSON.parse(message.body);
+                if (data !== undefined) {
+                    ledStatusElement.textContent = data;
+                }
+            } catch (error) {
+                console.error("광원량 메시지 본문을 파싱하는 중 오류 발생:", error);
+            }
+        } else {
+            console.log("Received an empty light level message body.");
+        }
+    });
     }, function (error) {
         console.error("STOMP 클라이언트 연결 실패:", error);
     }
