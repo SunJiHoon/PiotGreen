@@ -50,6 +50,15 @@ button.disabled {
     cursor: not-allowed;
 }
 
+
+/* 전체 LED 섹션 컨테이너 스타일 */
+.led-sections-container {
+    display: flex; /* Flexbox를 사용하여 가로로 정렬 */
+    gap: 20px; /* 섹션 간 간격 */
+    align-items: center; /* 수직 정렬 */
+    margin-top: 10px; /* 위쪽 여백 */
+}
+
 /* LED 컨테이너 스타일 */
 .led-container {
     display: flex;
