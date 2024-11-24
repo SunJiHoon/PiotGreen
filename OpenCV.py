@@ -31,7 +31,7 @@ fps_limit = 30  # 최대 프레임 수를 30으로 설정
 prev_time = time.time()
 
 # Pre-trained Faster R-CNN 모델 로드 (객체 탐지 모델 사용)
-model = fasterrcnn_resnet50_fpn(pretrained=True).eval()
+model = fasterrcnn_resnet50_fpn(weights='DEFAULT').eval()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
 
