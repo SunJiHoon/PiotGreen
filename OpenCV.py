@@ -1,8 +1,5 @@
 import cv2
 import numpy as np
-import torch
-import torchvision.transforms as transforms
-from torchvision import models
 import time
 
 # 스트리밍 URL 설정
@@ -26,34 +23,17 @@ prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
 # 초당 프레임 수 제한 설정
-fps_limit = 30
+fps_limit = 30  # 최대 프레임 수를 30으로 설정
 prev_time = time.time()
-
-# Pre-trained MobileNet 모델 로드 (경량화된 모델 사용)
-model = models.mobilenet_v2(pretrained=True).eval()
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model.to(device)
-
-# 이미지 전처리 설정
-transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
-
-# 이동 경로를 그리기 위한 초기 설정
-tracker_initialized = False
-bbox = None
 
 while True:
     ret, frame = cap.read()
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.01초 단위)
+    # 현재 시간 계산 (0.01초 단위로 변경)
     current_time = time.time()
-    if (current_time - prev_time) < 0.01:
+    if (current_time - prev_time) < 1.0 / fps_limit:
         continue
 
     prev_time = current_time
@@ -67,7 +47,7 @@ while True:
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    _, thresh = cv2.threshold(frame_delta, 20, 255, cv2.THRESH_BINARY)  # 민감도 높임
+    _, thresh = cv2.threshold(frame_delta, 15, 255, cv2.THRESH_BINARY)  # 민감도 높임
 
     # 윤곽선 찾기
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -81,20 +61,9 @@ while True:
             max_area = area
             max_contour = contour
 
-    # 트래커 초기화 또는 업데이트
-    if max_contour is not None and max_area > 1000:  # 최소 크기 필터링, 민감도 증가
+    # 가장 큰 윤곽선에 대해 사각형 그리기
+    if max_contour is not None and max_area > 500:  # 최소 크기 필터링, 민감도 증가
         (x, y, w, h) = cv2.boundingRect(max_contour)
-        bbox = (x, y, w, h)
-        tracker_initialized = True
-
-    # MobileNet을 사용하여 객체 인식
-    if tracker_initialized and bbox is not None:
-        x, y, w, h = bbox
-        cropped_frame = frame[y:y + h, x:x + w]
-        input_tensor = transform(cropped_frame).unsqueeze(0).to(device)
-        with torch.no_grad():
-            output = model(input_tensor)
-        # 바운딩 박스 그리기
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     # 결과를 화면에 표시
