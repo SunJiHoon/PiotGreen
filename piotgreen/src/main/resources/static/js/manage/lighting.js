@@ -111,7 +111,7 @@ function toggleLed(index) {
             if (!response.ok) {
                 throw new Error('서버 응답 오류');
             }
-            return response.json();
+            return response.text();
         })
         .then(data => {
             console.log('서버 응답:', data);
