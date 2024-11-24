@@ -22,29 +22,10 @@ if not ret:
 prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
-# 초당 프레임 수 제한 설정
-fps_limit = 30  # 최대 프레임 수를 30으로 설정
-prev_time = time.time()
-
-# 처리 속도 향상을 위한 설정
-frame_skip = 2  # 매 2번째 프레임만 처리하여 딜레이 감소
-frame_count = 0
-
 while True:
     ret, frame = cap.read()
     if not ret:
         continue
-
-    frame_count += 1
-    if frame_count % frame_skip != 0:
-        continue
-
-    # 현재 시간 계산 (0.01초 단위로 변경)
-    current_time = time.time()
-    if (current_time - prev_time) < (1.0 / fps_limit):
-        continue
-
-    prev_time = current_time
 
     # 해상도 조정 및 그레이스케일 변환
     frame = cv2.resize(frame, (frame_width, frame_height))
@@ -55,23 +36,16 @@ while True:
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    _, thresh = cv2.threshold(frame_delta, 15, 255, cv2.THRESH_BINARY)  # 민감도 높임
+    motion_mask = frame_delta > 15  # 움직임 감지 민감도 높임
+    motion_detected = np.sum(motion_mask) > 500
 
-    # 윤곽선 찾기
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    # 가장 큰 윤곽선 찾기 및 움직임 감지
-    max_area = 0
-    max_contour = None
-    for contour in contours:
-        area = cv2.contourArea(contour)
-        if area > max_area:
-            max_area = area
-            max_contour = contour
-
-    if max_contour is not None and max_area > 500:  # 최소 크기 필터링, 민감도 증가
-        (x, y, w, h) = cv2.boundingRect(max_contour)
-        print(f"Motion detected: Position=({x}, {y}), Size=({w}, {h})", flush=True)
+    if motion_detected:
+        # 움직임이 감지된 영역의 좌표 계산
+        y_indices, x_indices = np.where(motion_mask)
+        if len(x_indices) > 0 and len(y_indices) > 0:
+            x_min, x_max = np.min(x_indices), np.max(x_indices)
+            y_min, y_max = np.min(y_indices), np.max(y_indices)
+            print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
