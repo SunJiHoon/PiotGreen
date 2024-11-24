@@ -49,3 +49,31 @@ button.disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+/* LED 컨테이너 스타일 */
+.led-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* 기본 LED 스타일 */
+.led {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* 꺼진 상태 */
+.led.off {
+    background-color: #ccc; /* 회색 */
+    box-shadow: none;
+}
+
+/* 켜진 상태 */
+.led.on {
+    background-color: #f1c40f; /* 노란색 */
+    box-shadow: 0 0 20px #f1c40f; /* 빛나는 효과 */
+}

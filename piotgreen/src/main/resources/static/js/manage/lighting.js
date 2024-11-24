@@ -1,6 +1,7 @@
 // 초기 데이터 설정
 let currentMode = 'auto';
-let ledStates = [0, 0, 0, 0, 0];
+// let ledStates = [0, 0, 0, 0, 0];
+
 
 // 모드 변경 함수
 function setMode(mode) {
@@ -39,12 +40,28 @@ function setMode(mode) {
         });
 }
 
+// // LED 상태 토글 함수
+// function toggleLed(section, index) {
+//     // LED 상태 토글
+//     ledSections[section][index] = ledSections[section][index] === 0 ? 1 : 0;
+//
+//     // 해당 LED 상태 업데이트
+//     const ledElement = document.getElementById(`led-${section}-${index}`);
+//     if (ledSections[section][index] === 1) {
+//         ledElement.classList.remove('off');
+//         ledElement.classList.add('on');
+//     } else {
+//         ledElement.classList.remove('on');
+//         ledElement.classList.add('off');
+//     }
+// }
+
 // LED 상태 토글 함수
 function toggleLed(index) {
     if (currentMode !== 'manual') return; // 수동 모드에서만 활성화
 
-    ledStates[index] = ledStates[index] === 0 ? 1 : 0; // 토글
-    document.getElementById('led-status').textContent = ledStates.join(' ');
+    // ledStates[index] = ledStates[index] === 0 ? 1 : 0; // 토글
+    // document.getElementById('led-status').textContent = ledStates.join(' ');
 
     // Spring 서버에 POST 요청 보내기
     fetch('/lighting/led/toggle', {
@@ -88,10 +105,45 @@ setInterval(() => {
 
 
 
+// LED 상태를 업데이트하는 함수
+function updateLedSections(data) {
+    if (!Array.isArray(data) || data.length < 2) {
+        console.error("유효하지 않은 LED 데이터 형식:", data);
+        return;
+    }
 
+    // 섹션 1 LED 상태 업데이트
+    const section1 = data[0];
+    const led1_0 = document.getElementById('led-1-0');
+    const led1_1 = document.getElementById('led-1-1');
+
+    // 섹션 2 LED 상태 업데이트
+    const section2 = data[1];
+    const led2_0 = document.getElementById('led-2-0');
+    const led2_1 = document.getElementById('led-2-1');
+
+    // 섹션 1 LED 상태 반영
+    updateLedState(led1_0, section1 === 1);
+    updateLedState(led1_1, section1 === 1);
+
+    // 섹션 2 LED 상태 반영
+    updateLedState(led2_0, section2 === 1);
+    updateLedState(led2_1, section2 === 1);
+}
+
+// LED 상태를 on/off로 업데이트하는 함수
+function updateLedState(ledElement, isOn) {
+    if (isOn) {
+        ledElement.classList.remove('off');
+        ledElement.classList.add('on');
+    } else {
+        ledElement.classList.remove('on');
+        ledElement.classList.add('off');
+    }
+}
 
 const lightLevelElement = document.getElementById("light-level");
-const ledStatusElement = document.getElementById("led-status");
+// const ledStatusElement = document.getElementById("led-status");
 const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 
@@ -126,7 +178,9 @@ stompClient.connect({}, function () {
             try {
                 const data = JSON.parse(message.body);
                 if (data !== undefined) {
-                    ledStatusElement.textContent = data;
+                    // ledStatusElement.textContent = data;
+                    console.log("Parsed LED data:", data);
+                    updateLedSections(data);
                 }
             } catch (error) {
                 console.error("광원량 메시지 본문을 파싱하는 중 오류 발생:", error);

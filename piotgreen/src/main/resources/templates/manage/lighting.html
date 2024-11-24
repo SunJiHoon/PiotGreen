@@ -15,8 +15,19 @@
 
 <div class="data-display">
     <h2>실시간 데이터</h2>
-    <p><strong>광량:</strong> <span id="light-level">값</span><span> %</span></p>
-    <p><strong>LED 섹션 상태:</strong> <span id="led-status">0 0 0 0 0</span></p>
+    <p><strong>광량:</strong> <span id="light-level">0</span><span> %</span></p>
+<!--    <p><strong>LED 섹션 상태:</strong> <span id="led-status">0 0</span></p>-->
+    <!-- LED 섹션 1 -->
+    <h2>LED 섹션 상태</h2>
+    <div id="led-section-1" class="led-container">
+        <div class="led off" id="led-1-0"></div>
+        <div class="led off" id="led-1-1"></div>
+    </div>
+    <!-- LED 섹션 2 -->
+    <div id="led-section-2" class="led-container">
+        <div class="led off" id="led-2-0"></div>
+        <div class="led off" id="led-2-1"></div>
+    </div>
 </div>
 
 <div class="mode-control">
