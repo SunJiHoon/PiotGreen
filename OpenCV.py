@@ -4,6 +4,7 @@ import time
 import torch
 import torchvision.transforms as transforms
 from torchvision import models
+from torchvision.models.detection import fasterrcnn_resnet50_fpn
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
@@ -29,15 +30,15 @@ prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 fps_limit = 30  # 최대 프레임 수를 30으로 설정
 prev_time = time.time()
 
-# Pre-trained MobileNet 모델 로드 (경량화된 모델 사용)
-model = models.mobilenet_v2(pretrained=True).eval()
+# Pre-trained Faster R-CNN 모델 로드 (객체 탐지 모델 사용)
+model = fasterrcnn_resnet50_fpn(pretrained=True).eval()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
 
 # 이미지 전처리 설정
 transform = transforms.Compose([
     transforms.ToPILImage(),
-    transforms.Resize((224, 224)),
+    transforms.Resize((480, 480)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
@@ -47,9 +48,9 @@ while True:
     if not ret:
         continue
 
-    # 현재 시간 계산 (0.005초 단위로 변경)
+    # 현재 시간 계산 (0.05초 단위로 변경)
     current_time = time.time()
-    if (current_time - prev_time) < 1.0 / fps_limit:
+    if (current_time - prev_time) < 0.05:
         continue
 
     prev_time = current_time
@@ -86,10 +87,12 @@ while True:
         cropped_frame = frame[y:y + h, x:x + w]
         input_tensor = transform(cropped_frame).unsqueeze(0).to(device)
         with torch.no_grad():
-            output = model(input_tensor)
-            _, predicted = torch.max(output, 1)
-            label = predicted.item()
-            print(f"Detected object label: {label}")
+            outputs = model(input_tensor)
+            labels = outputs[0]['labels'].cpu().numpy()
+            scores = outputs[0]['scores'].cpu().numpy()
+            for label, score in zip(labels, scores):
+                if score > 0.5:  # 신뢰도 50% 이상만 출력
+                    print(f"Detected object: Label={label}, Confidence={score:.2f}")
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
