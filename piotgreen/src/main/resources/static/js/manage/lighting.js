@@ -80,7 +80,7 @@ function updateData(lightLevel, ledArray) {
 
 // 테스트 데이터 (실제 구현에서는 수신 데이터로 대체)
 setInterval(() => {
-    const fakeLightLevel = Math.floor(Math.random() * 1000); // 0~1000 범위
+    const fakeLightLevel = Math.floor(Math.random() * 100); // 0~1000 범위
     const fakeLedArray = ledStates;
     updateData(fakeLightLevel, fakeLedArray);
 }, 1000); // 1초마다 데이터 갱신
