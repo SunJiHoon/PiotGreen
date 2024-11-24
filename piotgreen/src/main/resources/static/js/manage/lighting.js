@@ -26,6 +26,13 @@ function setMode(mode) {
             mode: mode
         })
     })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            // 본문을 텍스트로 읽음
+            return response.text();
+        })
         .then(data => {
             // 서버 응답 처리
             console.log('서버 응답:', data);
