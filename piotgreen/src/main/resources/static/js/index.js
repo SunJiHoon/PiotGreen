@@ -25,7 +25,8 @@ stompClient.connect({}, function () {
 
             if (message.body) {
                 try {
-                    const data = JSON.parse(message.body);
+                    // const data = JSON.parse(message.body);
+                    const data = message.body;
                     if (data !== undefined) {
                         soilMoistureElement.textContent = data;
                     }
