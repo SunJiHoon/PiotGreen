@@ -61,13 +61,10 @@ while True:
             max_area = area
             max_contour = contour
 
-    # 가장 큰 윤곽선에 대해 사각형 그리기
+    # 가장 큰 윤곽선에 대해 움직임 감지
     if max_contour is not None and max_area > 500:  # 최소 크기 필터링, 민감도 증가
         (x, y, w, h) = cv2.boundingRect(max_contour)
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-    # 결과를 화면에 표시
-    cv2.imshow('Motion Tracking', frame)
+        print(f"움직임 감지됨: 위치=({x}, {y}), 크기=({w}, {h})")
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
