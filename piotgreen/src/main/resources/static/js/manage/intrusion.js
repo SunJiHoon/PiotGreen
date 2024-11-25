@@ -21,6 +21,6 @@ socket.onclose = () => {
     console.log("WebSocket connection closed");
 };
 
-function goBack() {
-    window.history.back();
+function goToParent() {
+    window.location.href = "../../";
 }
