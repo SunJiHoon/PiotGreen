@@ -11,8 +11,15 @@ client_socket.connect(server_address)
 connection = client_socket.makefile('wb')
 
 try:
-    # 웹캠을 통해 영상 캡처 시작
-    capture = cv2.VideoCapture(0)  # 0번 카메라 (기본 웹캠)
+    # motion에서 스트리밍되는 영상 주소 (motion.conf 파일의 stream_localhost 설정을 'off'로 설정해야 외부에서도 접근 가능)
+    stream_url = 'http://127.168.137.223:8081'  # motion에서 사용하는 MJPEG 스트림 URL
+
+    # OpenCV로 MJPEG 스트림 받아오기
+    capture = cv2.VideoCapture(stream_url)
+
+    if not capture.isOpened():
+        print("스트림을 열 수 없습니다.")
+        exit()
 
     while True:
         ret, frame = capture.read()
