@@ -80,7 +80,7 @@ function toggleLed(index) {
     // ledStates[index] = ledStates[index] === 0 ? 1 : 0; // 토글
     // document.getElementById('led-status').textContent = ledStates.join(' ');
     let currState = 0;
-    if(index === 0){
+    if(index === 1){
         const led1Element = document.getElementById('led-1-0'); // LED 요소 선택
 
         if (led1Element.classList.contains('on')) {
@@ -89,7 +89,7 @@ function toggleLed(index) {
             currState = 0; // 꺼짐 상태
         }
     }
-    else if(index===1){
+    else if(index===2){
         const led2Element = document.getElementById('led-2-0'); // LED 요소 선택
 
         if (led2Element.classList.contains('on')) {
