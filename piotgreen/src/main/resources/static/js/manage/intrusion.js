@@ -20,3 +20,7 @@ socket.onerror = (error) => {
 socket.onclose = () => {
     console.log("WebSocket connection closed");
 };
+
+function goBack() {
+    window.history.back();
+}

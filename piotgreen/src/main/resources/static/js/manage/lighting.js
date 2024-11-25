@@ -245,3 +245,8 @@ stompClient.connect({}, function () {
         console.error("STOMP 클라이언트 연결 실패:", error);
     }
 );
+
+
+function goBack() {
+    window.history.back();
+}
