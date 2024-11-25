@@ -39,6 +39,9 @@ function setMode(mode) {
             console.error('POST 요청 실패:', error);
         });
 }
+function updateHumidityValue(value) {
+    document.getElementById('humidity-value').innerText = value; // 선택된 값 실시간 업데이트
+}
 
 // 희망 습도 설정 함수
 function setTargetHumidity() {
