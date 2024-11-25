@@ -16,12 +16,15 @@
 
 <section class="real-time-monitor">
     <div class="monitor-item">
-<!--        <h2>현재 광원량</h2>-->
-<!--        <p id="light-level">0</p>-->
-        <img id="video" alt="Video Stream" src="/assets/images/error_puang.png" style="max-width: 90%; height: auto;" />
-
+        <iframe 
+            id="video-frame" 
+            src="http://192.168.137.223:8081" 
+            style="max-width: 90%; height: 500px; border: none;" 
+            title="Real-time Video Stream">
+        </iframe>
     </div>
 </section>
+
 
 <!--<div class="container">-->
 <!--    <img id="video" alt="Video Stream" src="/images/placeholder.jpg" />-->
