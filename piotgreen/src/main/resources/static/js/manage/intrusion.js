@@ -20,3 +20,7 @@ socket.onerror = (error) => {
 socket.onclose = () => {
     console.log("WebSocket connection closed");
 };
+
+function goToParent() {
+    window.location.href = "../../";
+}
