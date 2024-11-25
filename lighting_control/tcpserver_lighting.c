@@ -95,7 +95,7 @@ void *client_thread_loop(void *aux)
 				val = 0;
 			}
 		}
-		else if (strstr(buf, "MODE"))
+		else if (strstr(buf, "mode"))
 		{
 			// MODE: auto,0
 			tar_sql = sql_Mode;

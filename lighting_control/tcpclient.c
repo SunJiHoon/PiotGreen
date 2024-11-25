@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <sqlite3.h>
 
-#define TCP_PORT 8091
+#define TCP_PORT 8088
 #define BUFSIZE 1024
 
 int sockfd;
