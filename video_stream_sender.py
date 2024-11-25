@@ -3,7 +3,7 @@ import socket
 import struct
 
 # 소켓 서버 설정
-server_address = ('main.putiez.com', 8081)  # 송신할 대상의 IP 주소와 포트
+server_address = ('192.168.137.124', 8081)  # 송신할 대상의 IP 주소와 포트
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
