@@ -3,7 +3,7 @@ import numpy as np
 import time
 
 # 스트리밍 URL 설정
-stream_url = "http://192.168.0.200:8081/"
+stream_url = "http://main.putiez.com:8081/"
 cap = cv2.VideoCapture(stream_url)
 
 if not cap.isOpened():
