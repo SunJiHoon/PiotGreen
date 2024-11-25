@@ -28,7 +28,9 @@
 <div class="manual-controls">
     <h2>수동 모드 설정</h2>
     <p>목표 습도를 입력하세요:</p>
-    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">
+<!--    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">-->
+    <input type="range" id="target-humidity" min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
+    <span id="humidity-value">60</span>% <!-- 실시간으로 선택된 값 표시 -->
     <button onclick="setTargetHumidity()">희망 습도 설정</button>
 </div>
 

@@ -42,7 +42,8 @@ function setMode(mode) {
 
 // 희망 습도 설정 함수
 function setTargetHumidity() {
-    const inputElement = document.getElementById('target-humidity');
+    // const inputElement = document.getElementById('target-humidity');
+    const inputElement = document.getElementById('humidity-value');
     targetHumidity = parseInt(inputElement.value);
 
     if (isNaN(targetHumidity) || targetHumidity < 0 || targetHumidity > 100) {
