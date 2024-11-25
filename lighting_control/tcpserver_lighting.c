@@ -82,15 +82,15 @@ void *client_thread_loop(void *aux)
 			char *endptr;
 			if (strstr(buf, "on"))
 			{
-				//"LED: on[i]"
-				int led_num = strtol(buf + 8, &endptr, 10);
+				//"LED:on[i]"
+				int led_num = strtol(buf + 7, &endptr, 10);
 				tar_sql = led_num == 1 ? sql_Led1 : sql_Led2;
 				val = 1;
 			}
 			else
 			{
-				//"LED: off[i]"
-				int led_num = strtol(buf + 9, &endptr, 10);
+				//"LED:off[i]"
+				int led_num = strtol(buf + 8, &endptr, 10);
 				tar_sql = led_num == 1 ? sql_Led1 : sql_Led2;
 				val = 0;
 			}
