@@ -61,6 +61,7 @@ void *client_thread_loop(void *aux)
 	struct client_thread_info *cti = (struct client_thread_info*) aux;
 	char fromstr[64];
 	char buf[BUFSIZE];
+	int isAuto = 1;
 
 	/* 스레드 종료 핸들러 설정 */
 	pthread_cleanup_push(client_thread_cleanup, (void*) aux);
@@ -91,36 +92,65 @@ void *client_thread_loop(void *aux)
 
 				token = strtok(buf, ":");
 				if (token != NULL) {
-					if (strcmp(token, "MODE") == 0) {
-						token = strtok(NULL, ":");
-						if (token != NULL && (strcmp(token, "auto") == 0 || (strcmp(token, "pass")))) {
-							if (write(cti->sockfd, token, sizeof(token)) <= 0) {
-								perror("client thread write()");
-								break;
-							}
-						}
-					}
-				}
-				if (token != NULL && strcmp(token, "irrigation_system") == 0) {
-					token = strtok(NULL, ":");
-					if (token != NULL) {
-						strncpy(command, token, sizeof(command));
-						command[sizeof(command) - 1] = '\0';
+					if (strcmp(token, "mode") == 0) {
+						printf("token : %s\n", token);
 
 						token = strtok(NULL, ":");
 						if (token != NULL) {
-							value = atoi(token);
+							token[strcspn(token, "\n")] = 0;
+							if (strcmp(token, "auto") == 0) {
+								isAuto = 1;
+							}
+							else if (strcmp(token, "pass") == 0) {
+								isAuto = 0;
+							}
+							else {
+								printf("알 수 없는 모드: %s\n", token);
+							} 
+						}
+						else {
+							printf("모드 값이 없습니다!\n");
 						}
 					}
+					else {
+						printf("알 수 없는 명령어: %s\n", token);
+					}
+				}
 
-					if (strcmp(command, "pump") == 0) {
-						printf("토양 수분이 %d%이상 될때 까지 워터 펌프 작동\n", value);
+				printf("isAuto : %d", isAuto);
 
-						while (read_adc_per(SPI_CHANNEL) < value) {
+				if (isAuto == 1) {
+					if (read_adc_per(SPI_CHANNEL) < 30) {
+						while (read_adc_per(SPI_CHANNEL) < 80) {
 							digitalWrite(PUMP, LOW);
 							delay(3000);
 							digitalWrite(PUMP, HIGH);
 							delay(3000);
+						}
+					}
+				}
+				else {
+					if (strcmp(token, "irrigation_system") == 0) {
+						token = strtok(NULL, ":");
+						if (token != NULL) {
+							strncpy(command, token, sizeof(command));
+							command[sizeof(command) - 1] = '\0';
+
+							token = strtok(NULL, ":");
+							if (token != NULL) {
+								value = atoi(token);
+							}
+						}
+
+						if (strcmp(command, "pump") == 0) {
+							printf("토양 수분이 %d%이상 될때 까지 워터 펌프 작동\n", value);
+
+							while (read_adc_per(SPI_CHANNEL) < value) {
+								digitalWrite(PUMP, LOW);
+								delay(3000);
+								digitalWrite(PUMP, HIGH);
+								delay(3000);
+							}
 						}
 					}
 				}

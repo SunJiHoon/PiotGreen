@@ -8,7 +8,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 
-#define TCP_PORT 8090
+#define TCP_PORT 8088
 #define BUFSIZE 1024
 
 #define SPI_CHANNEL 0
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
         // 전송할 문자열 준비
 	printf("토양 수분 값:%d\n", soil_value);
         char str_val[50]; // 동적 메모리 대신 정적 크기의 배열 사용
-        snprintf(str_val, sizeof(str_val), "irrigation_system:moisture:%.1f%\n", percent);
+        snprintf(str_val, sizeof(str_val), "irrigation_system:moisture:%.1f\n", percent);
 
 	if(percent < 30){
 		digitalWrite(pump, LOW);
