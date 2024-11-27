@@ -14,7 +14,7 @@ public class LightData {
     private Long id;
 
     @Column(name = "light_level_1")
-    private int lightLevel1;
+    private int lightLevel1;//0~100사이의 값을 갖는다.
 
     @Column(name = "light_level_2")
     private int lightLevel2;
