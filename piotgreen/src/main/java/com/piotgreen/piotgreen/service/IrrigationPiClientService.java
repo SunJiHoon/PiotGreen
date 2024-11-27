@@ -28,10 +28,10 @@ private static final String SUB_PI_IP = "irrigation.putiez.com"; // 서브 Pi IP
             socket = new Socket(SUB_PI_IP, SUB_PI_PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            System.out.println("Connected to Sub Pi server at " + SUB_PI_IP + ":" + SUB_PI_PORT);
+            System.out.println("Connected to Irrigation Pi server at " + SUB_PI_IP + ":" + SUB_PI_PORT);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Failed to connect to Sub Pi server: " + e.getMessage());
+            System.out.println("Failed to connect to Irrigation Pi server: " + e.getMessage());
         }
     }
 
