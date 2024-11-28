@@ -13,6 +13,19 @@
     <p>스마트 농업 솔루션을 통해 조명 history를 확인하세요.</p>
 </header>
 
+
+<div class="calendar-controls">
+    <button id="prev-month" onclick="changeMonth(-1)">◀ 이전</button>
+    <span id="current-month">2024년 11월</span>
+    <button id="next-month" onclick="changeMonth(1)">다음 ▶</button>
+</div>
+
+<div class="chart-container">
+    <h2>일별 평균 일광량</h2>
+    <canvas id="lightChart"></canvas>
+</div>
+
+
 <div class="data-display">
     <h1>Lighting Data History</h1>
 
@@ -60,4 +73,68 @@
 <button onclick="goBack()">뒤로가기</button>
 
 </body>
+
+
+<script>
+    let currentMonth = new Date().getMonth() + 1;
+    let currentYear = new Date().getFullYear();
+
+    // 초기 데이터 가져오기
+    fetchAndRenderData();
+
+    // 달 변경
+    function changeMonth(offset) {
+        currentMonth += offset;
+        if (currentMonth > 12) {
+            currentMonth = 1;
+            currentYear++;
+        } else if (currentMonth < 1) {
+            currentMonth = 12;
+            currentYear--;
+        }
+
+        const monthText = `${currentYear}년 ${currentMonth}월`;
+        document.getElementById('current-month').innerText = monthText;
+        fetchAndRenderData();
+    }
+
+    // 데이터 가져오기 및 그래프 업데이트
+    function fetchAndRenderData() {
+        fetch(`/lighting/data?year=${currentYear}&month=${currentMonth}`)
+            .then(response => response.json())
+            .then(data => renderChart(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Chart.js를 사용하여 그래프 그리기
+    function renderChart(data) {
+        const ctx = document.getElementById('lightChart').getContext('2d');
+        const labels = data.map(item => item.day);
+        const values = data.map(item => item.averageLight);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '일 평균 일광량',
+                    data: values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+
 </html>
+
