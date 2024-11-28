@@ -14,9 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class LightingController {
     private final LightingDataStorageService lightingDataStorageService;
+
     @GetMapping("/lighting/data")
     @ResponseBody
-    public List<DailyLightData> getAverageLightData(@RequestParam int year, @RequestParam int month) {
-        return lightingDataStorageService.getAverageDailyLight(year, month);
+    public List<DailyLightData> getAverageLightData(@RequestParam("year") String year, @RequestParam("month") String month) {
+
+        return lightingDataStorageService.getAverageDailyLight(Integer.parseInt(year), Integer.parseInt(month));
     }
 }
