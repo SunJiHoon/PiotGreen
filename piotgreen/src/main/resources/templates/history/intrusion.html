@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/history/intrusion.css">
+</head>
+<body>
+<!--<h1>실시간 농장 모니터링 관리</h1>-->
+<!--<img id="video" alt="Video Stream" />-->
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>실시간 농장 모니터링 history 페이지</p>
+</header>
+
+<div class="data-display">
+    <h1>Intrusion Data History</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Danger Level</th>
+            <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="intrusion : ${intrusionDataList}">
+            <td th:text="${intrusion.id}"></td>
+            <td th:text="${intrusion.dangerLevel}"></td>
+            <td th:text="${intrusion.timestamp}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<button onclick="goToParent()">뒤로가기</button>
+
+</body>
+</html>

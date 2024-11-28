@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irrigation manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/history/irrigation.css">
+</head>
+<body>
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>스마트 농업 솔루션을 통해 관수 환경 history를 확인하세요.</p>
+</header>
+
+<div class="data-display">
+    <h1>Irrigation Data History</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Moisture Level</th>
+            <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="irrigation : ${irrigationDataList}">
+            <td th:text="${irrigation.id}"></td>
+            <td th:text="${irrigation.moistureLevel}"></td>
+            <td th:text="${irrigation.timestamp}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<button onclick="goBack()">뒤로가기</button>
+
+</body>
+</html>

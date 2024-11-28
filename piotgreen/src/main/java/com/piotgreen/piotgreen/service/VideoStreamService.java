@@ -28,7 +28,7 @@ public class VideoStreamService {
     private void startServer() {
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-                System.out.println("Server is running on port " + PORT);
+                System.out.println("Video Stream Server is running on port " + PORT);
 
                 while (true) {
                     try (Socket socket = serverSocket.accept();

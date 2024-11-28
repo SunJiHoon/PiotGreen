@@ -22,7 +22,7 @@ public class LightingPiClientService {
     private PrintWriter out;
     private BufferedReader in;
 
-    @PostConstruct
+//    @PostConstruct
     public void initializeConnection() {
         try {
             socket = new Socket(SUB_PI_IP, SUB_PI_PORT);

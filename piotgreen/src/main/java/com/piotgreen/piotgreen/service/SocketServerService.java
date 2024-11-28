@@ -1,6 +1,7 @@
 package com.piotgreen.piotgreen.service;
 
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 @Service
+@AllArgsConstructor
 public class SocketServerService {
 //    ## 각 모듈간 tcp server를 사용한다.
 //- piotgreen: 8088 *
@@ -20,8 +22,10 @@ public class SocketServerService {
 //- lighting: 8091
     private static final int SERVER_PORT = 8088; // 서버 포트 설정
 
-    @Autowired
     private SimpMessagingTemplate messagingTemplate; // WebSocket 메시지 전송 템플릿
+    private final LightingDataStorageService lightingDataStorageService;
+    private final IrrigationDataStorageService irrigationDataStorageService;
+    private final IntrusionDataStorageService intrusionDataStorageService;
 
     @PostConstruct
     public void startServer() {
@@ -67,6 +71,34 @@ public class SocketServerService {
                     System.out.println("Subcategory: " + subCategory);
                     System.out.println("Data: " + data);
 
+                    // Process data based on major category
+                    if ("lighting_control".equalsIgnoreCase(majorCategory)) {
+                        if ("light".equalsIgnoreCase(subCategory)) {
+                            processLightData(data);
+                        }
+                        else if ("led".equalsIgnoreCase(subCategory)) {
+                            processLedData(data);
+                        }
+                        else{
+                            System.out.println("Unknown subCategory: " + subCategory);
+                        }
+                    } else if ("irrigation_system".equalsIgnoreCase(majorCategory)) {
+                        if ("moisture".equalsIgnoreCase(subCategory)) {
+                            processIrrigationData(data);
+                        }
+                        else{
+                            System.out.println("Unknown subCategory: " + subCategory);
+                        }
+                    } else if ("intrusion_detection".equalsIgnoreCase(majorCategory)) {
+                        if ("danger".equalsIgnoreCase(subCategory)) {
+                            processIntrusionData(data);
+                        }
+                        else{
+                            System.out.println("Unknown subCategory: " + subCategory);
+                        }
+                    } else {
+                        System.out.println("Unknown category: " + majorCategory);
+                    }
                     // Send data based on the major category via WebSocket
                     messagingTemplate.convertAndSend("/topic/" + majorCategory + "/" + subCategory, data);
                 } else {
@@ -81,4 +113,50 @@ public class SocketServerService {
             e.printStackTrace();
         }
     }
+
+
+    private void processLedData(String data) {
+        String[] ledValues = data.split(",");
+        if (ledValues.length == 2) {
+            String led1 = ledValues[0];
+            String led2 = ledValues[1];
+            lightingDataStorageService.saveLedData(led1, led2);
+        } else {
+            System.out.println("Invalid lighting data format: " + data);
+        }
+    }
+
+    private void processLightData(String data) {
+        String[] lightLevels = data.split(",");
+        if (lightLevels.length == 2) {
+            try {
+                int lightLevel1 = Integer.parseInt(lightLevels[0]);
+                int lightLevel2 = Integer.parseInt(lightLevels[1]);
+                lightingDataStorageService.saveLightData(lightLevel1, lightLevel2);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid light data values: " + data);
+            }
+        } else {
+            System.out.println("Invalid light data format: " + data);
+        }
+    }
+
+    private void processIrrigationData(String data) {
+        try {
+            int moistureLevel = Integer.parseInt(data);
+            irrigationDataStorageService.saveIrrigationData(moistureLevel);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid irrigation data value: " + data);
+        }
+    }
+
+    private void processIntrusionData(String data) {
+        try {
+            int dangerLevel = Integer.parseInt(data);
+            intrusionDataStorageService.saveIntrusionData(dangerLevel);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid irrigation data value: " + data);
+        }
+    }
+
 }
