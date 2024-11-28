@@ -24,7 +24,8 @@ public class IntrusionDataStorageService {
         return intrusionDataRepository.save(intrusionData);
     }
     public List<IntrusionData> getAllIntrusionDataSorted() {
-        return intrusionDataRepository.findAllByOrderByTimestampAsc();
+//        return intrusionDataRepository.findAllByOrderByTimestampAsc();
+        return intrusionDataRepository.findAllByOrderByTimestampDesc();
     }
 
 }

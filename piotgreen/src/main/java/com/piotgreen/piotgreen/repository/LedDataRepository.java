@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface LedDataRepository extends JpaRepository<LedData, Long> {
     List<LedData> findAllByOrderByTimestampAsc();
+    List<LedData> findAllByOrderByTimestampDesc();
 }

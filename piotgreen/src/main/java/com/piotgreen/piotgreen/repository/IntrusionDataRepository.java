@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface IntrusionDataRepository extends JpaRepository<IntrusionData, Long> {
     List<IntrusionData> findAllByOrderByTimestampAsc();
-
+    List<IntrusionData> findAllByOrderByTimestampDesc();
 }

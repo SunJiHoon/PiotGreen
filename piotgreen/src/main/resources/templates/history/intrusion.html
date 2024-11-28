@@ -12,42 +12,30 @@
 <!--<img id="video" alt="Video Stream" />-->
 <header class="header">
     <h1>PiotGreen에 오신 것을 환영합니다</h1>
-    <p>실시간 농장 모니터링 관리 페이지</p>
+    <p>실시간 농장 모니터링 history 페이지</p>
 </header>
 
-<section class="real-time-monitor">
-    <div class="monitor-item">
-<!--        <iframe -->
-<!--            id="video-frame" -->
-<!--            src="http://192.168.137.223:8081" -->
-<!--            style="max-width: 90%; height: 500px; border: none;" -->
-<!--            title="Real-time Video Stream">-->
-<!--        </iframe>-->
-
-        <iframe
-                id="video-frame-2"
-                src="http://intrusion.putiez.com:8081"
-                style="height: 480px; width: 640px;  border : none;"
-                title="Real-time Video Stream">
-        </iframe>
-<!--        style="height: 480px; width: 640px;  border : none;"-->
-    </div>
-</section>
+<div class="data-display">
+    <h1>Intrusion Data History</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Danger Level</th>
+            <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="intrusion : ${intrusionDataList}">
+            <td th:text="${intrusion.id}"></td>
+            <td th:text="${intrusion.dangerLevel}"></td>
+            <td th:text="${intrusion.timestamp}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <button onclick="goToParent()">뒤로가기</button>
-
-<!--<div class="container">-->
-<!--    <img id="video" alt="Video Stream" src="/images/placeholder.jpg" />-->
-<!--    <div class="controls">-->
-<!--        <button onclick="startStream()">스트리밍 시작</button>-->
-<!--        <button onclick="stopStream()">스트리밍 중지</button>-->
-<!--    </div>-->
-<!--</div>-->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
-<script src="/js/manage/intrusion.js"></script>
 
 </body>
 </html>

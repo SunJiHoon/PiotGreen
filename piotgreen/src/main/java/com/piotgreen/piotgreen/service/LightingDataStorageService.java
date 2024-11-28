@@ -39,7 +39,8 @@ public class LightingDataStorageService {
     }
 
     public List<LightData> getAllLightDataSorted() {
-        return lightDataRepository.findAllByOrderByTimestampAsc();
+//        return lightDataRepository.findAllByOrderByTimestampAsc();
+        return lightDataRepository.findAllByOrderByTimestampDesc();
     }
 
 }

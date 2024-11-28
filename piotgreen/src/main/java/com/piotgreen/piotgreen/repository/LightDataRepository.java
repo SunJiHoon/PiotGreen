@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface LightDataRepository extends JpaRepository<LightData, Long> {
     List<LightData> findAllByOrderByTimestampAsc();
+    List<LightData> findAllByOrderByTimestampDesc();
 
 }

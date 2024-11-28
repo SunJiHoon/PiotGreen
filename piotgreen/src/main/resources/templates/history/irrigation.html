@@ -10,38 +10,30 @@
 <body>
 <header class="header">
     <h1>PiotGreen에 오신 것을 환영합니다</h1>
-    <p>스마트 농업 솔루션을 통해 관수 환경을 실시간으로 관리하세요.</p>
+    <p>스마트 농업 솔루션을 통해 관수 환경 history를 확인하세요.</p>
 </header>
 
 <div class="data-display">
-    <h2>실시간 데이터</h2>
-    <p><strong>현재 습도:</strong> <span id="humidity-level">0</span><span> %</span></p>
-    <p><strong>희망 습도:</strong> <span id="target-humidity-display">미설정</span></p>
+    <h1>Irrigation Data History</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Moisture Level</th>
+            <th>Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="irrigation : ${irrigationDataList}">
+            <td th:text="${irrigation.id}"></td>
+            <td th:text="${irrigation.moistureLevel}"></td>
+            <td th:text="${irrigation.timestamp}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-
-<div class="mode-control">
-    <h2>현재 모드: <span id="current-mode">자동</span></h2>
-    <button id="auto-mode-btn" onclick="setMode('auto')">자동 모드</button>
-    <button id="manual-mode-btn" onclick="setMode('manual')">수동 모드</button>
-</div>
-
-<div class="manual-controls">
-    <h2>수동 모드 설정</h2>
-    <p>목표 습도를 입력하세요:</p>
-<!--    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">-->
-    <input type="range" id="target-humidity" min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
-    <span id="humidity-value">60</span>% <!-- 실시간으로 선택된 값 표시 -->
-    <button onclick="setTargetHumidity()">희망 습도 설정</button>
-</div>
-
 
 <button onclick="goBack()">뒤로가기</button>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
-<script src="/js/manage/irrigation.js"></script>
 
 </body>
 </html>

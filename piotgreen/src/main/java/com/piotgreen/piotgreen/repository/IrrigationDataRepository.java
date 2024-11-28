@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface IrrigationDataRepository extends JpaRepository<IrrigationData, Long>{
     List<IrrigationData> findAllByOrderByTimestampAsc();
+    List<IrrigationData> findAllByOrderByTimestampDesc();
+
 }
 

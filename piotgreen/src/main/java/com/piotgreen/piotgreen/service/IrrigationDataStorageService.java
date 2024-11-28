@@ -22,7 +22,8 @@ public class IrrigationDataStorageService {
         return irrigationDataRepository.save(irrigationData);
     }
     public List<IrrigationData> getAllIrrigationDataSorted() {
-        return irrigationDataRepository.findAllByOrderByTimestampAsc();
+//        return irrigationDataRepository.findAllByOrderByTimestampAsc();
+        return irrigationDataRepository.findAllByOrderByTimestampDesc();
     }
 
 }
