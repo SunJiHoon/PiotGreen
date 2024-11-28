@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighting manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/history/lighting.css">
+</head>
+<body>
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>스마트 농업 솔루션을 통해 조명 환경을 실시간으로 관리하세요.</p>
+</header>
+
+<div class="data-display">
+<!--    <h2>실시간 데이터</h2>-->
+<!--    <p><strong>광량:</strong> <span id="light-level">0</span><span> %</span></p>-->
+
+    <h2>광량 데이터</h2>
+    <div class="light-sections-container">
+        <!-- 광량 섹션 1 -->
+        <div id="light-section-1" class="light-container">
+            <p><strong>섹션 1:</strong> <span id="light-level-1">0</span><span> %</span></p>
+        </div>
+        <!-- 광량 섹션 2 -->
+        <div id="light-section-2" class="light-container">
+            <p><strong>섹션 2:</strong> <span id="light-level-2">0</span><span> %</span></p>
+        </div>
+    </div>
+
+
+    <h2>LED 섹션 상태</h2>
+
+    <div class="led-sections-container">
+
+        <div id="led-section-1" class="led-container">
+            <div class="led off" id="led-1-0"></div>
+        </div>
+        <!-- LED 섹션 2 -->
+        <div id="led-section-2" class="led-container">
+            <div class="led off" id="led-2-0"></div>
+        </div>
+    </div>
+</div>
+
+<div class="mode-control">
+    <h2>현재 모드: <span id="current-mode">자동</span></h2>
+    <button id="auto-mode-btn" onclick="setMode('auto')">자동 모드</button>
+    <button id="manual-mode-btn" onclick="setMode('manual')">수동 모드</button>
+</div>
+
+<div class="manual-controls">
+    <h2>수동 모드 LED 섹션 제어</h2>
+    <button onclick="toggleLed(1)">LED 섹션 1</button>
+    <button onclick="toggleLed(2)">LED 섹션 2</button>
+</div>
+
+
+<button onclick="goBack()">뒤로가기</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script src="/js/manage/lighting.js"></script>
+
+</body>
+</html>
