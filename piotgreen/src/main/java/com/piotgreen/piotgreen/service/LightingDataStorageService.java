@@ -5,6 +5,7 @@ import com.piotgreen.piotgreen.entity.LedData;
 import com.piotgreen.piotgreen.entity.LightData;
 import com.piotgreen.piotgreen.repository.LedDataRepository;
 import com.piotgreen.piotgreen.repository.LightDataRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +75,48 @@ public class LightingDataStorageService {
         // 결과 반환
         return results;
     }
+
+    public long getTupleCount() {
+        // 테이블의 튜플 개수를 반환
+        return lightDataRepository.count();
+    }
+
+    @PostConstruct
+    public void initializeData() {
+        long tupleCount = getTupleCount(); // 개수 가져오기
+        System.out.println("Current tuple count: " + tupleCount);
+
+        if (tupleCount <= 30) {
+            System.out.println("Initializing light data...");
+
+            // 11월 1일부터 30일까지 데이터 생성
+            LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
+            LocalDateTime endDate = LocalDateTime.of(2024, 11, 30, 23, 59);
+            LocalDateTime currentDate = startDate;
+
+            while (!currentDate.isAfter(endDate)) {
+                // 랜덤한 lightLevel 값 생성
+                int lightLevel1 = (int) (Math.random() * 100); // 0~100 범위
+                int lightLevel2 = (int) (Math.random() * 100); // 0~100 범위
+
+                // LightData 객체 생성 및 저장
+                LightData lightData = new LightData();
+                lightData.setLightLevel1(lightLevel1);
+                lightData.setLightLevel2(lightLevel2);
+                lightData.setTimestamp(currentDate);
+                lightDataRepository.save(lightData); // 데이터베이스에 저장
+
+                System.out.println("Saved light data: " + lightData);
+
+                // 다음 데이터로 넘어가기 (몇 시간 후로 설정)
+                currentDate = currentDate.plusHours((int) (Math.random() * 8) + 1); // 1~8시간 후
+            }
+
+            System.out.println("Light data initialization completed.");
+        } else {
+            System.out.println("Skipping initialization, tuple count exceeds 30.");
+        }
+    }
+
 
 }

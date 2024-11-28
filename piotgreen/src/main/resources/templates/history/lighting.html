@@ -80,6 +80,7 @@
 <script>
     let currentMonth = new Date().getMonth() + 1;
     let currentYear = new Date().getFullYear();
+    let chartInstance = null; // Chart 인스턴스 변수
 
     // 초기 데이터 가져오기
     fetchAndRenderData();
@@ -113,8 +114,13 @@
         const ctx = document.getElementById('lightChart').getContext('2d');
         const labels = data.map(item => item.day);
         const values = data.map(item => item.averageLight);
+        // 기존 차트가 있으면 파괴
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
 
-        new Chart(ctx, {
+
+        chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
