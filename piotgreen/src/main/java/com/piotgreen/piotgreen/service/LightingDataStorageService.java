@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +32,14 @@ public class LightingDataStorageService {
         lightData.setLightLevel2(lightLevel2);
         lightData.setTimestamp(LocalDateTime.now());
         return lightDataRepository.save(lightData);
+    }
+
+    public List<LedData> getAllLedDataSorted() {
+        return ledDataRepository.findAllByOrderByTimestampAsc();
+    }
+
+    public List<LightData> getAllLightDataSorted() {
+        return lightDataRepository.findAllByOrderByTimestampAsc();
     }
 
 }

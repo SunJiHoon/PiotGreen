@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +20,9 @@ public class IrrigationDataStorageService {
         irrigationData.setMoistureLevel(moistureLevel);
         irrigationData.setTimestamp(LocalDateTime.now());
         return irrigationDataRepository.save(irrigationData);
+    }
+    public List<IrrigationData> getAllIrrigationDataSorted() {
+        return irrigationDataRepository.findAllByOrderByTimestampAsc();
     }
 
 }

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,9 @@ public class IntrusionDataStorageService {
         intrusionData.setDangerLevel(dangerLevel);
         intrusionData.setTimestamp(LocalDateTime.now());
         return intrusionDataRepository.save(intrusionData);
+    }
+    public List<IntrusionData> getAllIntrusionDataSorted() {
+        return intrusionDataRepository.findAllByOrderByTimestampAsc();
     }
 
 }
