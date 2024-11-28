@@ -22,7 +22,7 @@ private static final String SUB_PI_IP = "irrigation.putiez.com"; // 서브 Pi IP
     private PrintWriter out;
     private BufferedReader in;
 
-    @PostConstruct
+//    @PostConstruct
     public void initializeConnection() {
         try {
             socket = new Socket(SUB_PI_IP, SUB_PI_PORT);

@@ -89,3 +89,22 @@ function monitorFarm() {
     alert("실시간 농장 모니터링 기능을 실행합니다.");
     // 실제 구현 필요
 }
+
+
+// 공통으로 POST 요청을 보내는 함수
+function initializeConnection(endpoint) {
+    fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // 서버 응답 메시지를 알림으로 표시
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to initialize connection.');
+        });
+}
