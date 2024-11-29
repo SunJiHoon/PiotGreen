@@ -143,3 +143,6 @@ stompClient.connect({}, function () {
 function goBack() {
     window.history.back();
 }
+function goToParent() {
+    window.location.href = "../../";
+}
