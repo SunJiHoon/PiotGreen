@@ -160,10 +160,11 @@ public class SocketServerService {
 
     private void processIntrusionData(String data) {
         try {
-            int dangerLevel = Integer.parseInt(data);
+//            int dangerLevel = Integer.parseInt(data);
+            String dangerLevel = data.compareTo("0") == 0 ? "safe" : "danger";
             intrusionDataStorageService.saveIntrusionData(dangerLevel);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid irrigation data value: " + data);
+            System.out.println("Invalid intrusion data value: " + data);
         }
     }
 
