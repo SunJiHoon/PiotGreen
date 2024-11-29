@@ -63,22 +63,46 @@ public class HistoryController {
     }
 
     @GetMapping("/irrigation")
-    public String getHistoryIrrigation(Model model) {  // 서비스 계층에서 데이터 가져오기
-        List<IrrigationData> irrigationDataList = irrigationDataStorageService.getAllIrrigationDataSorted();
+    public String getHistoryIrrigation(
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month,
+            Model model) {
 
-        // 모델에 데이터 추가
+        // 현재 날짜로 기본값 설정
+        if (year == null || month == null) {
+            LocalDate now = LocalDate.now();
+            year = (year == null) ? now.getYear() : year;
+            month = (month == null) ? now.getMonthValue() : month;
+        }
+
+
+        List<IrrigationData> irrigationDataList = irrigationDataStorageService.getIrrigationDataByYearAndMonth(year, month);
         model.addAttribute("irrigationDataList", irrigationDataList);
-
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
         return "history/irrigation";
     }
 
     @GetMapping("/intrusion")
-    public String getHistoryIntrusion(Model model) {
+    public String getHistoryIntrusion(
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month,
+            Model model
+    ) {
+        // 현재 날짜로 기본값 설정
+        if (year == null || month == null) {
+            LocalDate now = LocalDate.now();
+            year = (year == null) ? now.getYear() : year;
+            month = (month == null) ? now.getMonthValue() : month;
+        }
+
         // 서비스 계층에서 데이터 가져오기
-        List<IntrusionData> intrusionDataList = intrusionDataStorageService.getAllIntrusionDataSorted();
+        List<IntrusionData> intrusionDataList = intrusionDataStorageService.getIntrusionDataByYearAndMonth(year, month);
 
         // 모델에 데이터 추가
         model.addAttribute("intrusionDataList", intrusionDataList);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
 
         return "history/intrusion";
     }

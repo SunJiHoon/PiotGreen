@@ -73,4 +73,9 @@ public class IntrusionDataStorageService {
         }
     }
 
+
+    public List<IrrigationData> getIntrusionDataByYearAndMonth(int year, int month) {
+        return intrusionDataRepository.findAllByYearAndMonth(year, month);
+    }
+
 }
