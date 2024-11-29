@@ -104,4 +104,8 @@ public class IrrigationDataStorageService {
         }
     }
 
+    public List<IrrigationData> getIrrigationDataByYearAndMonth(int year, int month) {
+        return irrigationDataRepository.findAllByYearAndMonth(year, month);
+    }
+
 }
