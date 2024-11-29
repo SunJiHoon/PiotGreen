@@ -13,30 +13,40 @@
   <p>일기예보 확인 페이지</p>
 </header>
 
+
+<!-- - Base_time : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300 (1일 8회)-->
 <!-- 검색 폼 -->
 <form action="/weather/all" method="get">
-  <label for="baseDate">Base Date:</label>
-  <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}">
-  <label for="baseTime">Base Time:</label>
-  <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}">
-  <label for="nx">NX:</label>
-  <input type="text" id="nx" name="nx" th:value="${nx}">
-  <label for="ny">NY:</label>
-  <input type="text" id="ny" name="ny" th:value="${ny}">
-  <button type="submit">Search</button>
+  <div class ="sero">
+    <label for="baseDate">Base Date:</label>
+    <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}">
+    <label for="baseTime">Base Time:</label>
+    <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}">
+  </div>
+  <div class ="sero">
+    <label for="nx">NX:</label>
+    <input type="text" id="nx" name="nx" th:value="${nx}">
+    <label for="ny">NY:</label>
+    <input type="text" id="ny" name="ny" th:value="${ny}">
+  </div>
+  <div class ="sero">
+    <button type="submit">Search</button>
+  </div>
 </form>
+
+<!--하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)-->
 
 <!-- 날씨 데이터 테이블 -->
 <table>
   <caption>Weather General Data</caption>
   <thead>
   <tr>
-    <th>Forecast Date</th>
-    <th>Forecast Time</th>
-    <th>Temperature</th>
-    <th>Wind Speed</th>
-    <th>Sky Condition</th>
-    <th>Precipitation Probability</th>
+    <th>날짜</th>
+    <th>시간</th>
+    <th>기온</th>
+    <th>풍속</th>
+    <th>구름</th>
+    <th>강수확률</th>
   </tr>
   </thead>
   <tbody>
