@@ -116,17 +116,25 @@ public class SocketServerService {
 
 
     private void processLedData(String data) {
+        // 대괄호 제거
+        data = data.replace("[", "").replace("]", "");
+
         String[] ledValues = data.split(",");
         if (ledValues.length == 2) {
-            String led1 = ledValues[0];
-            String led2 = ledValues[1];
-            lightingDataStorageService.saveLedData(led1, led2);
+            String led1 = ledValues[0].trim();
+            String led2 = ledValues[1].trim();
+            String led1Status = led1.compareTo("1") == 0 ? "on" : "off";
+            String led2Status = led2.compareTo("1") == 0 ? "on" : "off";
+            lightingDataStorageService.saveLedData(led1Status, led2Status);
         } else {
             System.out.println("Invalid lighting data format: " + data);
         }
     }
 
     private void processLightData(String data) {
+        // 대괄호 제거
+        data = data.replace("[", "").replace("]", "");
+
         String[] lightLevels = data.split(",");
         if (lightLevels.length == 2) {
             try {

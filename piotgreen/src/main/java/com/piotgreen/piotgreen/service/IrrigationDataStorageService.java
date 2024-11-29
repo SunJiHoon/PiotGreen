@@ -83,7 +83,7 @@ public class IrrigationDataStorageService {
 
             while (!currentDate.isAfter(endDate)) {
                 // 랜덤한 lightLevel 값 생성
-                int moistureLevel = (int) (Math.random() * 100); // 0~100 범위
+                int moistureLevel = (int) (Math.random() * 101); // 0~100 범위
 
                 // LightData 객체 생성 및 저장
                 IrrigationData irrigationData = new IrrigationData();
