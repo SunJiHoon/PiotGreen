@@ -78,7 +78,7 @@ public class IrrigationDataStorageService {
 
             // 11월 1일부터 30일까지 데이터 생성
             LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
-            LocalDateTime endDate = LocalDateTime.of(2024, 11, 30, 23, 59);
+            LocalDateTime endDate = LocalDateTime.of(2024, 12, 10, 23, 59);
             LocalDateTime currentDate = startDate;
 
             while (!currentDate.isAfter(endDate)) {

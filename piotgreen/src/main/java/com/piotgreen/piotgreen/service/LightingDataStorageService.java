@@ -91,7 +91,7 @@ public class LightingDataStorageService {
 
             // 11월 1일부터 30일까지 데이터 생성
             LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
-            LocalDateTime endDate = LocalDateTime.of(2024, 11, 30, 23, 59);
+            LocalDateTime endDate = LocalDateTime.of(2024, 12, 10, 23, 59);
             LocalDateTime currentDate = startDate;
 
             while (!currentDate.isAfter(endDate)) {
@@ -116,6 +116,13 @@ public class LightingDataStorageService {
         } else {
             System.out.println("Skipping initialization, tuple count exceeds 30.");
         }
+    }
+    public List<LedData> getLedDataByYearAndMonth(int year, int month) {
+        return ledDataRepository.findAllByYearAndMonth(year, month);
+    }
+
+    public List<LightData> getLightDataByYearAndMonth(int year, int month) {
+        return lightDataRepository.findAllByYearAndMonth(year, month);
     }
 
 
