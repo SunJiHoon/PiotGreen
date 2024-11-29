@@ -32,6 +32,17 @@
 </div>
 
 
+
+<!-- 연도와 월 선택 폼 -->
+<form action="/history/lighting" method="get">
+    <label for="year">Year:</label>
+    <input type="number" id="year" name="year" value="${year}">
+    <label for="month">Month:</label>
+    <input type="number" id="month" name="month" value="${month}">
+    <button type="submit">Filter</button>
+</form>
+
+
 <div class="data-display">
     <h1>Lighting Data History</h1>
 

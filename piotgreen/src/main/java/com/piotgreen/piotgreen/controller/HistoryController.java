@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,15 +24,31 @@ public class HistoryController {
     private final IrrigationDataStorageService irrigationDataStorageService;
     private final IntrusionDataStorageService intrusionDataStorageService;
 
+//    @GetMapping("/lighting")
+//    public String getHistoryLighting(Model model) {
+//        // 서비스 계층을 통해 정렬된 데이터 요청
+//        List<LedData> ledDataList = lightingDataStorageService.getAllLedDataSorted();
+//        List<LightData> lightDataList = lightingDataStorageService.getAllLightDataSorted();
+//
+//        // 모델에 데이터 추가
+//        model.addAttribute("ledDataList", ledDataList);
+//        model.addAttribute("lightDataList", lightDataList);
+//
+//        return "history/lighting";
+//    }
     @GetMapping("/lighting")
-    public String getHistoryLighting(Model model) {
-        // 서비스 계층을 통해 정렬된 데이터 요청
-        List<LedData> ledDataList = lightingDataStorageService.getAllLedDataSorted();
-        List<LightData> lightDataList = lightingDataStorageService.getAllLightDataSorted();
+    public String getLightingData(
+            @RequestParam(value = "year", required = false, defaultValue = "2024") int year,
+            @RequestParam(value = "month", required = false, defaultValue = "12") int month,
+            Model model) {
 
-        // 모델에 데이터 추가
+        List<LedData> ledDataList = lightingDataStorageService.getLedDataByYearAndMonth(year, month);
+        List<LightData> lightDataList = lightingDataStorageService.getLightDataByYearAndMonth(year, month);
+
         model.addAttribute("ledDataList", ledDataList);
         model.addAttribute("lightDataList", lightDataList);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
 
         return "history/lighting";
     }
