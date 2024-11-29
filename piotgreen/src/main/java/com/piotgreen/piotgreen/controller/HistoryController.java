@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -38,9 +39,17 @@ public class HistoryController {
 //    }
     @GetMapping("/lighting")
     public String getLightingData(
-            @RequestParam(value = "year", required = false, defaultValue = "2024") int year,
-            @RequestParam(value = "month", required = false, defaultValue = "12") int month,
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month,
             Model model) {
+
+        // 현재 날짜로 기본값 설정
+        if (year == null || month == null) {
+            LocalDate now = LocalDate.now();
+            year = (year == null) ? now.getYear() : year;
+            month = (month == null) ? now.getMonthValue() : month;
+        }
+
 
         List<LedData> ledDataList = lightingDataStorageService.getLedDataByYearAndMonth(year, month);
         List<LightData> lightDataList = lightingDataStorageService.getLightDataByYearAndMonth(year, month);
