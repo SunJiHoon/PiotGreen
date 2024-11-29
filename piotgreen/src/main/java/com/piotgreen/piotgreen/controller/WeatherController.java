@@ -38,4 +38,16 @@ public class WeatherController {
         model.addAttribute("ny", ny);
         return "weather/all";
     }
+    @GetMapping("/json")
+    @ResponseBody
+    public List<WeatherGeneralData> getAllWeatherJson(
+            @RequestParam(value = "baseDate",defaultValue = "20241129", required = false) String baseDate,
+            @RequestParam(value = "baseTime",defaultValue = "0500", required = false) String baseTime,
+            @RequestParam(value = "nx",defaultValue = "55", required = false) String nx,
+            @RequestParam(value = "ny",defaultValue = "127", required = false) String ny,
+            Model model) throws UnsupportedEncodingException {
+        List<WeatherGeneralData> weatherGeneralDataList = weatherDataService.getWeatherGeneralData(baseDate, baseTime, nx, ny);
+        return weatherGeneralDataList;
+    }
+
 }
