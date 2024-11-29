@@ -155,7 +155,7 @@ public class LightingDataStorageService {
                 currentDate = currentDate.plusHours((int) (Math.random() * 8) + 1); // 1~8시간 후
             }
 
-            System.out.println("Light data initialization completed.");
+            System.out.println("led data initialization completed.");
         } else {
             System.out.println("Skipping initialization, tuple count exceeds 30.");
         }
