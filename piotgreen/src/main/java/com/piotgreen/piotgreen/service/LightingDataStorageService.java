@@ -76,14 +76,14 @@ public class LightingDataStorageService {
         return results;
     }
 
-    public long getTupleCount() {
+    public long getLightTupleCount() {
         // 테이블의 튜플 개수를 반환
         return lightDataRepository.count();
     }
 
     @PostConstruct
-    public void initializeData() {
-        long tupleCount = getTupleCount(); // 개수 가져오기
+    public void initializeLightData() {
+        long tupleCount = getLightTupleCount(); // 개수 가져오기
         System.out.println("Current tuple count: " + tupleCount);
 
         if (tupleCount <= 30) {
@@ -91,13 +91,14 @@ public class LightingDataStorageService {
 
             // 11월 1일부터 30일까지 데이터 생성
             LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
-            LocalDateTime endDate = LocalDateTime.of(2024, 11, 30, 23, 59);
+            LocalDateTime endDate = LocalDateTime.of(2024, 11, 25, 23, 59);
+//            LocalDateTime endDate = LocalDateTime.of(2024, 12, 9, 23, 59);
             LocalDateTime currentDate = startDate;
 
             while (!currentDate.isAfter(endDate)) {
                 // 랜덤한 lightLevel 값 생성
-                int lightLevel1 = (int) (Math.random() * 100); // 0~100 범위
-                int lightLevel2 = (int) (Math.random() * 100); // 0~100 범위
+                int lightLevel1 = (int) (Math.random() * 101); // 0~100 범위
+                int lightLevel2 = (int) (Math.random() * 101); // 0~100 범위
 
                 // LightData 객체 생성 및 저장
                 LightData lightData = new LightData();
@@ -116,6 +117,60 @@ public class LightingDataStorageService {
         } else {
             System.out.println("Skipping initialization, tuple count exceeds 30.");
         }
+    }
+
+    public long getLedTupleCount() {
+        // 테이블의 튜플 개수를 반환
+        return ledDataRepository.count();
+    }
+    @PostConstruct
+    public void initializeLedData() {
+        long tupleCount = getLedTupleCount(); // 개수 가져오기
+        System.out.println("Current tuple count: " + tupleCount);
+
+        if (tupleCount <= 30) {
+            System.out.println("Initializing led data...");
+
+            // 11월 1일부터 30일까지 데이터 생성
+            LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
+            LocalDateTime endDate = LocalDateTime.of(2024, 11, 25, 23, 59);
+//            LocalDateTime endDate = LocalDateTime.of(2024, 12, 9, 23, 59);
+            LocalDateTime currentDate = startDate;
+
+            while (!currentDate.isAfter(endDate)) {
+                // 랜덤한 lightLevel 값 생성
+                int led1 = (int) (Math.random() * 2); // 0~1 범위
+                String led1Status = led1 == 0 ? "on" : "off";
+                int led2 = (int) (Math.random() * 2); // 0~1 범위
+                String led2Status = led1 == 0 ? "on" : "off";
+
+                // LightData 객체 생성 및 저장
+                LedData ledData = new LedData();
+                ledData.setLed1(led1Status);
+                ledData.setLed2(led2Status);
+                ledData.setTimestamp(currentDate);
+                ledDataRepository.save(ledData); // 데이터베이스에 저장
+
+                System.out.println("Saved led data: " + ledData);
+
+                // 다음 데이터로 넘어가기 (몇 시간 후로 설정)
+                currentDate = currentDate.plusHours((int) (Math.random() * 8) + 1); // 1~8시간 후
+            }
+
+            System.out.println("led data initialization completed.");
+        } else {
+            System.out.println("Skipping initialization, tuple count exceeds 30.");
+        }
+    }
+
+
+
+    public List<LedData> getLedDataByYearAndMonth(int year, int month) {
+        return ledDataRepository.findAllByYearAndMonth(year, month);
+    }
+
+    public List<LightData> getLightDataByYearAndMonth(int year, int month) {
+        return lightDataRepository.findAllByYearAndMonth(year, month);
     }
 
 

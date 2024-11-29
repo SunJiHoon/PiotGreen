@@ -24,8 +24,44 @@
 
 <div class="chart-container">
     <h2>일별 평균 일광량</h2>
-    <canvas id="lightChart"></canvas>
+<!--    <canvas id="lightChart"></canvas>-->
+    <div style="width: 600px; height: 400px;">
+        <canvas id="lightChart"></canvas>
+    </div>
+
 </div>
+
+
+
+<!-- 연도와 월 선택 폼 -->
+<form action="/history/lighting" method="get">
+<!--    <label for="year">Year:</label>-->
+<!--    <input type="number" id="year" name="year" value="${year}">-->
+    <label for="year">Year:</label>
+    <select id="year" name="year">
+        <!-- 연도 선택 -->
+        <option th:each="y : ${#numbers.sequence(2020, 2025)}"
+                th:value="${y}"
+                th:text="${y}"
+                th:selected="${y == year}">
+        </option>
+    </select>
+
+
+<!--    <label for="month">Month:</label>-->
+<!--    <input type="number" id="month" name="month" value="${month}">-->
+    <label for="month">Month:</label>
+    <select id="month" name="month">
+        <!-- 월 선택 -->
+        <option th:each="m : ${#numbers.sequence(1, 12)}"
+                th:value="${m}"
+                th:text="${m}"
+                th:selected="${m == month}">
+        </option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
 
 
 <div class="data-display">
@@ -74,75 +110,8 @@
 
 <button onclick="goBack()">뒤로가기</button>
 
+<script src="/js/history/lighting.js"></script>
+
 </body>
-
-
-<script>
-    let currentMonth = new Date().getMonth() + 1;
-    let currentYear = new Date().getFullYear();
-    let chartInstance = null; // Chart 인스턴스 변수
-
-    // 초기 데이터 가져오기
-    fetchAndRenderData();
-
-    // 달 변경
-    function changeMonth(offset) {
-        currentMonth += offset;
-        if (currentMonth > 12) {
-            currentMonth = 1;
-            currentYear++;
-        } else if (currentMonth < 1) {
-            currentMonth = 12;
-            currentYear--;
-        }
-
-        const monthText = `${currentYear}년 ${currentMonth}월`;
-        document.getElementById('current-month').innerText = monthText;
-        fetchAndRenderData();
-    }
-
-    // 데이터 가져오기 및 그래프 업데이트
-    function fetchAndRenderData() {
-        fetch(`/lighting/data?year=${currentYear}&month=${currentMonth}`)
-            .then(response => response.json())
-            .then(data => renderChart(data))
-            .catch(error => console.log('Error fetching data:', error));
-    }
-
-    // Chart.js를 사용하여 그래프 그리기
-    function renderChart(data) {
-        const ctx = document.getElementById('lightChart').getContext('2d');
-        const labels = data.map(item => item.day);
-        const values = data.map(item => item.averageLight);
-        // 기존 차트가 있으면 파괴
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
-
-
-        chartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '일 평균 일광량',
-                    data: values,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-</script>
-
-
 </html>
 

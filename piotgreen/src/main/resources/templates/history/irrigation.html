@@ -6,12 +6,30 @@
     <title>Irrigation manager</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/history/irrigation.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <header class="header">
     <h1>PiotGreen에 오신 것을 환영합니다</h1>
     <p>스마트 농업 솔루션을 통해 관수 환경 history를 확인하세요.</p>
 </header>
+
+
+
+<div class="calendar-controls">
+    <button id="prev-month" onclick="changeMonth(-1)">◀ 이전</button>
+    <span id="current-month">2024년 11월</span>
+    <button id="next-month" onclick="changeMonth(1)">다음 ▶</button>
+</div>
+
+<div class="chart-container">
+    <h2>일별 평균 습도량</h2>
+    <!--    <canvas id="lightChart"></canvas>-->
+    <div style="width: 600px; height: 400px;">
+        <canvas id="moistureChart"></canvas>
+    </div>
+
+</div>
 
 <div class="data-display">
     <h1>Irrigation Data History</h1>
@@ -34,6 +52,8 @@
 </div>
 
 <button onclick="goBack()">뒤로가기</button>
+
+<script src="/js/history/irrigation.js"></script>
 
 </body>
 </html>
