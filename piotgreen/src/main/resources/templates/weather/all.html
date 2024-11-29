@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Forecast</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/weather/all.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>PiotGreen에 오신 것을 환영합니다</h1>
+  <p>일기예보 확인 페이지</p>
+</header>
+
+<button onclick="goToParent()">뒤로가기</button>
+
+<!-- - Base_time : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300 (1일 8회)-->
+<!-- 검색 폼 -->
+<form action="/weather/all" method="get">
+  <div class ="sero">
+    <label for="baseDate">Base Date:</label>
+    <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}">
+    <label for="baseTime">Base Time:</label>
+    <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}">
+  </div>
+  <div class ="sero">
+    <label for="nx">NX:</label>
+    <input type="text" id="nx" name="nx" th:value="${nx}">
+    <label for="ny">NY:</label>
+    <input type="text" id="ny" name="ny" th:value="${ny}">
+  </div>
+  <div class ="sero">
+    <button type="submit">Search</button>
+  </div>
+</form>
+
+<!--하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)-->
+
+<!-- 날씨 데이터 테이블 -->
+<table>
+  <caption>Weather General Data</caption>
+  <thead>
+  <tr>
+    <th>날짜</th>
+    <th>시간</th>
+    <th>기온</th>
+    <th>풍속</th>
+    <th>구름</th>
+    <th>강수확률</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="weather : ${weatherGeneralDataList}">
+    <td th:text="${weather.fcstDate}"></td>
+    <td th:text="${weather.fcstTime}"></td>
+    <td th:text="${weather.temperature}"></td>
+    <td th:text="${weather.windSpeed}"></td>
+    <td th:text="${weather.skyCondition}"></td>
+    <td th:text="${weather.propabilityOfPrecipitation}"></td>
+  </tr>
+  </tbody>
+</table>
+<button onclick="goToParent()">뒤로가기</button>
+<script src="/js/weather/all.js"></script>
+
+</body>
+</html>
