@@ -123,3 +123,26 @@ table tr:nth-child(even) {
 /*        font-size: 0.9em;*/
 /*    }*/
 /*}*/
+
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
