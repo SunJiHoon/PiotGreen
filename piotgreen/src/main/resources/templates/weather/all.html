@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Forecast</title>
+  <style>
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 8px;
+    }
+    th {
+      background-color: #f4f4f4;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center;">Weather Forecast</h1>
+
+<!-- 검색 폼 -->
+<form action="/weather/all" method="get">
+  <label for="baseDate">Base Date:</label>
+  <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}">
+  <label for="baseTime">Base Time:</label>
+  <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}">
+  <label for="nx">NX:</label>
+  <input type="text" id="nx" name="nx" th:value="${nx}">
+  <label for="ny">NY:</label>
+  <input type="text" id="ny" name="ny" th:value="${ny}">
+  <button type="submit">Search</button>
+</form>
+
+<!-- 날씨 데이터 테이블 -->
+<table>
+  <caption>Weather General Data</caption>
+  <thead>
+  <tr>
+    <th>Forecast Date</th>
+    <th>Forecast Time</th>
+    <th>Temperature</th>
+    <th>Wind Speed</th>
+    <th>Sky Condition</th>
+    <th>Precipitation Probability</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="weather : ${weatherGeneralDataList}">
+    <td th:text="${weather.fcstDate}"></td>
+    <td th:text="${weather.fcstTime}"></td>
+    <td th:text="${weather.temperature}"></td>
+    <td th:text="${weather.windSpeed}"></td>
+    <td th:text="${weather.skyCondition}"></td>
+    <td th:text="${weather.propabilityOfPrecipitation}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
