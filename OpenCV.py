@@ -31,6 +31,10 @@ GPIO.output(BUZZER_PIN, GPIO.LOW)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(('0.0.0.0', 9999))  # UDP 소켓 설정 및 포트 바인딩
 
+# 송신 소켓 설정 (결과를 보내기 위한 목적)
+sock_send = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server_address = ('192.168.0.200', 9999)  # 수신 측 IP와 포트 설정
+
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
 cap = cv2.VideoCapture(stream_url)
@@ -64,6 +68,7 @@ frame_count = 0
 
 # 감지 활성화 플래그 초기화
 detection_enabled = False
+motion_detected_flag = False  # 이전 상태 기억
 
 # 소켓 수신 스레드 함수
 def receive_commands():
@@ -135,6 +140,11 @@ while True:
         GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
         GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
+        # 소켓으로 감지 상태 전송 (이전 상태와 다를 경우에만 전송)
+        if not motion_detected_flag:
+            sock_send.sendto(b"intrusion_detection:danger:1", server_address)
+            motion_detected_flag = True
+
         # 움직임이 감지된 영역의 좌표 계산
         y_indices, x_indices = np.where(motion_mask)
 
@@ -150,6 +160,11 @@ while True:
         # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
+
+        # 소켓으로 감지되지 않음을 전송 (이전 상태와 다를 경우에만 전송)
+        if motion_detected_flag:
+            sock_send.sendto(b"intrusion_detection:danger:0", server_address)
+            motion_detected_flag = False
 
     # 감지된 결과를 화면에 표시
     cv2.imshow("Motion Detection", frame)
