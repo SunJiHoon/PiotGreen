@@ -13,16 +13,19 @@ GPIO.setwarnings(False)
 SECURITY_LED_PIN = 23  # 보안 모드 활성화 LED
 MOTION_LED_PIN = 24    # 움직임 감지 LED
 SECURITY_OFF_LED_PIN = 25  # 보안 모드 비활성화 LED
+BUZZER_PIN = 8         # 움직임 감지 시 부저
 
 # GPIO 핀 출력 모드로 설정
 GPIO.setup(SECURITY_LED_PIN, GPIO.OUT)
 GPIO.setup(MOTION_LED_PIN, GPIO.OUT)
 GPIO.setup(SECURITY_OFF_LED_PIN, GPIO.OUT)
+GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 # 초기 상태 설정 (모두 꺼짐)
 GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
 GPIO.output(MOTION_LED_PIN, GPIO.LOW)
 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
+GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 # 소켓 통신 설정
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -79,6 +82,7 @@ def receive_commands():
                 GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
                 GPIO.output(MOTION_LED_PIN, GPIO.LOW)
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.HIGH)
+                GPIO.output(BUZZER_PIN, GPIO.LOW)
         except socket.error:
             pass  # 수신할 데이터가 없을 경우 패스
 
@@ -113,17 +117,19 @@ while True:
     motion_detected = np.sum(motion_mask) > 1000  # 최소 움직임 임계값 증가
 
     if motion_detected:
-        # 움직임이 감지된 경우 GPIO 24번 LED 켜기
+        # 움직임이 감지된 경우 GPIO 24번 LED와 부저 켜기
         GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
+        GPIO.output(BUZZER_PIN, GPIO.HIGH)
         # 움직임이 감지된 영역의 좌표 계산
         y_indices, x_indices = np.where(motion_mask)
         if len(x_indices) > 0 and len(y_indices) > 0:
             x_min, x_max = np.min(x_indices), np.max(x_indices)
-            y_min, y_max = np.min(y_indices), np.max(y_indices)
+            y_min, y_max = np.min(y_indices)
             print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
     else:
-        # 움직임이 감지되지 않으면 GPIO 24번 LED 끄기
+        # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
+        GPIO.output(BUZZER_PIN, GPIO.LOW)
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
