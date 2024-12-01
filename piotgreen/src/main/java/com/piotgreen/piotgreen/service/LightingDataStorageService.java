@@ -177,4 +177,8 @@ public class LightingDataStorageService {
         return lightDataRepository.findMostRecentLightData();
     }
 
+    public LedData getRecentLedData(){
+        return ledDataRepository.findMostRecentLedData();
+    }
+
 }
