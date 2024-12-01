@@ -1,6 +1,7 @@
-function goBack() {
-    window.history.back();
+function goToParent() {
+    window.location.href = "../../";
 }
+
 
 document.getElementById("sendDangerMessage").addEventListener("click", () => {
     const url = "/manage/api/send-danger-message"; // 서버의 엔드포인트
