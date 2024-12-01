@@ -43,6 +43,9 @@ if not cap.isOpened():
 # 해상도를 480p로 설정
 frame_width, frame_height = 640, 480
 
+# 프레임 경계 마진 설정 (예: 경계에서 20픽셀 떨어진 내부만 감지)
+MARGIN = 20
+
 # 첫 번째 프레임 초기화
 ret, prev_frame = cap.read()
 if not ret:
