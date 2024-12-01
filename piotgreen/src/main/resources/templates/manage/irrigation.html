@@ -16,19 +16,29 @@
 <div class="data-display">
     <h2>실시간 데이터</h2>
     <p><strong>현재 습도:</strong> <span id="humidity-level" th:text="${irrigationData.getMoistureLevel()}">0</span><span> %</span></p>
-    <p><strong>희망 습도:</strong> <span id="target-humidity-display">미설정</span></p>
+    <p><strong>희망 습도:</strong> <span id="target-humidity-display" th:text="${commandData2.getValue()}">미설정</span></p>
 </div>
 
 <div class="mode-control">
-    <h2>현재 모드: <span id="current-mode">자동</span></h2>
+    <h2>현재 모드: <span id="current-mode" th:text="${commandData1.value == 'pass' ? '수동' : '자동'}">자동</span></h2>
     <button id="auto-mode-btn" onclick="setMode('auto')">자동 모드</button>
     <button id="manual-mode-btn" onclick="setMode('manual')">수동 모드</button>
 </div>
 
-<div class="manual-controls">
+<!--<div class="manual-controls">-->
+<!--    <h2>수동 모드 설정</h2>-->
+<!--    <p>목표 습도를 입력하세요:</p>-->
+<!--&lt;!&ndash;    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">&ndash;&gt;-->
+<!--    <input type="range" id="target-humidity" min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">-->
+<!--    <span id="humidity-value">60</span>% &lt;!&ndash; 실시간으로 선택된 값 표시 &ndash;&gt;-->
+<!--    <button onclick="setTargetHumidity()">희망 습도 설정</button>-->
+<!--</div>-->
+
+<div class="manual-controls"
+     th:style="${commandData1.value == 'pass' ? 'display: block;' : 'display: none;'}">
     <h2>수동 모드 설정</h2>
     <p>목표 습도를 입력하세요:</p>
-<!--    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">-->
+    <!--    <input type="number" id="target-humidity" placeholder="예: 60" min="0" max="100">-->
     <input type="range" id="target-humidity" min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
     <span id="humidity-value">60</span>% <!-- 실시간으로 선택된 값 표시 -->
     <button onclick="setTargetHumidity()">희망 습도 설정</button>
