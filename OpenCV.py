@@ -1,6 +1,11 @@
 import cv2
 import numpy as np
 import time
+import socket
+
+# 소켓 통신 설정
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind(('0.0.0.0', 9999))  # UDP 소켓 설정 및 포트 바인딩
 
 # 스트리밍 URL 설정
 stream_url = "http://192.168.0.200:8081/"
@@ -26,13 +31,32 @@ prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 frame_skip = 2  # 매 2번째 프레임만 처리하여 CPU 사용 감소
 frame_count = 0
 
+# 감지 활성화 플래그 초기화
+detection_enabled = False
+
 while True:
+    # 소켓을 통해 메시지 수신 (논블로킹 방식)
+    try:
+        data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
+        message = data.decode('utf-8')
+        if message == "intrusion_detection:danger:on":
+            detection_enabled = True
+        elif message == "intrusion_detection:danger:off":
+            detection_enabled = False
+    except socket.error:
+        pass  # 수신할 데이터가 없을 경우 패스
+
+    # 프레임 읽기
     ret, frame = cap.read()
     if not ret:
         continue
 
     frame_count += 1
     if frame_count % frame_skip != 0:
+        continue
+
+    # 감지 기능이 비활성화된 경우 프레임을 계속 읽기만 함
+    if not detection_enabled:
         continue
 
     # 해상도 조정 및 그레이스케일 변환
