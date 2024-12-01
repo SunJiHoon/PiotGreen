@@ -120,8 +120,8 @@ while True:
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    motion_mask = frame_delta > 20  # 움직임 감지 민감도 높임 (25 -> 50)
-    motion_detected = np.sum(motion_mask) > 2000  # 최소 움직임 임계값 증가 (1000 -> 5000)
+    motion_mask = frame_delta > 20  # 움직임 감지 민감도 높임 (25 -> 20)
+    motion_detected = np.sum(motion_mask) > 2000  # 최소 움직임 임계값 증가 (1000 -> 2000)
 
     if motion_detected:
         # 움직임이 감지된 경우 GPIO 24번 LED와 부저 켜기
@@ -135,12 +135,14 @@ while True:
             x_min, x_max = np.min(x_indices), np.max(x_indices)
             y_min, y_max = np.min(y_indices), np.max(y_indices)
 
-            # 마진 조건에 따라 필터링된 움직임만 출력
-            if (x_min > MARGIN and x_max < frame_width - MARGIN and
-                y_min > MARGIN and y_max < frame_height - MARGIN):
-                # 바운딩 박스를 원본 프레임에 그리기
-                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
-                print(f"Filtered Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
+            # 왼쪽 절반을 감지하지 않기 위한 조건 추가
+            if x_min > frame_width // 2:
+                # 마진 조건에 따라 필터링된 움직임만 출력
+                if (x_min > MARGIN and x_max < frame_width - MARGIN and
+                    y_min > MARGIN and y_max < frame_height - MARGIN):
+                    # 바운딩 박스를 원본 프레임에 그리기
+                    cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+                    print(f"Filtered Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
 
     else:
         # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
