@@ -39,9 +39,9 @@ while True:
     try:
         data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
         try:
-        message = data.decode('utf-8')
-    except UnicodeDecodeError:
-        continue
+            message = data.decode('utf-8')
+        except UnicodeDecodeError:
+            continue
         if message == "intrusion_detection:danger:on":
             detection_enabled = True
         elif message == "intrusion_detection:danger:off":
