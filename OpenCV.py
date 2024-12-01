@@ -92,3 +92,10 @@ while True:
 # 자원 해제
 cap.release()
 cv2.destroyAllWindows()
+
+def send_command(command):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_address = ('192.168.0.200', 9999)  # 수신 측 IP와 포트 설정
+    sock.sendto(command.encode('utf-8'), server_address)
+    sock.close()
+
