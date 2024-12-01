@@ -43,8 +43,8 @@ if not cap.isOpened():
 # 해상도를 480p로 설정
 frame_width, frame_height = 640, 480
 
-# 프레임 경계 마진 설정 (예: 경계에서 20픽셀 떨어진 내부만 감지)
-MARGIN = 20
+# 프레임 경계 마진 설정 (예: 경계에서 5픽셀 떨어진 내부만 감지)
+MARGIN = 5
 
 # 첫 번째 프레임 초기화
 ret, prev_frame = cap.read()
@@ -128,14 +128,18 @@ while True:
         # 움직임이 감지된 영역의 좌표 계산
         y_indices, x_indices = np.where(motion_mask)
 
-        # 마진 내에 있는 움직임만 허용
         if len(x_indices) > 0 and len(y_indices) > 0:
             x_min, x_max = np.min(x_indices), np.max(x_indices)
             y_min, y_max = np.min(y_indices), np.max(y_indices)
 
+            # 마진 없이 모든 움직임을 출력 (디버깅 목적)
+            print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
+
+            # 마진 조건에 따라 필터링된 움직임만 출력
             if (x_min > MARGIN and x_max < frame_width - MARGIN and
                 y_min > MARGIN and y_max < frame_height - MARGIN):
-                print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
+                print(f"Filtered Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
+
     else:
         # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
