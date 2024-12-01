@@ -1,6 +1,7 @@
 package com.piotgreen.piotgreen.controller;
 
 import com.piotgreen.piotgreen.entity.IntrusionData;
+import com.piotgreen.piotgreen.entity.LightData;
 import com.piotgreen.piotgreen.repository.IntrusionDataRepository;
 import com.piotgreen.piotgreen.service.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,8 @@ public class DashboardController {
     public String index(Model model) {
         IntrusionData intrusionData = intrusionDataStorageService.getRecentIntrusionData();
         model.addAttribute("intrusionData", intrusionData);
-
+        LightData lightData = lightingDataStorageService.getRecentLightData();
+        model.addAttribute("lightData", lightData);
         return "index";
     }
 
