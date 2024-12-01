@@ -120,8 +120,8 @@ while True:
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    motion_mask = frame_delta > 20  # 움직임 감지 민감도 높임 (25 -> 20)
-    motion_detected = np.sum(motion_mask) > 2000  # 최소 움직임 임계값 증가 (1000 -> 2000)
+    motion_mask = frame_delta > 25  # 움직임 감지 민감도 높임 (25 -> 20)
+    motion_detected = np.sum(motion_mask) > 1000  # 최소 움직임 임계값 증가 (1000 -> 2000)
 
     if motion_detected:
         # 움직임이 감지된 경우 GPIO 24번 LED와 부저 켜기
