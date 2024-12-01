@@ -56,4 +56,13 @@ public class ManagerController {
         return ResponseEntity.ok("Danger message sent successfully!");
     }
 
+
+    @PostMapping("/manager/delete")
+    public String deleteManagerData(@RequestParam(value = "phoneNumber") String phoneNumber) {
+        managerDataStorageService.deleteByPhoneNumber(phoneNumber); // 전화번호로 삭제 로직 호출
+        return "redirect:/manage/manager"; // 삭제 후 목록 페이지로 리다이렉트
+    }
+
+
+
 }
