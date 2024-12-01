@@ -108,4 +108,8 @@ public class IrrigationDataStorageService {
         return irrigationDataRepository.findAllByYearAndMonth(year, month);
     }
 
+    public IrrigationData getRecentIrrigationData(){
+        return irrigationDataRepository.findMostRecentIrrigationData();
+    }
+
 }
