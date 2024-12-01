@@ -1,8 +1,8 @@
 package com.piotgreen.piotgreen.controller;
 
-import com.piotgreen.piotgreen.service.IntrusionPiClientService;
-import com.piotgreen.piotgreen.service.IrrigationPiClientService;
-import com.piotgreen.piotgreen.service.LightingPiClientService;
+import com.piotgreen.piotgreen.entity.IntrusionData;
+import com.piotgreen.piotgreen.repository.IntrusionDataRepository;
+import com.piotgreen.piotgreen.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +15,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("")
 @AllArgsConstructor
 public class DashboardController {
-    final private LightingPiClientService lightingPiClientService;
-    final private IrrigationPiClientService irrigationPiClientService;
-    final private IntrusionPiClientService intrusionPiClientService;
+    private final LightingPiClientService lightingPiClientService;
+    private final IrrigationPiClientService irrigationPiClientService;
+    private final IntrusionPiClientService intrusionPiClientService;
+    private final IntrusionDataStorageService intrusionDataStorageService;
+    private final IrrigationDataStorageService irrigationDataStorageService;
+    private final LightingDataStorageService lightingDataStorageService;
+
 
     @GetMapping("")
     public String index(Model model) {
+        IntrusionData intrusionData = intrusionDataStorageService.getRecentIntrusionData();
+        model.addAttribute("intrusionData", intrusionData);
+
         return "index";
     }
 
