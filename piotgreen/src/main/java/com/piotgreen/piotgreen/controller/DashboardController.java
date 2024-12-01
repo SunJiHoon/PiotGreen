@@ -1,6 +1,7 @@
 package com.piotgreen.piotgreen.controller;
 
 import com.piotgreen.piotgreen.entity.IntrusionData;
+import com.piotgreen.piotgreen.entity.IrrigationData;
 import com.piotgreen.piotgreen.entity.LightData;
 import com.piotgreen.piotgreen.repository.IntrusionDataRepository;
 import com.piotgreen.piotgreen.service.*;
@@ -30,6 +31,8 @@ public class DashboardController {
         model.addAttribute("intrusionData", intrusionData);
         LightData lightData = lightingDataStorageService.getRecentLightData();
         model.addAttribute("lightData", lightData);
+        IrrigationData irrigationData = irrigationDataStorageService.getRecentIrrigationData();
+        model.addAttribute("irrigationData", irrigationData);
         return "index";
     }
 

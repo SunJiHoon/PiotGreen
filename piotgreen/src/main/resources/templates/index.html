@@ -32,7 +32,7 @@
         <h2>현재 흙 습도</h2>
         <div class="soil-sections-container">
             <div id="soil-moisture-1" class="light-container">
-                <p><span id="soil-moisture">0</span><span> %</span></p>
+                <p><span id="soil-moisture" th:text="${irrigationData.getMoistureLevel()}">0</span><span> %</span></p>
             </div>
         </div>
     </div>
