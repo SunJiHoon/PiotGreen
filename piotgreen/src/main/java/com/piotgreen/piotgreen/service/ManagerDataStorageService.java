@@ -2,6 +2,7 @@ package com.piotgreen.piotgreen.service;
 
 import com.piotgreen.piotgreen.entity.ManagerData;
 import com.piotgreen.piotgreen.repository.ManagerDataRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,9 @@ public class ManagerDataStorageService {
     }
     public void saveUser(ManagerData managerData) {
         managerDataRepository.save(managerData);
+    }
+    @Transactional // 트랜잭션 활성화
+    public void deleteByPhoneNumber(String phoneNumber) {
+        managerDataRepository.deleteByPhoneNumber(phoneNumber);
     }
 }
