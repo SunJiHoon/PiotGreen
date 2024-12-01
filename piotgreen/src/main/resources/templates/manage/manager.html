@@ -42,6 +42,13 @@
 <!--        <td th:text="${managerData.id}"></td>-->
         <td th:text="${managerData.name}"></td>
         <td th:text="${managerData.phoneNumber}"></td>
+        <td>
+            <form action="/manage/manager/delete" method="post">
+                <input type="hidden" name="phoneNumber" th:value="${managerData.phoneNumber}"/>
+                <button type="submit">삭제</button>
+            </form>
+        </td>
+
     </tr>
     </tbody>
 </table>
