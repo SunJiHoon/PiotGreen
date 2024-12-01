@@ -1,5 +1,5 @@
 // 초기 데이터 설정
-let currentMode = 'auto';
+// let currentMode = 'auto';
 // let ledStates = [0, 0, 0, 0, 0];
 
 

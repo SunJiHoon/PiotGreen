@@ -51,17 +51,22 @@
 </div>
 
 <div class="mode-control">
-    <h2>현재 모드: <span id="current-mode">자동</span></h2>
+    <h2>현재 모드: <span id="current-mode" th:text="${commandData.value == 'pass' ? '수동' : '자동'}">자동</span></h2>
     <button id="auto-mode-btn" onclick="setMode('auto')">자동 모드</button>
     <button id="manual-mode-btn" onclick="setMode('manual')">수동 모드</button>
 </div>
 
-<div class="manual-controls">
+<!--<div class="manual-controls">-->
+<!--    <h2>수동 모드 LED 섹션 제어</h2>-->
+<!--    <button onclick="toggleLed(1)">LED 섹션 1</button>-->
+<!--    <button onclick="toggleLed(2)">LED 섹션 2</button>-->
+<!--</div>-->
+<div class="manual-controls"
+     th:style="${commandData.value == 'pass' ? 'display: block;' : 'display: none;'}">
     <h2>수동 모드 LED 섹션 제어</h2>
     <button onclick="toggleLed(1)">LED 섹션 1</button>
     <button onclick="toggleLed(2)">LED 섹션 2</button>
 </div>
-
 
 <button onclick="goToParent()">뒤로가기</button>
 
