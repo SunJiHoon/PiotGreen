@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager manage</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/manage/manager.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>스마트 농업 솔루션을 통해 매너저를 등록하고 수정하세요.</p>
+</header>
+
+<h1>현재 등록된 매니저 데이터</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="managerData : ${managerDataList}">
+        <td th:text="${managerData.id}"></td>
+        <td th:text="${managerData.name}"></td>
+        <td th:text="${managerData.phoneNumber}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

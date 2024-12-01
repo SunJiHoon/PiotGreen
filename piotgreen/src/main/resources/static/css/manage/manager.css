@@ -1,0 +1,181 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    text-align: center;
+}
+
+.header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.data-display, .mode-control, .manual-controls {
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 80%;
+}
+
+.manual-controls {
+    display: none; /* 기본적으로 숨김 */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* 전체 광량 섹션 컨테이너 스타일 */
+.light-sections-container {
+    display: flex; /* Flexbox를 사용하여 가로 정렬 */
+    gap: 20px; /* 섹션 간 간격 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    margin-bottom: 20px; /* LED 섹션과의 간격 */
+}
+
+/* 광량 컨테이너 스타일 */
+.light-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* 전체 LED 섹션 컨테이너 스타일 */
+.led-sections-container {
+    display: flex; /* Flexbox를 사용하여 가로로 정렬 */
+    gap: 20px; /* 섹션 간 간격 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+
+    margin-top: 10px; /* 위쪽 여백 */
+}
+
+/* LED 컨테이너 스타일 */
+.led-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* 기본 LED 스타일 */
+.led {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* 꺼진 상태 */
+.led.off {
+    background-color: #ccc; /* 회색 */
+    box-shadow: none;
+}
+
+/* 켜진 상태 */
+.led.on {
+    background-color: #f1c40f; /* 노란색 */
+    box-shadow: 0 0 20px #f1c40f; /* 빛나는 효과 */
+}
+
+
+
+
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+
+form {
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+form select,
+form button {
+    padding: 8px 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+
+form button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
