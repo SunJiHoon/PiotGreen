@@ -21,6 +21,14 @@ public class CommandDataStorageService {
         // 테이블의 튜플 개수를 반환
         return commandDataRepository.count();
     }
+    public void saveCommandData(String category, String command, String value) {
+        CommandData commandData = new CommandData();
+        commandData.setCategory(category);
+        commandData.setCommand(command);
+        commandData.setValue(value);
+        commandData.setTimestamp(LocalDateTime.now());
+        commandDataRepository.save(commandData);
+    }
     @PostConstruct
     public void initializeData() {
         long tupleCount = getTupleCount(); // 개수 가져오기
@@ -57,15 +65,15 @@ public class CommandDataStorageService {
                 commandDataRepository.save(commandData);
 
 
-                // intrusion - mode set
-                mode = (int) (Math.random() * 2); // 0~1 범위
-                modeStr = mode == 0 ? "auto" : "pass";
-                commandData = new CommandData();
-                commandData.setCategory("intrusion");
-                commandData.setCommand("mode");
-                commandData.setValue(modeStr);
-                commandData.setTimestamp(currentDate);
-                commandDataRepository.save(commandData);
+//                // intrusion - mode set
+//                mode = (int) (Math.random() * 2); // 0~1 범위
+//                modeStr = mode == 0 ? "auto" : "pass";
+//                commandData = new CommandData();
+//                commandData.setCategory("intrusion");
+//                commandData.setCommand("mode");
+//                commandData.setValue(modeStr);
+//                commandData.setTimestamp(currentDate);
+//                commandDataRepository.save(commandData);
 
                 // intrusion - 보안 모드
                 mode = (int) (Math.random() * 2); // 0~1 범위

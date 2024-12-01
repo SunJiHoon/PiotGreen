@@ -23,12 +23,12 @@ public interface CommandDataRepository extends JpaRepository<CommandData, Long> 
             "LIMIT 1")
     CommandData findMostRecentIrrigationWantHumidityCommandData();
 
-    @Query("SELECT c " +
-            "FROM CommandData c " +
-            "where c.category = 'intrusion' and c.command = 'mode' " +
-            "ORDER BY c.timestamp DESC " +
-            "LIMIT 1")
-    CommandData findMostRecentIntrusionModeCommandData();
+//    @Query("SELECT c " +
+//            "FROM CommandData c " +
+//            "where c.category = 'intrusion' and c.command = 'mode' " +
+//            "ORDER BY c.timestamp DESC " +
+//            "LIMIT 1")
+//    CommandData findMostRecentIntrusionModeCommandData();
 
     @Query("SELECT c " +
             "FROM CommandData c " +
