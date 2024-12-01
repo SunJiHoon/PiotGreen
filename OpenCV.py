@@ -132,18 +132,20 @@ while True:
             x_min, x_max = np.min(x_indices), np.max(x_indices)
             y_min, y_max = np.min(y_indices), np.max(y_indices)
 
-            # 마진 없이 모든 움직임을 출력 (디버깅 목적)
-            print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
-
             # 마진 조건에 따라 필터링된 움직임만 출력
             if (x_min > MARGIN and x_max < frame_width - MARGIN and
                 y_min > MARGIN and y_max < frame_height - MARGIN):
+                # 바운딩 박스를 원본 프레임에 그리기
+                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
                 print(f"Filtered Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
 
     else:
         # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
+
+    # 감지된 결과를 화면에 표시
+    cv2.imshow("Motion Detection", frame)
 
     # 이전 프레임 업데이트
     prev_gray = gray.copy()
