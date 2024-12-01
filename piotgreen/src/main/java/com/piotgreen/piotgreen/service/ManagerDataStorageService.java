@@ -19,5 +19,7 @@ public class ManagerDataStorageService {
             sendMessageService.sendMessage(managerData.getPhoneNumber(), message);
         }
     }
-
+    public void saveUser(ManagerData managerData) {
+        managerDataRepository.save(managerData);
+    }
 }
