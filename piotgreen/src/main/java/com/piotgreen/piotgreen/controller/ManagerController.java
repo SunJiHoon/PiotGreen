@@ -1,5 +1,6 @@
 package com.piotgreen.piotgreen.controller;
 
+import com.piotgreen.piotgreen.entity.ManagerData;
 import com.piotgreen.piotgreen.service.ManagerDataStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ public class ManagerController {
 
     @GetMapping("/manager")
     public String registerManager(Model model) {
+        model.addAttribute("newManager", new ManagerData()); // 폼에 사용할 빈 객체
         model.addAttribute("managerDataList", managerDataStorageService.getAllManagerData());
         return "manage/manager"; // This should correspond to monitorFarm.html or a similar template
     }
