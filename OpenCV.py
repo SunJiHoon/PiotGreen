@@ -5,12 +5,91 @@ import socket
 import threading
 import RPi.GPIO as GPIO
 
-# GPIO 설정 (생략: 기존 설정 유지)
+# GPIO 설정
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-# 프레임 경계 마진 설정 (예: 경계에서 20픽셀 떨어진 내부만 감지)
-MARGIN = 20
+# 사용할 GPIO 핀 번호 설정
+SECURITY_LED_PIN = 23  # 보안 모드 활성화 LED
+MOTION_LED_PIN = 24    # 움직임 감지 LED
+SECURITY_OFF_LED_PIN = 25  # 보안 모드 비활성화 LED
+BUZZER_PIN = 8         # 움직임 감지 시 부저
 
-# 소켓 수신 스레드 함수 (생략: 기존 설정 유지)
+# GPIO 핀 출력 모드로 설정
+GPIO.setup(SECURITY_LED_PIN, GPIO.OUT)
+GPIO.setup(MOTION_LED_PIN, GPIO.OUT)
+GPIO.setup(SECURITY_OFF_LED_PIN, GPIO.OUT)
+GPIO.setup(BUZZER_PIN, GPIO.OUT)
+
+# 초기 상태 설정 (모두 꺼짐)
+GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
+GPIO.output(MOTION_LED_PIN, GPIO.LOW)
+GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
+GPIO.output(BUZZER_PIN, GPIO.LOW)
+
+# 소켓 통신 설정
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind(('0.0.0.0', 9999))  # UDP 소켓 설정 및 포트 바인딩
+
+# 스트리밍 URL 설정
+stream_url = "http://192.168.0.200:8081/"
+cap = cv2.VideoCapture(stream_url)
+
+# 스트리밍 열기 확인
+if not cap.isOpened():
+    print("Cannot open stream.")
+    exit()
+
+# 해상도를 480p로 설정
+frame_width, frame_height = 640, 480
+
+# 첫 번째 프레임 초기화
+ret, prev_frame = cap.read()
+if not ret:
+    print("Cannot get the initial frame.")
+    exit()
+
+prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
+prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
+
+# 처리 속도를 높이기 위해 프레임 스킵 설정
+frame_skip = 2  # 매 2번째 프레임만 처리하여 CPU 사용 감소
+frame_count = 0
+
+# 감지 활성화 플래그 초기화
+detection_enabled = False
+
+# 소켓 수신 스레드 함수
+def receive_commands():
+    global detection_enabled
+    while True:
+        try:
+            data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
+            try:
+                message = data.decode('utf-8')
+            except UnicodeDecodeError:
+                continue
+            
+            if message == "intrusion_detection:danger:on":
+                detection_enabled = True
+                print("Detection enabled")
+                # 보안 모드 활성화: GPIO 23 켜고, 나머지 끔
+                GPIO.output(SECURITY_LED_PIN, GPIO.HIGH)
+                GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
+            elif message == "intrusion_detection:danger:off":
+                detection_enabled = False
+                print("Detection disabled")
+                # 보안 모드 비활성화: GPIO 25 켜고, 나머지 끔
+                GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
+                GPIO.output(MOTION_LED_PIN, GPIO.LOW)
+                GPIO.output(SECURITY_OFF_LED_PIN, GPIO.HIGH)
+                GPIO.output(BUZZER_PIN, GPIO.LOW)
+        except socket.error:
+            pass  # 수신할 데이터가 없을 경우 패스
+
+# 소켓 수신 스레드를 시작
+receive_thread = threading.Thread(target=receive_commands, daemon=True)
+receive_thread.start()
 
 while True:
     # 프레임 읽기
@@ -66,4 +145,7 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# 자원 해제 (생략: 기존 설정 유지)
+# 자원 해제
+cap.release()
+cv2.destroyAllWindows()
+GPIO.cleanup()  # GPIO 자원 해제
