@@ -78,4 +78,8 @@ public class IntrusionDataStorageService {
         return intrusionDataRepository.findAllByYearAndMonth(year, month);
     }
 
+    public IntrusionData getRecentIntrusionData() {
+        return intrusionDataRepository.findMostRecentIntrusionData();
+    }
+
 }

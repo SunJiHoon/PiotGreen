@@ -17,4 +17,6 @@ public interface IntrusionDataRepository extends JpaRepository<IntrusionData, Lo
     @Query("SELECT l FROM IntrusionData l WHERE YEAR(l.timestamp) = :year AND MONTH(l.timestamp) = :month")
     List<IntrusionData> findAllByYearAndMonth(@Param("year") int year, @Param("month") int month);
 
+    @Query("SELECT i FROM IntrusionData i ORDER BY i.timestamp DESC LIMIT 1")
+    IntrusionData findMostRecentIntrusionData();
 }
