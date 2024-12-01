@@ -22,4 +22,11 @@ public class ManagerController {
         return "manage/intrusion"; // This should correspond to monitorFarm.html or a similar template
     }
 
+    @GetMapping("/manager")
+    public String registerManager() {
+        return "manage/manager"; // This should correspond to monitorFarm.html or a similar template
+    }
+
+
+
 }
