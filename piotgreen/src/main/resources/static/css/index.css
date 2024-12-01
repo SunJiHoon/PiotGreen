@@ -1,6 +1,7 @@
 /* 광원량, 흙 습도 섹션 컨테이너 스타일 */
 .light-sections-container,
-.soil-sections-container {
+.soil-sections-container,
+.intrusion-sections-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -8,6 +9,7 @@
 }
 
 /* 개별 섹션 스타일 */
+.intrusion-container,
 .light-container {
     justify-content: center; /* 가로 가운데 정렬 */
     text-align: center; /* 텍스트 가운데 정렬 */
@@ -38,4 +40,19 @@
     color: #0078D4; /* 파란색 강조 */
     font-weight: bold;
     margin-left: 5px;
+}
+
+.indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+}
+.indicator.safe {
+    background-color: white;
+    border: 1px solid black;
+}
+.indicator.danger {
+    background-color: red;
 }

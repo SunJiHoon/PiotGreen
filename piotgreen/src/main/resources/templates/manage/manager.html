@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager manage</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/manage/manager.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>스마트 농업 솔루션을 통해 매너저를 등록하고 수정하세요.</p>
+</header>
+
+
+<button onclick="goToParent()">뒤로가기</button>
+
+<button id="sendDangerMessage" class="danger-button">Send Danger Message</button>
+
+<h2>매니저 추가하기</h2>
+<form action="/manage/manager" th:object="${newManager}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" th:field="*{name}" required /><br>
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required /><br>
+    <button type="submit">추가하기</button>
+</form>
+
+<h1>현재 등록된 매니저 데이터</h1>
+<table border="1">
+    <thead>
+    <tr>
+<!--        <th>ID</th>-->
+        <th>이름</th>
+        <th>전화번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="managerData : ${managerDataList}">
+<!--        <td th:text="${managerData.id}"></td>-->
+        <td th:text="${managerData.name}"></td>
+        <td th:text="${managerData.phoneNumber}"></td>
+        <td>
+            <form action="/manage/manager/delete" method="post">
+                <input type="hidden" name="phoneNumber" th:value="${managerData.phoneNumber}"/>
+                <button type="submit">삭제</button>
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+<button onclick="goToParent()">뒤로가기</button>
+
+
+<script src="/js/manage/manager.js"></script>
+
+</body>
+</html>

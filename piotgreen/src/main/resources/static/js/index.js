@@ -12,6 +12,9 @@
 
 const soilMoistureElement = document.getElementById("soil-moisture");
 const lightLevelElement = document.getElementById("light-level");
+const intrusionLevelElement = document.getElementById("intrusion-level-1");
+const intrusionIndicatorElement = document.getElementById('intrusion-indicator');
+
 const socket = new SockJS('/websocket');
 const stompClient = Stomp.over(socket);
 
@@ -69,7 +72,33 @@ stompClient.connect({}, function () {
                 console.log("Received an empty light level message body.");
             }
         });
-    }, function (error) {
+
+        stompClient.subscribe('/topic/intrusion_detection/danger', function (message) {
+            console.log("Received intrusion message:", message);
+            if (message.body) {
+                try {
+                    // const data = JSON.parse(message.body);
+                    const data = message.body;
+                    if (data !== undefined) {
+                        // intrusionLevelElement.textContent = data;
+                        if (data === "0") {
+                            intrusionLevelElement.textContent = "safe";
+                            intrusionIndicatorElement.className = "indicator safe";
+                        } else if (data === "1") {
+                            intrusionLevelElement.textContent = "danger";
+                            intrusionIndicatorElement.className = "indicator danger";
+                        }
+
+                    }
+                } catch (error) {
+                    console.error("흙 습도 메시지 본문을 파싱하는 중 오류 발생:", error);
+                }
+            } else {
+                console.log("Received an empty moisture message body.");
+            }
+        });
+
+        }, function (error) {
         console.error("STOMP 클라이언트 연결 실패:", error);
     }
 );
