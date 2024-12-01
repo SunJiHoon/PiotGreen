@@ -15,6 +15,9 @@
 </header>
 
 
+<button onclick="goBack()">뒤로가기</button>
+
+
 <h2>매니저 추가하기</h2>
 <form action="/manage/manager" th:object="${newManager}" method="post">
     <label for="name">Name:</label>
@@ -41,5 +44,11 @@
     </tr>
     </tbody>
 </table>
+
+<button onclick="goBack()">뒤로가기</button>
+
+
+<script src="/js/manage/manager.js"></script>
+
 </body>
 </html>
