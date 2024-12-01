@@ -38,7 +38,10 @@ while True:
     # 소켓을 통해 메시지 수신 (논블로킹 방식)
     try:
         data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
+        try:
         message = data.decode('utf-8')
+    except UnicodeDecodeError:
+        continue
         if message == "intrusion_detection:danger:on":
             detection_enabled = True
         elif message == "intrusion_detection:danger:off":
