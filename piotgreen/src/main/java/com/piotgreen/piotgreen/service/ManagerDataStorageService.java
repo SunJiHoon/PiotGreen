@@ -13,6 +13,11 @@ import java.util.List;
 public class ManagerDataStorageService {
     private final SendMessageService sendMessageService;
     private final ManagerDataRepository managerDataRepository;
+
+    public List<ManagerData> getAllManagerData() {
+        List<ManagerData> managerDataList = managerDataRepository.findAll();
+        return managerDataList;
+    }
     public void sendMessageToAllManger(String message) {
         List<ManagerData> managerDataList = managerDataRepository.findAll();
         for (ManagerData managerData : managerDataList) {

@@ -1,12 +1,17 @@
 package com.piotgreen.piotgreen.controller;
 
+import com.piotgreen.piotgreen.service.ManagerDataStorageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/manage")
+@RequiredArgsConstructor
 public class ManagerController {
+    private final ManagerDataStorageService managerDataStorageService;
     @GetMapping("/lighting")
     public String manageLighting() {
         return "manage/lighting"; // This should correspond to manageLighting.html or a similar template
@@ -23,10 +28,8 @@ public class ManagerController {
     }
 
     @GetMapping("/manager")
-    public String registerManager() {
+    public String registerManager(Model model) {
+        model.addAttribute("managerDataList", managerDataStorageService.getAllManagerData());
         return "manage/manager"; // This should correspond to monitorFarm.html or a similar template
     }
-
-
-
 }
