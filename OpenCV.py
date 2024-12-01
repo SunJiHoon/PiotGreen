@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 import socket
+import threading
 
 # 소켓 통신 설정
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -34,21 +35,30 @@ frame_count = 0
 # 감지 활성화 플래그 초기화
 detection_enabled = False
 
-while True:
-    # 소켓을 통해 메시지 수신 (논블로킹 방식)
-    try:
-        data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
+# 소켓 수신 스레드 함수
+def receive_commands():
+    global detection_enabled
+    while True:
         try:
-            message = data.decode('utf-8')
-        except UnicodeDecodeError:
-            continue
-        if message == "intrusion_detection:danger:on":
-            detection_enabled = True
-        elif message == "intrusion_detection:danger:off":
-            detection_enabled = False
-    except socket.error:
-        pass  # 수신할 데이터가 없을 경우 패스
+            data, addr = sock.recvfrom(1024)  # 최대 1024 바이트 수신
+            try:
+                message = data.decode('utf-8')
+            except UnicodeDecodeError:
+                continue
+            if message == "intrusion_detection:danger:on":
+                detection_enabled = True
+                print("Detection enabled")
+            elif message == "intrusion_detection:danger:off":
+                detection_enabled = False
+                print("Detection disabled")
+        except socket.error:
+            pass  # 수신할 데이터가 없을 경우 패스
 
+# 소켓 수신 스레드를 시작
+receive_thread = threading.Thread(target=receive_commands, daemon=True)
+receive_thread.start()
+
+while True:
     # 프레임 읽기
     ret, frame = cap.read()
     if not ret:
@@ -92,10 +102,3 @@ while True:
 # 자원 해제
 cap.release()
 cv2.destroyAllWindows()
-
-def send_command(command):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_address = ('192.168.0.200', 9999)  # 수신 측 IP와 포트 설정
-    sock.sendto(command.encode('utf-8'), server_address)
-    sock.close()
-
