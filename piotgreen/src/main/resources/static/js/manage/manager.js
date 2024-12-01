@@ -3,9 +3,9 @@ function goBack() {
 }
 
 document.getElementById("sendDangerMessage").addEventListener("click", () => {
-    const url = "/api/send-danger-message"; // 서버의 엔드포인트
+    const url = "/manage/api/send-danger-message"; // 서버의 엔드포인트
     const payload = {
-        message: "This is a danger alert message!",
+        message: "위험 발생",
         timestamp: new Date().toISOString()
     };
 

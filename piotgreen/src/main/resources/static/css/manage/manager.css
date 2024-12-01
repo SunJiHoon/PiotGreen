@@ -257,7 +257,7 @@ form button:hover {
 }
 
 .danger-button {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     background-color: #FF4C4C;
     color: white;
