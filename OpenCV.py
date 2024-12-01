@@ -55,6 +55,9 @@ if not ret:
 prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
+# 노이즈를 줄이기 위해 가우시안 블러 적용
+prev_gray = cv2.GaussianBlur(prev_gray, (21, 21), 0)
+
 # 처리 속도를 높이기 위해 프레임 스킵 설정
 frame_skip = 2  # 매 2번째 프레임만 처리하여 CPU 사용 감소
 frame_count = 0
@@ -112,13 +115,13 @@ while True:
     frame = cv2.resize(frame, (frame_width, frame_height))
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # 가우시안 블러를 사용하여 노이즈 제거
-    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+    # 노이즈 제거를 위한 더 큰 가우시안 블러 적용
+    gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
     # 프레임 차이를 사용하여 움직임 감지
     frame_delta = cv2.absdiff(prev_gray, gray)
-    motion_mask = frame_delta > 25  # 움직임 감지 민감도 높임
-    motion_detected = np.sum(motion_mask) > 1000  # 최소 움직임 임계값 증가
+    motion_mask = frame_delta > 50  # 움직임 감지 민감도 높임 (25 -> 50)
+    motion_detected = np.sum(motion_mask) > 5000  # 최소 움직임 임계값 증가 (1000 -> 5000)
 
     if motion_detected:
         # 움직임이 감지된 경우 GPIO 24번 LED와 부저 켜기
