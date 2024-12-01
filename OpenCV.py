@@ -124,7 +124,7 @@ while True:
         y_indices, x_indices = np.where(motion_mask)
         if len(x_indices) > 0 and len(y_indices) > 0:
             x_min, x_max = np.min(x_indices), np.max(x_indices)
-            y_min, y_max = np.min(y_indices)
+            y_min, y_max = np.min(y_indices), np.max(y_indices)
             print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))", flush=True)
     else:
         # 움직임이 감지되지 않으면 GPIO 24번 LED와 부저 끄기
