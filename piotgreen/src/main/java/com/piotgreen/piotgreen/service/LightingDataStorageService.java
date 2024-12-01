@@ -173,5 +173,12 @@ public class LightingDataStorageService {
         return lightDataRepository.findAllByYearAndMonth(year, month);
     }
 
+    public LightData getRecentLightData(){
+        return lightDataRepository.findMostRecentLightData();
+    }
+
+    public LedData getRecentLedData(){
+        return ledDataRepository.findMostRecentLedData();
+    }
 
 }

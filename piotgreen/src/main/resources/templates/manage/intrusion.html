@@ -35,6 +35,11 @@
 </section>
 
 
+<div class="data-display">
+    <h2>현재 위험 감지 기능</h2>
+    <p><strong>위험 감지 기능 상태:</strong> <span id="target-humidity-display" th:text="${commandData.getValue()}">미설정</span></p>
+</div>
+
 <button onclick="setMode('on')">위험 감지 기능 켜기</button>
 <button onclick="setMode('off')">위험 감지 기능 끄기</button>
 

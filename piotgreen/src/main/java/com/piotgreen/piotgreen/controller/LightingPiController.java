@@ -1,6 +1,8 @@
 package com.piotgreen.piotgreen.controller;
 
+import com.piotgreen.piotgreen.service.CommandDataStorageService;
 import com.piotgreen.piotgreen.service.LightingPiClientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +11,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/lighting")
+@RequiredArgsConstructor
 public class LightingPiController {
-    @Autowired
-    private LightingPiClientService lightingPiClientService;
+    private final LightingPiClientService lightingPiClientService;
+    private final CommandDataStorageService commandDataStorageService;
+
 
     @GetMapping("/send-lighting-command")
     public String sendLightingCommand(@RequestParam String command) {
@@ -27,9 +31,11 @@ public class LightingPiController {
         String command;
 
         if (state == 1){
+            commandDataStorageService.saveCommandData("lighting","led" + index,"on");
             command = "LED:on[" + index + "]";
         }
         else{
+            commandDataStorageService.saveCommandData("lighting","led" + index,"off");
             command = "LED:off[" + index + "]";
         }
         return ResponseEntity.ok(lightingPiClientService.sendCommand(command));
@@ -42,10 +48,12 @@ public class LightingPiController {
         String command;
         if (mode.compareTo("manual") == 0){
             command = "mode:pass";
+            commandDataStorageService.saveCommandData("lighting","mode","pass");
             return ResponseEntity.ok(lightingPiClientService.sendCommand(command));
         }
         if (mode.compareTo("auto") == 0){
             command = "mode:auto";
+            commandDataStorageService.saveCommandData("lighting","mode","auto");
             return ResponseEntity.ok(lightingPiClientService.sendCommand(command));
         }
         return ResponseEntity.badRequest().body("bad request");

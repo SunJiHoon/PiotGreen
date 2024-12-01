@@ -1,5 +1,6 @@
 package com.piotgreen.piotgreen.repository;
 
+import com.piotgreen.piotgreen.entity.IntrusionData;
 import com.piotgreen.piotgreen.entity.LightData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,6 @@ public interface LightDataRepository extends JpaRepository<LightData, Long> {
     @Query("SELECT l FROM LightData l WHERE YEAR(l.timestamp) = :year AND MONTH(l.timestamp) = :month")
     List<LightData> findAllByYearAndMonth(@Param("year") int year, @Param("month") int month);
 
-
+    @Query("SELECT i FROM LightData i ORDER BY i.timestamp DESC LIMIT 1")
+    LightData findMostRecentLightData();
 }

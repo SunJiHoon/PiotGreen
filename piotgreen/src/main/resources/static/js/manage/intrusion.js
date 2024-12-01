@@ -43,6 +43,14 @@ function setMode(mode) {
             if (!response.ok) {
                 throw new Error('서버 응답 오류');
             }
+            // target-humidity-display 값을 토글
+            const displayElement = document.getElementById('target-humidity-display');
+            if (mode === 'on') {
+                displayElement.textContent = 'on';
+            } else if (mode === 'off') {
+                displayElement.textContent = 'off';
+            }
+
             return response.json();
         })
         .then(data => {
@@ -51,4 +59,5 @@ function setMode(mode) {
         .catch(error => {
             console.error('POST 요청 실패:', error);
         });
+
 }

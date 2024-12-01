@@ -38,7 +38,7 @@ public class SendMessageService {
         System.out.println(response);
     }
 
-    @PostConstruct
+//    @PostConstruct
     private void sendMessageTest() {
         sendMessage("01023607644", "service start");
     }

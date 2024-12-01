@@ -21,11 +21,11 @@
     <div class="light-sections-container">
         <!-- 광량 섹션 1 -->
         <div id="light-section-1" class="light-container">
-            <p><strong>섹션 1:</strong> <span id="light-level-1">0</span><span> %</span></p>
+            <p><strong>섹션 1:</strong> <span id="light-level-1" th:text="${lightData.getLightLevel1()}">0</span><span> %</span></p>
         </div>
         <!-- 광량 섹션 2 -->
         <div id="light-section-2" class="light-container">
-            <p><strong>섹션 2:</strong> <span id="light-level-2">0</span><span> %</span></p>
+            <p><strong>섹션 2:</strong> <span id="light-level-2" th:text="${lightData.getLightLevel2()}">0</span><span> %</span></p>
         </div>
     </div>
 
@@ -35,27 +35,38 @@
     <div class="led-sections-container">
 
         <div id="led-section-1" class="led-container">
-            <div class="led off" id="led-1-0"></div>
+<!--            <div class="led off" id="led-1-0"></div>-->
+            <div class="led"
+                 id="led-1-0"
+                 th:classappend="${ledData.getLed1() == 'on' ? 'on' : 'off'}"></div>
         </div>
         <!-- LED 섹션 2 -->
         <div id="led-section-2" class="led-container">
-            <div class="led off" id="led-2-0"></div>
+<!--            <div class="led off" id="led-2-0"></div>-->
+            <div class="led"
+                 id="led-2-0"
+                 th:classappend="${ledData.getLed2() == 'on' ? 'on' : 'off'}"></div>
         </div>
     </div>
 </div>
 
 <div class="mode-control">
-    <h2>현재 모드: <span id="current-mode">자동</span></h2>
+    <h2>현재 모드: <span id="current-mode" th:text="${commandData.value == 'pass' ? '수동' : '자동'}">자동</span></h2>
     <button id="auto-mode-btn" onclick="setMode('auto')">자동 모드</button>
     <button id="manual-mode-btn" onclick="setMode('manual')">수동 모드</button>
 </div>
 
-<div class="manual-controls">
+<!--<div class="manual-controls">-->
+<!--    <h2>수동 모드 LED 섹션 제어</h2>-->
+<!--    <button onclick="toggleLed(1)">LED 섹션 1</button>-->
+<!--    <button onclick="toggleLed(2)">LED 섹션 2</button>-->
+<!--</div>-->
+<div class="manual-controls"
+     th:style="${commandData.value == 'pass' ? 'display: block;' : 'display: none;'}">
     <h2>수동 모드 LED 섹션 제어</h2>
     <button onclick="toggleLed(1)">LED 섹션 1</button>
     <button onclick="toggleLed(2)">LED 섹션 2</button>
 </div>
-
 
 <button onclick="goToParent()">뒤로가기</button>
 

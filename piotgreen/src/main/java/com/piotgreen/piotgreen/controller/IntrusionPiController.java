@@ -1,5 +1,6 @@
 package com.piotgreen.piotgreen.controller;
 
+import com.piotgreen.piotgreen.service.CommandDataStorageService;
 import com.piotgreen.piotgreen.service.IntrusionPiClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class IntrusionPiController {
     private final IntrusionPiClientService intrusionPiClientService;
+    private final CommandDataStorageService commandDataStorageService;
 
 //    @GetMapping("/send-intrusion-command")
 //    public String sendIntrusionCommand(@RequestParam String command) {
@@ -24,13 +26,16 @@ public class IntrusionPiController {
     public ResponseEntity<String> setMode(@RequestBody Map<String, String> payload) {
         String mode = payload.get("mode");
 
+
         String command;
         if (mode.compareTo("on") == 0){
             command = "intrusion_detection:danger:on";
+            commandDataStorageService.saveCommandData("intrusion","security","on");
             return ResponseEntity.ok(intrusionPiClientService.sendCommand(command));
         }
         if (mode.compareTo("off") == 0){
             command = "intrusion_detection:danger:off";
+            commandDataStorageService.saveCommandData("intrusion","security","off");
             return ResponseEntity.ok(intrusionPiClientService.sendCommand(command));
         }
         return ResponseEntity.badRequest().body("bad request");

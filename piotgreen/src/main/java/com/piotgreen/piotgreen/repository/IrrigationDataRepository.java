@@ -16,5 +16,8 @@ public interface IrrigationDataRepository extends JpaRepository<IrrigationData, 
 
     @Query("SELECT l FROM IrrigationData l WHERE YEAR(l.timestamp) = :year AND MONTH(l.timestamp) = :month")
     List<IrrigationData> findAllByYearAndMonth(@Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT i FROM IrrigationData i ORDER BY i.timestamp DESC LIMIT 1")
+    IrrigationData findMostRecentIrrigationData();
 }
 

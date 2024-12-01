@@ -51,8 +51,21 @@
 }
 .indicator.safe {
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid gray;
 }
 .indicator.danger {
     background-color: red;
+    animation: blink 1s infinite; /* 1초마다 깜빡이고 무한 반복 */
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1; /* 보임 */
+    }
+    50% {
+        opacity: 0; /* 안 보임 */
+    }
+    100% {
+        opacity: 1; /* 다시 보임 */
+    }
 }
