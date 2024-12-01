@@ -1,13 +1,7 @@
 package com.piotgreen.piotgreen.controller;
 
-import com.piotgreen.piotgreen.entity.IrrigationData;
-import com.piotgreen.piotgreen.entity.LedData;
-import com.piotgreen.piotgreen.entity.LightData;
-import com.piotgreen.piotgreen.entity.ManagerData;
-import com.piotgreen.piotgreen.service.IntrusionDataStorageService;
-import com.piotgreen.piotgreen.service.IrrigationDataStorageService;
-import com.piotgreen.piotgreen.service.LightingDataStorageService;
-import com.piotgreen.piotgreen.service.ManagerDataStorageService;
+import com.piotgreen.piotgreen.entity.*;
+import com.piotgreen.piotgreen.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +18,7 @@ public class ManagerController {
     private final IntrusionDataStorageService intrusionDataStorageService;
     private final IrrigationDataStorageService irrigationDataStorageService;
     private final LightingDataStorageService lightingDataStorageService;
+    private final CommandDataStorageService commandDataStorageService;
 
     @GetMapping("/lighting")
     public String manageLighting(Model model) {
@@ -31,6 +26,7 @@ public class ManagerController {
         model.addAttribute("lightData",lightData);
         LedData ledData = lightingDataStorageService.getRecentLedData();
         model.addAttribute("ledData",ledData);
+        CommandData commandData = commandDataStorageService.
         return "manage/lighting"; // This should correspond to manageLighting.html or a similar template
     }
 

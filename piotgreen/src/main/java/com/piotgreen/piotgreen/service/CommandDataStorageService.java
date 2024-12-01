@@ -125,4 +125,27 @@ public class CommandDataStorageService {
             System.out.println("Skipping initialization, tuple count exceeds 30.");
         }
     }
+
+    public CommandData getRecentCommandData(String category, String command) {
+        if (category.compareTo("irrigation") == 0 && command.compareTo("mode") == 0) {
+            return commandDataRepository.findMostRecentIrrigationModeCommandData();
+        }
+        else if (category.compareTo("irrigation") == 0 && command.compareTo("wantHumidity") == 0) {
+            return commandDataRepository.findMostRecentIrrigationWantHumidityCommandData();
+        }
+        else if (category.compareTo("intrusion") == 0 && command.compareTo("security") == 0) {
+            return commandDataRepository.findMostRecentIntrusionSecurityCommandData();
+        }
+        else if (category.compareTo("lighting") == 0 && command.compareTo("mode") == 0) {
+            return commandDataRepository.findMostRecentLightingModeCommandData();
+        }
+        else if (category.compareTo("lighting") == 0 && command.compareTo("led1") == 0) {
+            return commandDataRepository.findMostRecentLightingLed1CommandData();
+        }
+        else if (category.compareTo("lighting") == 0 && command.compareTo("led2") == 0) {
+            return commandDataRepository.findMostRecentLightingLed2CommandData();
+        }
+        return new CommandData();
+    }
+
 }
