@@ -26,7 +26,8 @@ public class ManagerController {
         model.addAttribute("lightData",lightData);
         LedData ledData = lightingDataStorageService.getRecentLedData();
         model.addAttribute("ledData",ledData);
-        CommandData commandData = commandDataStorageService.
+        CommandData commandData = commandDataStorageService.getRecentCommandData("lighting","mode");
+        model.addAttribute("commandData",commandData);
         return "manage/lighting"; // This should correspond to manageLighting.html or a similar template
     }
 
@@ -34,11 +35,17 @@ public class ManagerController {
     public String manageIrrigation(Model model) {
         IrrigationData irrigationData = irrigationDataStorageService.getRecentIrrigationData();
         model.addAttribute("irrigationData",irrigationData);
+        CommandData commandData1 = commandDataStorageService.getRecentCommandData("irrigation","mode");
+        model.addAttribute("commandData1",commandData1);
+        CommandData commandData2 = commandDataStorageService.getRecentCommandData("irrigation","wantHumidity");
+        model.addAttribute("commandData2",commandData2);
         return "manage/irrigation"; // This should correspond to manageIrrigation.html or a similar template
     }
 
     @GetMapping("/intrusion")
     public String monitorFarm(Model model) {
+        CommandData commandData = commandDataStorageService.getRecentCommandData("intrusion","security");
+        model.addAttribute("commandData",commandData);
         return "manage/intrusion"; // This should correspond to monitorFarm.html or a similar template
     }
 
