@@ -24,3 +24,31 @@ socket.onclose = () => {
 function goToParent() {
     window.location.href = "../../";
 }
+
+
+
+// 모드 설정 함수
+function setMode(mode) {
+    // Spring 서버에 POST 요청 보내기
+    fetch('/intrusion/mode/set', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            mode: mode
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+        })
+        .catch(error => {
+            console.error('POST 요청 실패:', error);
+        });
+}
