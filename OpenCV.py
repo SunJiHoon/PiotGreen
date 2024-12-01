@@ -56,7 +56,7 @@ prev_frame = cv2.resize(prev_frame, (frame_width, frame_height))
 prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
 
 # 노이즈를 줄이기 위해 가우시안 블러 적용
-prev_gray = cv2.GaussianBlur(prev_gray, (10, 10), 0)
+prev_gray = cv2.GaussianBlur(prev_gray, (11, 11), 0)
 
 # 처리 속도를 높이기 위해 프레임 스킵 설정
 frame_skip = 2  # 매 2번째 프레임만 처리하여 CPU 사용 감소
