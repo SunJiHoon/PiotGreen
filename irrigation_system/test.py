@@ -54,14 +54,14 @@ def willRain(hours):
             data = response.json()
             
             # 현재 시각부터 hours시간 내의 데이터를 확인
-            time_threshold = current_dateTime + timedelta(hours=hours)
+            time_threshold = current_datetime + timedelta(hours=hours)
             rain_alert = False  # 비가 올 확률이 70% 이상인 시간대가 있는지 여부
             
             for entry in data:
                 forecast_time = datetime.strptime(entry['fcstDate'] + entry['fcstTime'], '%Y%m%d%H%M')
                 
                 # 현재 시각부터 24시간 이내의 예보만 확인
-                if current_dateTime <= forecast_time <= time_threshold:
+                if current_datetime <= forecast_time <= time_threshold:
                     precip_prob = int(entry['propabilityOfPrecipitation'])
                     if precip_prob >= 70:
                         rain_alert = True
@@ -114,7 +114,7 @@ def read_adc_per(channel):
 
 # 자동 모드에서 펌프 제어를 계속 반복하는 함수
 def auto_mode_loop():
-    global is_auto  # 전역 변수 사용
+    global is_auto, current_time  # 전역 변수 사용
     last_executed_hour = -1
     willRain24 = False
     willRain48 = False
@@ -125,15 +125,14 @@ def auto_mode_loop():
             current_datetime = datetime.now()
             # 정각(?)이고 실행되지 않았을 경우
             if current_datetime.minute == 0:
-                executed = True
-                #지금 시간대와 마지막으로 측정한 시간대가 같지 않아야 작동 ->
-                if current_time.hour != last_executed_hour:
+                # 지금 시간대와 마지막으로 측정한 시간대가 같지 않아야 작동 ->
+                if current_time.hour != last_executed_hour or True:
                     print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')} - 정각입니다. 비 예측 코드 실행.")
                     willRain24 = willRain(24)
                     last_executed_hour = current_time.hour
             
-            while(willRain24 or not is_auto):
-                if(last_executed_hour < datetime.now().hour or not is_auto):
+            while (willRain24 or not is_auto):
+                if (last_executed_hour < datetime.now().hour or not is_auto):
                     willRain24 = False
                     break
                     
