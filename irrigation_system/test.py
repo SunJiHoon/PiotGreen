@@ -126,7 +126,8 @@ def auto_mode_loop():
             # 정각(?)이고 실행되지 않았을 경우
             if current_datetime.minute == 0:
                 # 지금 시간대와 마지막으로 측정한 시간대가 같지 않아야 작동 ->
-                if current_time.hour != last_executed_hour or True:
+                willRain(24)
+                if current_time.hour != last_executed_hour:
                     print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')} - 정각입니다. 비 예측 코드 실행.")
                     willRain24 = willRain(24)
                     last_executed_hour = current_time.hour
