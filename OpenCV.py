@@ -29,7 +29,7 @@ GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 # 소켓 통신 설정
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind(('0.0.0.0', 9999))  # UDP 소켓 설정 및 포트 바인딩
+sock.bind(('0.0.0.0', 8089))  # UDP 소켓 설정 및 포트 바인딩
 
 # 송신 소켓 설정 (결과를 보내기 위한 목적)
 sock_send = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
