@@ -114,7 +114,7 @@ def read_adc_per(channel):
 
 # 자동 모드에서 펌프 제어를 계속 반복하는 함수
 def auto_mode_loop():
-    global is_auto, current_time  # 전역 변수 사용
+    global is_auto  # 전역 변수 사용
     last_executed_hour = -1
     willRain24 = False
     willRain48 = False
@@ -126,10 +126,10 @@ def auto_mode_loop():
             # 정각(?)이고 실행되지 않았을 경우
             if current_datetime.minute == 0 or True:
                 # 지금 시간대와 마지막으로 측정한 시간대가 같지 않아야 작동 ->
-                if current_time.hour != last_executed_hour:
-                    print(f"{current_time.strftime('%Y-%m-%d %H:%M:%S')} - 정각입니다. 비 예측 코드 실행.")
+                if current_datetime.hour != last_executed_hour:
+                    print(f"{current_datetime.strftime('%Y-%m-%d %H:%M:%S')} - 정각입니다. 비 예측 코드 실행.")
                     willRain24 = willRain(24)
-                    last_executed_hour = current_time.hour
+                    last_executed_hour = current_datetime.hour
             
             while (willRain24 or not is_auto):
                 if (last_executed_hour < datetime.now().hour or not is_auto):
