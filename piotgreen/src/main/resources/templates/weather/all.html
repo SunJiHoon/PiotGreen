@@ -20,7 +20,7 @@
 <form action="/weather/all" method="get">
   <div class ="sero">
     <label for="baseDate">Base Date:</label>
-    <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}">
+    <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}" readonly>
     <label for="baseTime">Base Time:</label>
     <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}">
   </div>
@@ -66,3 +66,11 @@
 
 </body>
 </html>
+
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        const today = new Date();-->
+<!--        const mmdd = String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');-->
+<!--        document.getElementById("baseDate").value = mmdd;-->
+<!--    });-->
+<!--</script>-->

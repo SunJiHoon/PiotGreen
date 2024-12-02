@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -25,11 +27,14 @@ public class WeatherController {
 
     @GetMapping("/all")
     public String getAllWeather(
-            @RequestParam(value = "baseDate",defaultValue = "20241129", required = false) String baseDate,
+            @RequestParam(value = "baseDate", required = false) String baseDate,
             @RequestParam(value = "baseTime",defaultValue = "0500", required = false) String baseTime,
             @RequestParam(value = "nx",defaultValue = "55", required = false) String nx,
             @RequestParam(value = "ny",defaultValue = "127", required = false) String ny,
             Model model) throws UnsupportedEncodingException {
+        if (baseDate == null || baseDate.isEmpty()) {
+            baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        }
         List<WeatherGeneralData> weatherGeneralDataList = weatherDataService.getWeatherGeneralData(baseDate, baseTime, nx, ny);
         model.addAttribute("weatherGeneralDataList", weatherGeneralDataList);
         model.addAttribute("baseDate", baseDate);
