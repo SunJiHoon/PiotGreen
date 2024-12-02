@@ -46,6 +46,7 @@ def updateParams():
 
 
 def willRain(hours):
+    global params, url, current_datetime
     try:
         updateParams()
         response = requests.get(url, params=params)
