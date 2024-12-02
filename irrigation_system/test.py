@@ -125,14 +125,14 @@ def auto_mode_loop():
         if is_auto:
             current_datetime = datetime.now()
             # 정각(?)이고 실행되지 않았을 경우
-            if current_datetime.minute == 0 or True:
+            if current_datetime.minute == 0:
                 # 지금 시간대와 마지막으로 측정한 시간대가 같지 않아야 작동 ->
                 if current_datetime.hour != last_executed_hour:
                     print(f"{current_datetime.strftime('%Y-%m-%d %H:%M:%S')} - 정각입니다. 비 예측 코드 실행.")
                     willRain24 = willRain(24)
                     last_executed_hour = current_datetime.hour
             
-            if(willRain24 or not is_auto or True):
+            if(willRain24 or not is_auto):
                 print("비가 올 수 있으므로 관수를 일시중지합니다. 수동모드 전환시 관수를 재개합니다.")
                 while True:
                     if (last_executed_hour < datetime.now().hour or not is_auto):
