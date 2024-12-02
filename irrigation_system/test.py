@@ -132,11 +132,13 @@ def auto_mode_loop():
                     willRain24 = willRain(24)
                     last_executed_hour = current_datetime.hour
             
-            while (willRain24 or not is_auto or True):
-                if (last_executed_hour < datetime.now().hour or not is_auto):
-                    willRain24 = False
-                    print("관수 재개")
-                    break
+            if(willRain24 or not is_auto or True):
+                print("비가 올 수 있으므로 관수를 일시중지합니다. 수동모드 전환시 관수를 재개합니다.")
+                while True:
+                    if (last_executed_hour < datetime.now().hour or not is_auto):
+                        willRain24 = False
+                        print("관수 재개")
+                        break
                     
                     
                     
