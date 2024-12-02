@@ -33,10 +33,10 @@ sock.bind(('0.0.0.0', 9999))  # UDP 소켓 설정 및 포트 바인딩
 
 # 송신 소켓 설정 (결과를 보내기 위한 목적)
 sock_send = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_address = ('192.168.0.200', 9999)  # 수신 측 IP와 포트 설정
+server_address = ('192.168.137.223', 9999)  # 수신 측 IP와 포트 설정
 
 # 스트리밍 URL 설정
-stream_url = "http://192.168.0.200:8081/"
+stream_url = "http://192.168.137.223:8081/"
 cap = cv2.VideoCapture(stream_url)
 
 # 스트리밍 열기 확인
