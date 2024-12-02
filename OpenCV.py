@@ -75,7 +75,7 @@ def receive_commands():
                 print("Detection enabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.HIGH)
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
-            elif "intrusion_detection:danger:off"in data :
+            elif "intrusion_detection:danger:off" in data :
                 detection_enabled = False
                 print("Detection disabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
