@@ -69,6 +69,7 @@ def receive_commands():
             data = conn.recv(1024).decode('utf-8')  # TCP 데이터 수신
             if not data:
                 break
+            print(f"Received command: {data}")  # 받은 데이터를 출력
             if data == "intrusion_detection:danger:on":
                 detection_enabled = True
                 print("Detection enabled")
@@ -81,8 +82,10 @@ def receive_commands():
                 GPIO.output(MOTION_LED_PIN, GPIO.LOW)
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.HIGH)
                 GPIO.output(BUZZER_PIN, GPIO.LOW)
-        except socket.error:
+        except socket.error as e:
+            print(f"Socket error: {e}")  # 소켓 오류 출력
             break
+
 
 receive_thread = threading.Thread(target=receive_commands, daemon=True)
 receive_thread.start()
