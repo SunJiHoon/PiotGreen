@@ -31,6 +31,7 @@ function fetchAndRenderData() {
 
 // Chart.js를 사용하여 그래프 그리기
 function renderChart(data) {
+    console.log(data);
     const ctx = document.getElementById('moistureChart').getContext('2d');
     const labels = data.map(item => item.day);
     const values = data.map(item => item.averageMoisture);

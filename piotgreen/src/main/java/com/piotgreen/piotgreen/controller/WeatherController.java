@@ -28,8 +28,8 @@ public class WeatherController {
     @GetMapping("/all")
     public String getAllWeather(
             @RequestParam(value = "baseDate", required = false) String baseDate,
-            @RequestParam(value = "baseTime",defaultValue = "0500", required = false) String baseTime,
-            @RequestParam(value = "nx",defaultValue = "55", required = false) String nx,
+            @RequestParam(value = "baseTime",defaultValue = "0200", required = false) String baseTime,
+            @RequestParam(value = "nx",defaultValue = "60", required = false) String nx,
             @RequestParam(value = "ny",defaultValue = "127", required = false) String ny,
             Model model) throws UnsupportedEncodingException {
         if (baseDate == null || baseDate.isEmpty()) {
