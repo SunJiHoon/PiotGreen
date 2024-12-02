@@ -182,7 +182,7 @@ def handle_client_message(client_socket, data):
 
                 print(f"토양 수분이 {value}% 이상 될 때까지 워터 펌프 작동")
                 while read_adc_per(SPI_CHANNEL) < value:
-                    if stop_current_task:  # 중지 요청 확인
+                    if stop_current_task or is_auto:  # 중지 요청 확인
                         print("작업 중단 요청 수신. 현재 작업 중지.")
                         GPIO.output(PUMP_PIN, GPIO.HIGH)  # 펌프 끄기
                         break
