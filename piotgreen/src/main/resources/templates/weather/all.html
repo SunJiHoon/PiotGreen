@@ -5,6 +5,50 @@
   <title>Weather Forecast</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/weather/all.css">
+  <script>
+    // 도시 이름에 맞는 nx, ny 값 설정
+    function updateCoordinates() {
+      var city = document.getElementById("city").value;
+      var nxSelect = document.getElementById("nx");
+      var nySelect = document.getElementById("ny");
+
+      // nx, ny 값 초기화
+      nxSelect.innerHTML = "";
+      nySelect.innerHTML = "";
+
+      var coordinates = [];
+
+      // 도시별 nx, ny 값 정의
+      if (city === "Seoul") {
+        coordinates = [{ nx: "60", ny: "127" }];
+      } else if (city === "Busan") {
+        coordinates = [{ nx: "98", ny: "76" }];
+      } else if (city === "Incheon") {
+        coordinates = [{ nx: "55", ny: "124" }];
+      } else if (city === "Daegu") {
+        coordinates = [{ nx: "89", ny: "90" }];
+      }
+
+      // nx, ny 선택 옵션 추가
+      coordinates.forEach(function(coord) {
+        var nxOption = document.createElement("option");
+        nxOption.value = coord.nx;
+        nxOption.textContent = coord.nx;
+        nxSelect.appendChild(nxOption);
+
+        var nyOption = document.createElement("option");
+        nyOption.value = coord.ny;
+        nyOption.textContent = coord.ny;
+        nySelect.appendChild(nyOption);
+      });
+
+      // 기본적으로 첫 번째 값 선택
+      if (coordinates.length > 0) {
+        nxSelect.value = coordinates[0].nx;
+        nySelect.value = coordinates[0].ny;
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -25,10 +69,26 @@
     <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}" readonly>
   </div>
   <div class ="sero">
+    <label for="city">City:</label>
+    <select id="city" name="city" onchange="updateCoordinates()">
+      <option value="">Select a city</option>
+      <option value="Seoul">서울</option>
+      <option value="Busan">부산</option>
+      <option value="Incheon">인천</option>
+      <option value="Daegu">대구</option>
+    </select>
     <label for="nx">NX:</label>
-    <input type="text" id="nx" name="nx" th:value="${nx}">
+    <input type="text" id="nx" name="nx" th:value="${nx}" readonly>
+      <!-- JS로 자동으로 업데이트 -->
+
     <label for="ny">NY:</label>
-    <input type="text" id="ny" name="ny" th:value="${ny}">
+    <input type="text" id="ny" name="ny" th:value="${ny}" readonly>
+      <!-- JS로 자동으로 업데이트 -->
+
+<!--    <label for="nx">NX:</label>-->
+<!--    <input type="text" id="nx" name="nx" th:value="${nx}">-->
+<!--    <label for="ny">NY:</label>-->
+<!--    <input type="text" id="ny" name="ny" th:value="${ny}">-->
   </div>
   <div class ="sero">
     <button type="submit">Search</button>
