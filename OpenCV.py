@@ -120,7 +120,7 @@ while True:
         GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
         if not motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:1")
+            sock_send.send(b"intrusion_detection:danger:1\n")
             motion_detected_flag = True
 
         y_indices, x_indices = np.where(motion_mask)
@@ -136,7 +136,7 @@ while True:
         GPIO.output(BUZZER_PIN, GPIO.LOW)
 
         if motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:0")
+            sock_send.send(b"intrusion_detection:danger:0\n")
             motion_detected_flag = False
 
     cv2.imshow("Motion Detection", frame)
