@@ -70,12 +70,12 @@ def receive_commands():
             if not data:
                 break
             print(f"Received command: {data}")  # 받은 데이터를 출력
-            if data == "intrusion_detection:danger:on":
+            if "intrusion_detection:danger:on" in data:
                 detection_enabled = True
                 print("Detection enabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.HIGH)
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
-            elif data == "intrusion_detection:danger:off":
+            elif "intrusion_detection:danger:off"in data :
                 detection_enabled = False
                 print("Detection disabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
