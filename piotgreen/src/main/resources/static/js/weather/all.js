@@ -1,4 +1,7 @@
-let chartInstance = null;
+let chartInstance = [null,null,null,null];
+let TYPE=["temperatureChart","windChart","cloudChart","weatherChart"];
+let CHART_NAME=["기온","풍속","구름","강수 확률"];
+let LINE_COLOR=["rgba(255, 99, 132, 1)","rgba(54, 162, 235, 1)","rgba(255, 206, 86, 1)","rgba(75, 192, 192, 1)"];
 
 function goToParent() {
     window.location.href = "../../";
@@ -6,8 +9,8 @@ function goToParent() {
 
 
 // Chart.js를 사용하여 그래프 그리기
-function renderChart(data) {
-    const ctx = document.getElementById('weatherChart').getContext('2d');
+function renderChart(data, type) {
+    const ctx = document.getElementById(type).getContext('2d');
     // const labels = data.map(item => item.day);
     // const values = data.map(item => item.averageMoisture);
     // const labels = data.map((_, index) => `${index + 1}시간`); // x축 레이블 예: 1시간, 2시간 ...
@@ -24,36 +27,26 @@ function renderChart(data) {
         return `${displayMonth}월${displayDay}일 ${String(hour).padStart(2, '0')}시`;
     });
     const values = data.map(value => parseInt(value, 10)); // 강수확률 값
+
+    let index=TYPE.indexOf(type);
+
     // 기존 차트가 있으면 파괴
-    if (chartInstance) {
-        chartInstance.destroy();
+    if (chartInstance[index]) {
+        chartInstance[index].destroy();
     }
 
 
-    chartInstance = new Chart(ctx, {
-        type: 'bar',
+    chartInstance[index] = new Chart(ctx, {
+        type: 'line',
         data: {
             labels: labels,
             datasets: [{
-                label: '강수확률',
+                label: CHART_NAME[index],
                 data: values,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', // Red
-                    'rgba(54, 162, 235, 0.2)', // Blue
-                    'rgba(255, 206, 86, 0.2)', // Yellow
-                    'rgba(75, 192, 192, 0.2)', // Green
-                    'rgba(153, 102, 255, 0.2)', // Purple
-                    'rgba(255, 159, 64, 0.2)'  // Orange
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)', // Red
-                    'rgba(54, 162, 235, 1)', // Blue
-                    'rgba(255, 206, 86, 1)', // Yellow
-                    'rgba(75, 192, 192, 1)', // Green
-                    'rgba(153, 102, 255, 1)', // Purple
-                    'rgba(255, 159, 64, 1)'  // Orange
-                ],
-                borderWidth: 2
+                borderColor: LINE_COLOR[index], // 라인 색상
+                borderWidth: 2, // 라인 두께
+                pointRadius: 0, // 데이터 포인트 원 크기 0으로 설정
+                pointHoverRadius: 0, // 마우스 오버 시에도 포인트가 나타나지 않도록 설정
             }]
         },
         options: {
@@ -73,7 +66,7 @@ function renderChart(data) {
                 },
                 title: {
                     display: true,
-                    text: '강수 확률 차트',
+                    text: `${CHART_NAME[index]} 차트`,
                     font: {
                         size: 20,
                         family: 'Arial',

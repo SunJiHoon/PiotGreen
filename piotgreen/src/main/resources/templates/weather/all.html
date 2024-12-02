@@ -5,6 +5,35 @@
   <title>Weather Forecast</title>
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/weather/all.css">
+  <style>
+    .container {
+      display: grid; /* Grid 레이아웃 사용 */
+      grid-template-columns: repeat(2, 1fr); /* 2개의 열로 설정 */
+      grid-template-rows: repeat(2, 1fr); /* 2개의 행으로 설정 */
+      gap: 20px; /* 칸 간격 */
+      height: 100vh; /* 화면 전체 높이 */
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .chart-container {
+      border: 1px solid #ddd; /* 차트 경계선 */
+      border-radius: 10px; /* 둥근 모서리 */
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%; /* 차트 컨테이너를 전체 너비로 확장 */
+      height: 100%; /* 차트 컨테이너를 전체 높이로 확장 */
+    }
+
+    canvas {
+      width: 100% !important; /* 캔버스를 가로로 확장 */
+      height: 100% !important; /* 캔버스를 세로로 확장 */
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -28,24 +57,26 @@
       processTableData();
 
       function processTableData() {
-        const precipitationData = [];
-        tableBody.querySelectorAll('tr').forEach(row => {
-          const precipitationCell = row.cells[5]; // 강수확률 열
-          if (precipitationCell) {
-            precipitationData.push(precipitationCell.textContent.trim());
-          }
-        });
+        TYPE=["temperatureChart","windChart","cloudChart","weatherChart"];
+        for (let i = 0; i < 4; i++) {
+          const precipitationData = [];
+          tableBody.querySelectorAll('tr').forEach(row => {
+            const precipitationCell = row.cells[2+i]; // 강수확률 열
+            if (precipitationCell) {
+              precipitationData.push(precipitationCell.textContent.trim());
+            }
+          });
 
-        console.log("현재 강수확률 데이터:", precipitationData);
+          console.log("데이터:", precipitationData);
 
-        // 강수확률 데이터를 기반으로 추가 작업
-        renderPrecipitationChart(precipitationData);
+          renderPrecipitationChart(precipitationData,TYPE[i]);
+        }
       }
 
-      function renderPrecipitationChart(data) {
+      function renderPrecipitationChart(data,type) {
         console.log("차트를 그릴 데이터:", data);
         // 차트 업데이트 로직 추가
-        renderChart(data);
+        renderChart(data,type);
       }
     });
 
@@ -188,10 +219,34 @@
 
 <div class="weather-chart-container">
   <h2>강수확률 그래프</h2>
-  <div style="width: 600px; height: 400px;">
-    <canvas id="weatherChart"></canvas>
+  <div class="container">
+    <div class="chart-container">
+      <canvas id="temperatureChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="windChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="cloudChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="weatherChart"></canvas>
+    </div>
   </div>
-
+<!--  <div class="container">-->
+<!--    <div class="component" style="width: 600px; height: 400px;">-->
+<!--      <canvas id="temperatureChart"></canvas>-->
+<!--    </div>-->
+<!--      <div class="component" style="width: 600px; height: 400px;">-->
+<!--        <canvas id="windChart"></canvas>-->
+<!--      </div>-->
+<!--      <div class="component" style="width: 600px; height: 400px;">-->
+<!--        <canvas id="cloudChart"></canvas>-->
+<!--      </div>-->
+<!--      <div class="component" style="width: 600px; height: 400px;">-->
+<!--        <canvas id="weatherChart"></canvas>-->
+<!--      </div>-->
+<!--  </div>-->
 </div>
 
 <!--하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)-->
