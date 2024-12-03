@@ -20,4 +20,5 @@ public class WeatherGeneralData {
     private String windSpeed;
     private String skyCondition;
     private String propabilityOfPrecipitation;
+    private String precipitation;
 }
