@@ -152,6 +152,14 @@ public class WeatherDataService {
                 else if(weatherData.getCategory().compareTo("POP") == 0){
                     weatherGeneralData.setPropabilityOfPrecipitation(weatherData.getFcstValue());
                 }
+                else if(weatherData.getCategory().compareTo("PCP") == 0){
+                    if (weatherData.getFcstValue().compareTo("강수없음") == 0){
+                        weatherGeneralData.setPrecipitation("0");
+                    }
+                    else{
+                        weatherGeneralData.setPrecipitation(weatherData.getFcstValue());
+                    }
+                }
             }
         }
         List<WeatherGeneralData> generalDataList = new ArrayList<>();
