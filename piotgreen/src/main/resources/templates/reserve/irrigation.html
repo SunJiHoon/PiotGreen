@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Irrigation manager</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/history/irrigation.css">
+    <link rel="stylesheet" href="/css/reserve/irrigation.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -16,81 +16,77 @@
 
 
 
-<div class="calendar-controls">
-    <button id="prev-month" onclick="changeMonth(-1)">◀ 이전</button>
-    <span id="current-month">2024년 11월</span>
-    <button id="next-month" onclick="changeMonth(1)">다음 ▶</button>
-</div>
 
-<div class="chart-container">
-    <h2>일별 평균 습도량</h2>
-    <!--    <canvas id="lightChart"></canvas>-->
-    <div style="width: 600px; height: 400px;">
-        <canvas id="moistureChart"></canvas>
-    </div>
-
-</div>
-<!--<button onclick="goBack()">뒤로가기</button>-->
 <button onclick="goToParent()">뒤로가기</button>
 
 
-
-
-<!-- 연도와 월 선택 폼 -->
-<form action="/history/irrigation" method="get">
-    <!--    <label for="year">Year:</label>-->
-    <!--    <input type="number" id="year" name="year" value="${year}">-->
-    <label for="year">Year:</label>
-    <select id="year" name="year">
-        <!-- 연도 선택 -->
-        <option th:each="y : ${#numbers.sequence(2020, 2025)}"
-                th:value="${y}"
-                th:text="${y}"
-                th:selected="${y == year}">
-        </option>
-    </select>
-
-
-    <!--    <label for="month">Month:</label>-->
-    <!--    <input type="number" id="month" name="month" value="${month}">-->
-    <label for="month">Month:</label>
-    <select id="month" name="month">
-        <!-- 월 선택 -->
-        <option th:each="m : ${#numbers.sequence(1, 12)}"
-                th:value="${m}"
-                th:text="${m}"
-                th:selected="${m == month}">
-        </option>
-    </select>
-
-    <button type="submit">Filter</button>
+<form id="commandForm1" action="/reserve/irrigation" method="POST">
+    <div>
+        <label for="category1">Category:</label>
+        <input type="text" id="category1" name="category" value="irrigation" readonly>
+    </div>
+    <div>
+        <label for="commandValue1">Command & Value:</label>
+        <select id="commandValue1" name="commandValue" required>
+            <option value="">Select Command and Value</option>
+            <option value="mode:pass">Mode - Pass</option>
+            <option value="mode:auto">Mode - Auto</option>
+        </select>
+    </div>
+    <div>
+        <label for="timestamp1">Timestamp:</label>
+        <input type="datetime-local" id="timestamp1" name="timestamp" required>
+    </div>
+    <button type="submit">Submit</button>
 </form>
 
 
-<div class="data-display">
-    <h1>Irrigation Data History</h1>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Moisture Level</th>
-            <th>Timestamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="irrigation : ${irrigationDataList}">
-            <td th:text="${irrigation.id}"></td>
-            <td th:text="${irrigation.moistureLevel}"></td>
-            <td th:text="${irrigation.timestamp}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<form id="commandForm2" action="/reserve/irrigation" method="POST">
+    <div>
+        <label for="category2">Category:</label>
+        <input type="text" id="category2" name="category" value="irrigation" readonly>
+    </div>
+    <div>
+        <label for="target-humidity">Set Humidity: </label>
+        <input type="range" id="target-humidity"  min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
+        <span id="humidity-display">wantHumidity:60</span>
+        <!-- Hidden input field to send commandValue -->
+        <input type="hidden" id="commandValueInput" name="commandValue" value="wantHumidity:60">
+    </div>
+    <div>
+        <label for="timestamp2">Timestamp:</label>
+        <input type="datetime-local" id="timestamp2" name="timestamp" required>
+    </div>
+    <button type="submit">Submit</button>
+</form>
 
-<!--<button onclick="goBack()">뒤로가기</button>-->
+<h2>Irrigation Command 예약 내역</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th>Command</th>
+        <th>Value</th>
+        <th>Timestamp</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프 문법으로 데이터 반복 -->
+    <tr th:each="commandData : ${irrigationReserveCommandDataList}">
+        <td th:text="${commandData.category}">Category</td>
+        <td th:text="${commandData.command}">Command</td>
+        <td th:text="${commandData.value}">Value</td>
+        <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">Timestamp</td>
+    </tr>
+    </tbody>
+</table>
+
+
+
 <button onclick="goToParent()">뒤로가기</button>
 
-<script src="/js/history/irrigation.js"></script>
+
+<script src="/js/reserve/irrigation.js"></script>
 
 </body>
 </html>

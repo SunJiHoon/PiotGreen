@@ -67,6 +67,29 @@ public class ReserveController {
 
         return "reserve/irrigation";
     }
+    @PostMapping("/irrigation")
+    public String saveIrrigationCommand(
+            @RequestParam("category") String category,
+            @RequestParam("commandValue") String commandValue,
+            @RequestParam("timestamp") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp,
+            Model model) {
+
+        // commandValue를 ":"로 분리하여 command와 value 추출
+        String[] commandValueParts = commandValue.split(":");
+        String command = commandValueParts[0];
+        String value = commandValueParts[1];
+
+        // ReserveCommandData 객체 생성 및 저장
+        ReserveCommandData reserveCommandData = new ReserveCommandData();
+        reserveCommandData.setCategory(category);
+        reserveCommandData.setCommand(command);
+        reserveCommandData.setValue(value);
+        reserveCommandData.setTimestamp(timestamp);
+
+        reserveCommandDataStorageService.saveData(reserveCommandData);
+
+        return "redirect:/reserve/irrigation";
+    }
 
     @GetMapping("/intrusion")
     public String getCommandListIntrusion(
@@ -77,6 +100,28 @@ public class ReserveController {
         model.addAttribute("intrusionReserveCommandDataList", intrusionReserveCommandDataList);
         return "reserve/intrusion";
     }
+    @PostMapping("/intrusion")
+    public String saveIntrusionCommand(
+            @RequestParam("category") String category,
+            @RequestParam("commandValue") String commandValue,
+            @RequestParam("timestamp") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp,
+            Model model) {
 
+        // commandValue를 ":"로 분리하여 command와 value 추출
+        String[] commandValueParts = commandValue.split(":");
+        String command = commandValueParts[0];
+        String value = commandValueParts[1];
+
+        // ReserveCommandData 객체 생성 및 저장
+        ReserveCommandData reserveCommandData = new ReserveCommandData();
+        reserveCommandData.setCategory(category);
+        reserveCommandData.setCommand(command);
+        reserveCommandData.setValue(value);
+        reserveCommandData.setTimestamp(timestamp);
+
+        reserveCommandDataStorageService.saveData(reserveCommandData);
+
+        return "redirect:/reserve/intrusion";
+    }
 
 }
