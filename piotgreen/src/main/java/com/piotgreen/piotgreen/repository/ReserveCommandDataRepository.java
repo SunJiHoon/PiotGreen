@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ReserveCommandDataRepository extends JpaRepository<ReserveCommandData, Long> {
     List<ReserveCommandData> findByCategoryAndStatus(String category, String status);
-    List<ReserveCommandData> findByCategoryAndTimestampAfter(String category, LocalDateTime timestamp);
+    List<ReserveCommandData> findByCategoryAndTimestampAfterOrderByTimestampAsc(String category, LocalDateTime timestamp);
 }

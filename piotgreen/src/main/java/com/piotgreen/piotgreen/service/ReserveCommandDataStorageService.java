@@ -19,19 +19,19 @@ public class ReserveCommandDataStorageService {
     }
     public List<ReserveCommandData> getIntrusionDataList(LocalDateTime timestamp) {
         List<ReserveCommandData> reserveCommandDataList =
-                reserveCommandDataRepository.findByCategoryAndTimestampAfter("intrusion", timestamp);
+                reserveCommandDataRepository.findByCategoryAndTimestampAfterOrderByTimestampAsc("intrusion", timestamp);
         return reserveCommandDataList;
     }
 
     public List<ReserveCommandData> getLightingDataList(LocalDateTime timestamp) {
         List<ReserveCommandData> reserveCommandDataList =
-                reserveCommandDataRepository.findByCategoryAndTimestampAfter("lighting", timestamp);
+                reserveCommandDataRepository.findByCategoryAndTimestampAfterOrderByTimestampAsc("lighting", timestamp);
         return reserveCommandDataList;
     }
 
     public List<ReserveCommandData> getIrrigationDataList(LocalDateTime timestamp) {
         List<ReserveCommandData> reserveCommandDataList =
-                reserveCommandDataRepository.findByCategoryAndTimestampAfter("irrigation", timestamp);
+                reserveCommandDataRepository.findByCategoryAndTimestampAfterOrderByTimestampAsc("irrigation", timestamp);
         return reserveCommandDataList;
     }
 
