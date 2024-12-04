@@ -26,5 +26,5 @@ public class ReserveCommandData {
     private LocalDateTime timestamp;
 
     @Column(name = "status")
-    private String status; // 수행 여부를 "PENDING", "COMPLETED", "FAILED"와 같은 상태 값으로 저장
+    private String status; // 수행 여부를 SCHEDULED, COMPLETED, CANCELLED
 }

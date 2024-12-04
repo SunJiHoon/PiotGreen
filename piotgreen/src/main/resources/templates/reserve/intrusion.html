@@ -45,6 +45,7 @@
         <th>Command</th>
         <th>Value</th>
         <th>Timestamp</th>
+        <th>Status</th>
     </tr>
     </thead>
     <tbody>
@@ -54,6 +55,7 @@
         <td th:text="${commandData.command}">Command</td>
         <td th:text="${commandData.value}">Value</td>
         <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">Timestamp</td>
+        <td th:text="${commandData.status}">Status</td>
     </tr>
     </tbody>
 </table>

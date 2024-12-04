@@ -51,7 +51,7 @@ public class ReserveController {
         reserveCommandData.setCommand(command);
         reserveCommandData.setValue(value);
         reserveCommandData.setTimestamp(timestamp);
-
+        reserveCommandData.setStatus("SCHEDULED");
         reserveCommandDataStorageService.saveData(reserveCommandData);
 
         return "redirect:/reserve/lighting";
@@ -85,7 +85,7 @@ public class ReserveController {
         reserveCommandData.setCommand(command);
         reserveCommandData.setValue(value);
         reserveCommandData.setTimestamp(timestamp);
-
+        reserveCommandData.setStatus("SCHEDULED");
         reserveCommandDataStorageService.saveData(reserveCommandData);
 
         return "redirect:/reserve/irrigation";
@@ -118,7 +118,7 @@ public class ReserveController {
         reserveCommandData.setCommand(command);
         reserveCommandData.setValue(value);
         reserveCommandData.setTimestamp(timestamp);
-
+        reserveCommandData.setStatus("SCHEDULED");
         reserveCommandDataStorageService.saveData(reserveCommandData);
 
         return "redirect:/reserve/intrusion";
