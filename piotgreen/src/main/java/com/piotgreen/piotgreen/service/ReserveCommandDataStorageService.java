@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -143,6 +144,13 @@ public class ReserveCommandDataStorageService {
             } else {
                 log.info("paramCommand is null");
             }
+        }
+    }
+    public void cancelCommandById(String id){
+        Optional<ReserveCommandData> reserveCommandData = reserveCommandDataRepository.findById(Long.valueOf(id));
+        if (reserveCommandData.isPresent()) {
+            reserveCommandData.get().setStatus("CANCELLED");
+            reserveCommandDataRepository.save(reserveCommandData.get());
         }
     }
 }

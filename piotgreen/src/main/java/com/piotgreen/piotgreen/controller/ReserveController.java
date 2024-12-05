@@ -57,6 +57,14 @@ public class ReserveController {
         return "redirect:/reserve/lighting";
     }
 
+    @PostMapping("/lighting/delete")
+    public String saveLightingCommand(
+            @RequestParam("id") String id
+    ){
+        reserveCommandDataStorageService.cancelCommandById(id);
+        return "redirect:/reserve/lighting";
+    }
+
 
     @GetMapping("/irrigation")
     public String getCommandListIrrigation(
@@ -91,6 +99,14 @@ public class ReserveController {
         return "redirect:/reserve/irrigation";
     }
 
+    @PostMapping("/irrigation/delete")
+    public String saveIrrigationCommand(
+            @RequestParam("id") String id
+    ){
+        reserveCommandDataStorageService.cancelCommandById(id);
+        return "redirect:/reserve/irrigation";
+    }
+
     @GetMapping("/intrusion")
     public String getCommandListIntrusion(
             Model model
@@ -121,6 +137,14 @@ public class ReserveController {
         reserveCommandData.setStatus("SCHEDULED");
         reserveCommandDataStorageService.saveData(reserveCommandData);
 
+        return "redirect:/reserve/intrusion";
+    }
+
+    @PostMapping("/intrusion/delete")
+    public String saveIntrusionCommand(
+            @RequestParam("id") String id
+    ){
+        reserveCommandDataStorageService.cancelCommandById(id);
         return "redirect:/reserve/intrusion";
     }
 
