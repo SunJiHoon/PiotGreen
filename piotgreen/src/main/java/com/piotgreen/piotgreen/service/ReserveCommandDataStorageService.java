@@ -97,7 +97,7 @@ public class ReserveCommandDataStorageService {
                 irrigationPiClientService.sendCommand(paramCommand);
             } else if (command.compareTo("mode") == 0) {
                 String paramCommand;
-                if (data.compareTo("manual") == 0) {
+                if (data.compareTo("pass") == 0) {
                     paramCommand = "mode:pass";
                     commandDataStorageService.saveCommandData("irrigation", "mode", "pass");
                     irrigationPiClientService.sendCommand(paramCommand);
