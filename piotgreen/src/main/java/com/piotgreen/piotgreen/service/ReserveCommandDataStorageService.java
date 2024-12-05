@@ -123,10 +123,10 @@ public class ReserveCommandDataStorageService {
             } else if (command.compareTo("led2") == 0) {
                 if (data.compareTo("on") == 0) {
                     commandDataStorageService.saveCommandData("lighting", "led2", "on");
-                    paramCommand = "LED:on[1]";
+                    paramCommand = "LED:on[2]";
                 } else {
                     commandDataStorageService.saveCommandData("lighting", "led2", "off");
-                    paramCommand = "LED:off[1]";
+                    paramCommand = "LED:off[2]";
                 }
             } else if (command.compareTo("mode") == 0) {
                 if (data.compareTo("pass") == 0) {
