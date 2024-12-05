@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighting manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/reserve/lighting.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+<header class="header">
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>실시간 농장 제어 명령 예약 페이지 - lighting</p>
+</header>
+
+<button onclick="goToParent()">뒤로가기</button>
+
+
+<form id="commandForm" action="/reserve/lighting" method="POST">
+    <div>
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" value="lighting" readonly>
+    </div>
+    <div>
+        <label for="commandValue">Command & Value:</label>
+        <select id="commandValue" name="commandValue" required>
+            <option value="">Select Command and Value</option>
+            <option value="mode:pass">Mode - Pass</option>
+            <option value="mode:auto">Mode - Auto</option>
+            <option value="led1:off">LED1 - Off</option>
+            <option value="led1:on">LED1 - On</option>
+            <option value="led2:off">LED2 - Off</option>
+            <option value="led2:on">LED2 - On</option>
+        </select>
+    </div>
+    <div>
+        <label for="timestamp">Timestamp:</label>
+        <input type="datetime-local" id="timestamp" name="timestamp" required>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+
+
+<h2>Lighting Command 예약 내역</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th>Command</th>
+        <th>Value</th>
+        <th>Timestamp</th>
+        <th>Status</th>
+        <th>cancel</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프 문법으로 데이터 반복 -->
+    <tr th:each="commandData : ${lightingReserveCommandDataList}">
+        <td th:text="${commandData.category}">Category</td>
+        <td th:text="${commandData.command}">Command</td>
+        <td th:text="${commandData.value}">Value</td>
+        <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">Timestamp</td>
+        <td th:text="${commandData.status}">Status</td>
+        <td>
+            <form action="/reserve/lighting/delete" method="post">
+                <input type="hidden" name="id" th:value="${commandData.id}" />
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+<button onclick="goToParent()">뒤로가기</button>
+
+<script src="/js/reserve/lighting.js"></script>
+
+</body>
+</html>
+
