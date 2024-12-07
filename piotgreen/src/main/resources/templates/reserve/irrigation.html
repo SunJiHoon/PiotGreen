@@ -21,19 +21,17 @@
 
 
 <form id="commandForm1" action="/reserve/irrigation" method="POST">
-    <div>
+    <div class="sero">
         <label for="category1">Category:</label>
         <input type="text" id="category1" name="category" value="irrigation" readonly>
     </div>
-    <div>
+    <div class="sero">
         <label for="commandValue1">Command & Value:</label>
         <select id="commandValue1" name="commandValue" required>
             <option value="">Select Command and Value</option>
             <option value="mode:pass">Mode - Pass</option>
             <option value="mode:auto">Mode - Auto</option>
         </select>
-    </div>
-    <div>
         <label for="timestamp1">Timestamp:</label>
         <input type="datetime-local" id="timestamp1" name="timestamp" required>
     </div>
@@ -42,18 +40,16 @@
 
 
 <form id="commandForm2" action="/reserve/irrigation" method="POST">
-    <div>
+    <div class="sero">
         <label for="category2">Category:</label>
         <input type="text" id="category2" name="category" value="irrigation" readonly>
     </div>
-    <div>
+    <div class="sero">
         <label for="target-humidity">Set Humidity: </label>
         <input type="range" id="target-humidity"  min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
         <span id="humidity-display">wantHumidity:60</span>
         <!-- Hidden input field to send commandValue -->
         <input type="hidden" id="commandValueInput" name="commandValue" value="wantHumidity:60">
-    </div>
-    <div>
         <label for="timestamp2">Timestamp:</label>
         <input type="datetime-local" id="timestamp2" name="timestamp" required>
     </div>

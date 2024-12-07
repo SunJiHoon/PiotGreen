@@ -1,23 +1,51 @@
-.data-display, .mode-control, .manual-controls {
-    margin: 20px auto;
-    padding: 20px;
+/* select 태그 스타일 */
+form select {
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 4px;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    width: 80%;
-}
-.manual-controls {
-    display: none; /* 기본적으로 숨김 */
-    margin-top: 20px;
+    flex: 1;
+    min-width: 150px;
+    background-color: white;
+    color: #333;
+    transition: border-color 0.3s ease;
 }
 
-input[type="number"] {
-    padding: 10px;
+/* select 태그 포커스 상태 */
+form select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* 선택된 옵션에 대한 스타일 */
+form select option {
+    padding: 8px;
+    background-color: white;
+    color: #333;
+}
+
+form[action="/reserve/irrigation/delete"] {
+    visibility: hidden;
+    position: relative;
+}
+
+form[action="/reserve/irrigation/delete"] button {
+    visibility: visible;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     font-size: 1em;
-    margin-right: 10px;
-    border: 1px solid #ddd;
+    margin: 5px;
     border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+form[action="/reserve/irrigation/delete"] button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
 }
 
 button {
@@ -26,6 +54,7 @@ button {
     border: none;
     padding: 10px 20px;
     font-size: 1em;
+    margin: 5px;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -36,26 +65,83 @@ button:hover {
     background-color: #45a049;
 }
 
+button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
 
+/* 전체 광량 섹션 컨테이너 스타일 */
+.light-sections-container {
+    display: flex; /* Flexbox를 사용하여 가로 정렬 */
+    gap: 20px; /* 섹션 간 간격 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    margin-bottom: 20px; /* LED 섹션과의 간격 */
+}
 
+/* 광량 컨테이너 스타일 */
+.light-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.sero{
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    gap: 10px; /* 필드 간 간격 */
+}
+
+/* 전체 LED 섹션 컨테이너 스타일 */
+.led-sections-container {
+    display: flex; /* Flexbox를 사용하여 가로로 정렬 */
+    gap: 20px; /* 섹션 간 간격 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+
+    margin-top: 10px; /* 위쪽 여백 */
+}
+
+/* LED 컨테이너 스타일 */
+.led-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
 
 table {
-    width: 100%;
+    margin: 20px auto;
+    width: 90%;
     border-collapse: collapse;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table caption {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #4CAF50;
+}
+
+table thead {
+    background-color: #45a049;
+    color: white;
 }
 
 table th,
 table td {
-    padding: 12px;
+    padding: 8px;
     text-align: center;
     border: 1px solid #ddd;
 }
 
 table th {
-    background-color: #f4f4f4;
     font-weight: bold;
 }
 
@@ -63,26 +149,39 @@ table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-table tr:hover {
-    background-color: #f1f1f1;
-}
-
 
 
 form {
     margin: 20px auto;
-    max-width: 500px;
-    text-align: center;
-    padding: 20px;
+    /*max-width: 800px;*/
+    width: 95%;
+
     background: white;
-    border: 1px solid #ddd;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /*display: flex;*/
+    flex-wrap: wrap;
+    align-items: center;
+    display: flex;
+    gap: 10px; /* 필드 간 간격 */
+
+    justify-content: center; /* 가로 중앙 정렬 */
+
 }
 
 form label {
     font-weight: bold;
     margin-right: 10px;
+}
+
+form input {
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    flex: 1;
+    min-width: 150px;
 }
 
 form select,
@@ -94,12 +193,23 @@ form button {
     font-size: 1em;
 }
 
+/*form button {*/
+/*    background-color: #007BFF;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
 form button {
-    background-color: #007BFF;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #4CAF50;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 form button:hover {
