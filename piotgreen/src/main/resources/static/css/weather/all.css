@@ -172,3 +172,31 @@ form select option {
     background-color: white;
     color: #333;
 }
+
+.container {
+    display: grid; /* Grid 레이아웃 사용 */
+    grid-template-columns: repeat(2, 1fr); /* 2개의 열로 설정 */
+    grid-template-rows: repeat(2, 1fr); /* 2개의 행으로 설정 */
+    gap: 20px; /* 칸 간격 */
+    height: 100vh; /* 화면 전체 높이 */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.chart-container {
+    border: 1px solid #ddd; /* 차트 경계선 */
+    border-radius: 10px; /* 둥근 모서리 */
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 차트 컨테이너를 전체 너비로 확장 */
+    height: 100%; /* 차트 컨테이너를 전체 높이로 확장 */
+}
+
+canvas {
+    width: 100% !important; /* 캔버스를 가로로 확장 */
+    height: 100% !important; /* 캔버스를 세로로 확장 */
+}
