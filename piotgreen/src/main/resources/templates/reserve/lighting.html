@@ -19,11 +19,11 @@
 
 
 <form id="commandForm" action="/reserve/lighting" method="POST">
-    <div>
+    <div class="sero">
         <label for="category">Category:</label>
         <input type="text" id="category" name="category" value="lighting" readonly>
     </div>
-    <div>
+    <div class="sero">
         <label for="commandValue">Command & Value:</label>
         <select id="commandValue" name="commandValue" required>
             <option value="">Select Command and Value</option>
@@ -34,8 +34,6 @@
             <option value="led2:off">LED2 - Off</option>
             <option value="led2:on">LED2 - On</option>
         </select>
-    </div>
-    <div>
         <label for="timestamp">Timestamp:</label>
         <input type="datetime-local" id="timestamp" name="timestamp" required>
     </div>
@@ -52,7 +50,7 @@
         <th>Value</th>
         <th>Timestamp</th>
         <th>Status</th>
-        <th>cancel</th>
+        <th>Cancel</th>
 
     </tr>
     </thead>
