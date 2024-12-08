@@ -175,10 +175,6 @@ while True:
         if not motion_detected_flag:
             sock_send.send(b"intrusion_detection:danger:1\n")
             motion_detected_flag = True
-
-        x, y, w, h = cv2.boundingRect(largest_contour)
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
@@ -187,12 +183,7 @@ while True:
             sock_send.send(b"intrusion_detection:danger:0\n")
             motion_detected_flag = False
 
-    cv2.imshow("Motion Detection", frame)
     prev_gray = gray.copy()
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
 cap.release()
-cv2.destroyAllWindows()
 GPIO.cleanup()
