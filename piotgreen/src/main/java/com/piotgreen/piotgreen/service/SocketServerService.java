@@ -164,7 +164,7 @@ public class SocketServerService {
 //            int dangerLevel = Integer.parseInt(data);
             String dangerLevel = data.compareTo("0") == 0 ? "safe" : "danger";
 
-            if(intrusionDataStorageService.canSendDangerAlert()){
+            if(intrusionDataStorageService.canSendDangerAlert() && "danger".equals(dangerLevel)){
                 String dangerMessage = "위험 발생: 불법 침입 감지!";
                 managerDataStorageService.sendMessageToAllManger(dangerMessage);
             }
