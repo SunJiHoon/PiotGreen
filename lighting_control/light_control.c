@@ -71,6 +71,7 @@ int main()
                     // digitalWrite(LED1PINsec, HIGH);
                     pwmWrite(LED1PINfir, 1024 - Value1 * 1024 / 100);
                     pwmWrite(LED1PINsec, 1024 - Value1 * 1024 / 100);
+                    printf("LED1 turn on\n");
                     led1 = 1;
                 }
                 else
@@ -79,6 +80,7 @@ int main()
                     // digitalWrite(LED1PINsec, LOW);
                     pwmWrite(LED1PINfir, 0);
                     pwmWrite(LED1PINsec, 0);
+                    printf("LED1 turn off\n");
                     led1 = 0;
                 }
                 if (Value2 < THRESHOLD)
@@ -87,6 +89,7 @@ int main()
                     // digitalWrite(LED2PINsec, HIGH);
                     pwmWrite(LED2PINfir, 1024 - Value2 * 1024 / 100);
                     pwmWrite(LED2PINsec, 1024 - Value2 * 1024 / 100);
+                    printf("LED2 turn on\n");
                     led2 = 1;
                 }
                 else
@@ -95,6 +98,7 @@ int main()
                     // digitalWrite(LED2PINsec, LOW);
                     pwmWrite(LED2PINfir, 0);
                     pwmWrite(LED2PINsec, 0);
+                    printf("LED2 turn off\n");
                     led2 = 0;
                 }
                 rc = sqlite3_prepare_v2(db, sql_upd, -1, &stmt2, 0);
@@ -118,6 +122,7 @@ int main()
                     // digitalWrite(LED1PINsec, HIGH);
                     pwmWrite(LED1PINfir, 1024);
                     pwmWrite(LED1PINsec, 1024);
+                    printf("LED1 turn on\n");
                 }
                 else
                 {
@@ -125,6 +130,7 @@ int main()
                     // digitalWrite(LED1PINsec, LOW);
                     pwmWrite(LED1PINfir, 0);
                     pwmWrite(LED1PINsec, 0);
+                    printf("LED1 turn off\n");
                 }
                 if (led2 == 1)
                 {
@@ -132,6 +138,7 @@ int main()
                     // digitalWrite(LED2PINsec, HIGH);
                     pwmWrite(LED2PINfir, 1024);
                     pwmWrite(LED2PINsec, 1024);
+                    printf("LED2 turn on\n");
                 }
                 else
                 {
@@ -139,6 +146,7 @@ int main()
                     // digitalWrite(LED2PINsec, LOW);
                     pwmWrite(LED2PINfir, 0);
                     pwmWrite(LED2PINsec, 0);
+                    printf("LED2 turn off\n");
                 }
             }
         }
