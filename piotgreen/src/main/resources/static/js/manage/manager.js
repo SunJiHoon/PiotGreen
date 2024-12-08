@@ -6,7 +6,7 @@ function goToParent() {
 document.getElementById("sendDangerMessage").addEventListener("click", () => {
     const url = "/manage/api/send-danger-message"; // 서버의 엔드포인트
     const payload = {
-        message: "위험 발생",
+        message: "위험 발생: 침입이 감지되었습니다! 직접 발송",
         timestamp: new Date().toISOString()
     };
 
