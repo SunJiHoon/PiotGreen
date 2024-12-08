@@ -143,8 +143,8 @@ public class SocketServerService {
         String[] lightLevels = data.split(",");
         if (lightLevels.length == 2) {
             try {
-                int lightLevel1 = Integer.parseInt(lightLevels[0]);
-                int lightLevel2 = Integer.parseInt(lightLevels[1]);
+                int lightLevel1 = Integer.parseInt(lightLevels[0].trim());
+                int lightLevel2 = Integer.parseInt(lightLevels[1].trim());
                 lightingDataStorageService.saveLightData(lightLevel1, lightLevel2);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid light data values: " + data);
