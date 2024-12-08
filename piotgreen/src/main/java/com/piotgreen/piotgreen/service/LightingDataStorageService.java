@@ -133,7 +133,7 @@ public class LightingDataStorageService {
 
             // 11월 1일부터 30일까지 데이터 생성
             LocalDateTime startDate = LocalDateTime.of(2024, 5, 1, 0, 0);
-            LocalDateTime endDate = LocalDateTime.of(2024, 11, 25, 23, 59);
+            LocalDateTime endDate = LocalDateTime.of(2024, 12, 9, 23, 59);
 //            LocalDateTime endDate = LocalDateTime.of(2024, 12, 9, 23, 59);
             LocalDateTime currentDate = startDate;
 
