@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import time
 import socket
 import threading
 import RPi.GPIO as GPIO
@@ -29,15 +28,14 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('0.0.0.0', 8089))
 server_socket.listen(1)  # 하나의 클라이언트 연결 대기
 
-# 클라이언트와의 연결 수락
 print("Waiting for a connection...")
 conn, addr = server_socket.accept()
 print(f"Connected to {addr}")
 
-# 송신 소켓 설정
 sock_send = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock_send.connect(('main.putiez.com', 8088))  # 수신 측 IP와 포트 설정
 
+# 카메라 스트림 설정
 stream_url = "http://192.168.137.223:8081/"
 cap = cv2.VideoCapture(stream_url)
 
@@ -46,8 +44,8 @@ if not cap.isOpened():
     exit()
 
 frame_width, frame_height = 640, 480
-MARGIN = 5
 
+# 초기 프레임 설정
 ret, prev_frame = cap.read()
 if not ret:
     print("Cannot get the initial frame.")
@@ -61,6 +59,8 @@ frame_skip = 2
 frame_count = 0
 detection_enabled = False
 motion_detected_flag = False
+motion_threshold = 30  # 움직임 감지 민감도
+min_area = 1500  # 최소 감지 면적
 
 def receive_commands():
     global detection_enabled
@@ -75,7 +75,7 @@ def receive_commands():
                 print("Detection enabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.HIGH)
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
-            elif "intrusion_detection:danger:off" in data :
+            elif "intrusion_detection:danger:off" in data:
                 detection_enabled = False
                 print("Detection disabled")
                 GPIO.output(SECURITY_LED_PIN, GPIO.LOW)
@@ -83,9 +83,8 @@ def receive_commands():
                 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.HIGH)
                 GPIO.output(BUZZER_PIN, GPIO.LOW)
         except socket.error as e:
-            print(f"Socket error: {e}")  # 소켓 오류 출력
+            print(f"Socket error: {e}")
             break
-
 
 receive_thread = threading.Thread(target=receive_commands, daemon=True)
 receive_thread.start()
@@ -106,16 +105,25 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    mask = np.zeros_like(gray)
-    mask[:, frame_width // 2:] = 255
-
+    # 프레임 차이 계산
     frame_delta = cv2.absdiff(prev_gray, gray)
-    frame_delta = cv2.bitwise_and(frame_delta, frame_delta, mask=mask)
+    _, thresh = cv2.threshold(frame_delta, motion_threshold, 255, cv2.THRESH_BINARY)
+    thresh = cv2.dilate(thresh, None, iterations=2)
 
-    motion_mask = frame_delta > 25
-    motion_detected = np.sum(motion_mask) > 1000
+    # 컨투어 탐지
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    largest_contour = None
+    max_area = 0
 
-    if motion_detected:
+    # 가장 큰 물체 탐지
+    for contour in contours:
+        area = cv2.contourArea(contour)
+        if area > min_area and area > max_area:
+            largest_contour = contour
+            max_area = area
+
+    if largest_contour is not None:
+        # 움직임 감지 표시
         GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
         GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
@@ -123,15 +131,11 @@ while True:
             sock_send.send(b"intrusion_detection:danger:1\n")
             motion_detected_flag = True
 
-        y_indices, x_indices = np.where(motion_mask)
-
-        if len(x_indices) > 0 and len(y_indices) > 0:
-            x_min, x_max = np.min(x_indices), np.max(x_indices)
-            y_min, y_max = np.min(y_indices), np.max(y_indices)
-            cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
-            print(f"Motion detected: Bounding box=(({x_min}, {y_min}), ({x_max}, {y_max}))")
-
+        x, y, w, h = cv2.boundingRect(largest_contour)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
+        # 움직임 없을 때
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
 
