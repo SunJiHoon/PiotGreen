@@ -26,9 +26,10 @@ GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
 GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 # 날씨 API 설정
-WEATHER_API_KEY = "e548fb177a976133d31021053019b35d"  # OpenWeatherMap API 키 입력
-CITY = "Seoul"
-WEATHER_API_URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={WEATHER_API_KEY}"
+WEATHER_API_KEY = "e548fb177a976133d31021053019b35d"  # OpenWeatherMap API 키
+LAT = "37.5665"  # 서울의 위도
+LON = "126.9780"  # 서울의 경도
+WEATHER_API_URL = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={WEATHER_API_KEY}"
 
 weather_data = {}
 motion_threshold = 30
@@ -38,13 +39,11 @@ def fetch_weather():
     global motion_threshold, min_area, weather_data
     while True:
         try:
+            print("Fetching weather data...")
             response = requests.get(WEATHER_API_URL)
             if response.status_code == 200:
-                # JSON 데이터 출력 (디버깅)
-                print("Weather API Response:", response.json())
+                # 응답 처리
                 weather_data = response.json()
-
-                # JSON 구조 확인 후 데이터 추출
                 weather_conditions = [w['main'].lower() for w in weather_data.get('weather', [])]
                 wind_speed = weather_data.get('wind', {}).get('speed', 0)
 
@@ -64,13 +63,14 @@ def fetch_weather():
 
                 print(f"Weather updated: {weather_conditions}, Wind Speed: {wind_speed}, "
                       f"Motion Threshold: {motion_threshold}, Min Area: {min_area}")
+            elif response.status_code == 401:
+                print("Unauthorized: Check your API key.")
             else:
                 print(f"Failed to fetch weather data: HTTP {response.status_code}")
         except Exception as e:
             print(f"Error fetching weather data: {e}")
 
-        time.sleep(3600)  # 5분 간격으로 날씨 데이터 갱신
-
+        time.sleep(300)  # 5분 간격으로 날씨 데이터 갱신
 
 # 날씨 업데이트 스레드 시작
 weather_thread = threading.Thread(target=fetch_weather, daemon=True)
