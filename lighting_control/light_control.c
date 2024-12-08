@@ -4,20 +4,27 @@
 #include <unistd.h>
 
 #define THRESHOLD 40
-#define LED1PINfir 0
-#define LED2PINfir 1
-#define LED1PINsec 15
-#define LED2PINsec 16
+#define LED1PINfir 1
+#define LED2PINfir 23
+#define LED1PINsec 24
+#define LED2PINsec 26
 
 // 본 프로그램은 자동/수종모드 여부에 따라 led를 제어합니다.
 
 int main()
 {
     wiringPiSetup();
-    pinMode(LED1PINfir, OUTPUT);
-    pinMode(LED2PINfir, OUTPUT);
-    pinMode(LED1PINsec, OUTPUT);
-    pinMode(LED2PINsec, OUTPUT);
+    // pinMode(LED1PINfir, OUTPUT);
+    // pinMode(LED2PINfir, OUTPUT);
+    // pinMode(LED1PINsec, OUTPUT);
+    // pinMode(LED2PINsec, OUTPUT);
+    pinMode(LED1PINfir, PWM_OUTPUT);
+    pinMode(LED2PINfir, PWM_OUTPUT);
+    pinMode(LED1PINsec, PWM_OUTPUT);
+    pinMode(LED2PINsec, PWM_OUTPUT);
+    pwmSetMode(PWM_MODE_MS);
+    pwmSetClock(19);
+    pwmSetRange(1024);
 
     sqlite3 *db;
     sqlite3_stmt *stmt1;
@@ -61,26 +68,34 @@ int main()
                 // 자동모드
                 if (Value1 < THRESHOLD)
                 {
-                    digitalWrite(LED1PINfir, HIGH);
-                    digitalWrite(LED1PINsec, HIGH);
+                    // digitalWrite(LED1PINfir, HIGH);
+                    // digitalWrite(LED1PINsec, HIGH);
+                    pwmWrite(LED1PINfir, Value1 * 1024 / 100);
+                    pwmWrite(LED1PINsec, Value1 * 1024 / 100);
                     led1 = 1;
                 }
                 else
                 {
-                    digitalWrite(LED1PINfir, LOW);
-                    digitalWrite(LED1PINsec, LOW);
+                    // digitalWrite(LED1PINfir, LOW);
+                    // digitalWrite(LED1PINsec, LOW);
+                    pwmWrite(LED1PINfir, 0);
+                    pwmWrite(LED1PINsec, 0);
                     led1 = 0;
                 }
                 if (Value2 < THRESHOLD)
                 {
-                    digitalWrite(LED2PINfir, HIGH);
-                    digitalWrite(LED2PINsec, HIGH);
+                    // digitalWrite(LED2PINfir, HIGH);
+                    // digitalWrite(LED2PINsec, HIGH);
+                    pwmWrite(LED2PINfir, Value2 * 1024 / 100);
+                    pwmWrite(LED2PINsec, Value2 * 1024 / 100);
                     led2 = 1;
                 }
                 else
                 {
-                    digitalWrite(LED2PINfir, LOW);
-                    digitalWrite(LED2PINsec, LOW);
+                    // digitalWrite(LED2PINfir, LOW);
+                    // digitalWrite(LED2PINsec, LOW);
+                    pwmWrite(LED2PINfir, 0);
+                    pwmWrite(LED2PINsec, 0);
                     led2 = 0;
                 }
                 rc = sqlite3_prepare_v2(db, sql_upd, -1, &stmt2, 0);
@@ -100,23 +115,31 @@ int main()
                 // 수동모드
                 if (led1 == 1)
                 {
-                    digitalWrite(LED1PINfir, HIGH);
-                    digitalWrite(LED1PINsec, HIGH);
+                    // digitalWrite(LED1PINfir, HIGH);
+                    // digitalWrite(LED1PINsec, HIGH);
+                    pwmWrite(LED1PINfir, 1024);
+                    pwmWrite(LED1PINsec, 1024);
                 }
                 else
                 {
-                    digitalWrite(LED1PINfir, LOW);
-                    digitalWrite(LED1PINsec, LOW);
+                    // digitalWrite(LED1PINfir, LOW);
+                    // digitalWrite(LED1PINsec, LOW);
+                    pwmWrite(LED1PINfir, 0);
+                    pwmWrite(LED1PINsec, 0);
                 }
                 if (led2 == 1)
                 {
-                    digitalWrite(LED2PINfir, HIGH);
-                    digitalWrite(LED2PINsec, HIGH);
+                    // digitalWrite(LED2PINfir, HIGH);
+                    // digitalWrite(LED2PINsec, HIGH);
+                    pwmWrite(LED2PINfir, 1024);
+                    pwmWrite(LED2PINsec, 1024);
                 }
                 else
                 {
-                    digitalWrite(LED2PINfir, LOW);
-                    digitalWrite(LED2PINsec, LOW);
+                    // digitalWrite(LED2PINfir, LOW);
+                    // digitalWrite(LED2PINsec, LOW);
+                    pwmWrite(LED2PINfir, 0);
+                    pwmWrite(LED2PINsec, 0);
                 }
             }
         }
