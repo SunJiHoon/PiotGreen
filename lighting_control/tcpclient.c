@@ -126,8 +126,8 @@ int main(int argc, char **argv)
 
 		sqlite3_finalize(stmt);
 
-		// 5초 대기
-		sleep(1);
+		// 1초 대기
+		sleep(1000);
 	}
 	close(sockfd);
 
