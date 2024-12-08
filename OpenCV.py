@@ -102,6 +102,7 @@ frame_skip = 2
 frame_count = 0
 detection_enabled = False
 motion_detected_flag = False
+last_sent_time = time.time()  # 마지막 데이터 전송 시간 초기화
 
 def receive_commands():
     global detection_enabled
@@ -140,7 +141,10 @@ while True:
         continue
 
     if not detection_enabled:
-        sock_send.send(b"intrusion_detection:danger:0\n")  # 감지되지 않을 때 안전 상태 전송
+        # 0.5초마다 "safe" 상태 전송
+        if time.time() - last_sent_time >= 0.5:
+            sock_send.send(b"intrusion_detection:safe:1\n")
+            last_sent_time = time.time()
         continue
 
     frame = cv2.resize(frame, (frame_width, frame_height))
@@ -162,22 +166,22 @@ while True:
             max_area = area
 
     if largest_contour is not None:
-        GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
-        GPIO.output(BUZZER_PIN, GPIO.HIGH)
-
-        if not motion_detected_flag:
+        # 0.5초마다 "danger" 상태 전송
+        if time.time() - last_sent_time >= 0.5:
+            GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
+            GPIO.output(BUZZER_PIN, GPIO.HIGH)
             sock_send.send(b"intrusion_detection:danger:1\n")
-            motion_detected_flag = True
+            last_sent_time = time.time()
 
         x, y, w, h = cv2.boundingRect(largest_contour)
         print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
-        GPIO.output(MOTION_LED_PIN, GPIO.LOW)
-        GPIO.output(BUZZER_PIN, GPIO.LOW)
-
-        if motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:0\n")
-            motion_detected_flag = False
+        # 0.5초마다 "safe" 상태 전송
+        if time.time() - last_sent_time >= 0.5:
+            GPIO.output(MOTION_LED_PIN, GPIO.LOW)
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
+            sock_send.send(b"intrusion_detection:safe:1\n")
+            last_sent_time = time.time()
 
     prev_gray = gray.copy()
 
