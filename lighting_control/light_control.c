@@ -70,8 +70,8 @@ int main()
                 {
                     // digitalWrite(LED1PINfir, HIGH);
                     // digitalWrite(LED1PINsec, HIGH);
-                    pwmWrite(LED1PINfir, Value1 * 1024 / 100);
-                    pwmWrite(LED1PINsec, Value1 * 1024 / 100);
+                    pwmWrite(LED1PINfir, 1024 - Value1 * 1024 / 100);
+                    pwmWrite(LED1PINsec, 1024 - Value1 * 1024 / 100);
                     led1 = 1;
                 }
                 else
@@ -86,8 +86,8 @@ int main()
                 {
                     // digitalWrite(LED2PINfir, HIGH);
                     // digitalWrite(LED2PINsec, HIGH);
-                    pwmWrite(LED2PINfir, Value2 * 1024 / 100);
-                    pwmWrite(LED2PINsec, Value2 * 1024 / 100);
+                    pwmWrite(LED2PINfir, 1024 - Value2 * 1024 / 100);
+                    pwmWrite(LED2PINsec, 1024 - Value2 * 1024 / 100);
                     led2 = 1;
                 }
                 else
