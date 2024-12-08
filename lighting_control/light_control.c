@@ -4,16 +4,20 @@
 #include <unistd.h>
 
 #define THRESHOLD 40
-#define LED1PIN 0
-#define LED2PIN 1
+#define LED1PINfir 0
+#define LED2PINfir 1
+#define LED1PINsec 15
+#define LED2PINsec 16
 
 // 본 프로그램은 자동/수종모드 여부에 따라 led를 제어합니다.
 
 int main()
 {
     wiringPiSetup();
-    pinMode(LED1PIN, OUTPUT);
-    pinMode(LED2PIN, OUTPUT);
+    pinMode(LED1PINfir, OUTPUT);
+    pinMode(LED2PINfir, OUTPUT);
+    pinMode(LED1PINsec, OUTPUT);
+    pinMode(LED2PINsec, OUTPUT);
 
     sqlite3 *db;
     sqlite3_stmt *stmt1;
@@ -57,22 +61,26 @@ int main()
                 // 자동모드
                 if (Value1 < THRESHOLD)
                 {
-                    digitalWrite(LED1PIN, HIGH);
+                    digitalWrite(LED1PINfir, HIGH);
+                    digitalWrite(LED1PINsec, HIGH);
                     led1 = 1;
                 }
                 else
                 {
-                    digitalWrite(LED1PIN, LOW);
+                    digitalWrite(LED1PINfir, LOW);
+                    digitalWrite(LED1PINsec, LOW);
                     led1 = 0;
                 }
                 if (Value2 < THRESHOLD)
                 {
-                    digitalWrite(LED2PIN, HIGH);
+                    digitalWrite(LED2PINfir, HIGH);
+                    digitalWrite(LED2PINsec, HIGH);
                     led2 = 1;
                 }
                 else
                 {
-                    digitalWrite(LED2PIN, LOW);
+                    digitalWrite(LED2PINfir, LOW);
+                    digitalWrite(LED2PINsec, LOW);
                     led2 = 0;
                 }
                 rc = sqlite3_prepare_v2(db, sql_upd, -1, &stmt2, 0);
@@ -92,19 +100,23 @@ int main()
                 // 수동모드
                 if (led1 == 1)
                 {
-                    digitalWrite(LED1PIN, HIGH);
+                    digitalWrite(LED1PINfir, HIGH);
+                    digitalWrite(LED1PINsec, HIGH);
                 }
                 else
                 {
-                    digitalWrite(LED1PIN, LOW);
+                    digitalWrite(LED1PINfir, LOW);
+                    digitalWrite(LED1PINsec, LOW);
                 }
                 if (led2 == 1)
                 {
-                    digitalWrite(LED2PIN, HIGH);
+                    digitalWrite(LED2PINfir, HIGH);
+                    digitalWrite(LED2PINsec, HIGH);
                 }
                 else
                 {
-                    digitalWrite(LED2PIN, LOW);
+                    digitalWrite(LED2PINfir, LOW);
+                    digitalWrite(LED2PINsec, LOW);
                 }
             }
         }
