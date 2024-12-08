@@ -11,7 +11,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 SECURITY_LED_PIN = 23  # 보안 모드 활성화 LED
-MOTION_LED_PIN = 24    # 움직임 감지 LED
+MOTION_LED_PIN = 14    # 움직임 감지 LED (빨간색)
 SECURITY_OFF_LED_PIN = 25  # 보안 모드 비활성화 LED
 BUZZER_PIN = 8         # 움직임 감지 시 부저
 
@@ -147,48 +147,4 @@ while True:
     if frame_count % frame_skip != 0:
         continue
 
-    if not detection_enabled:
-        continue
-
-    frame = cv2.resize(frame, (frame_width, frame_height))
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (5, 5), 0)
-
-    frame_delta = cv2.absdiff(prev_gray, gray)
-    _, thresh = cv2.threshold(frame_delta, motion_threshold, 255, cv2.THRESH_BINARY)
-    thresh = cv2.dilate(thresh, None, iterations=2)
-
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    largest_contour = None
-    max_area = 0
-
-    for contour in contours:
-        area = cv2.contourArea(contour)
-        if area > min_area and area > max_area:
-            largest_contour = contour
-            max_area = area
-
-    if largest_contour is not None:
-        GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
-        GPIO.output(BUZZER_PIN, GPIO.HIGH)
-
-        if not motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:1\n")
-            motion_detected_flag = True
-
-        # Bounding Box 좌표 출력
-        x, y, w, h = cv2.boundingRect(largest_contour)
-        print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
-    else:
-        GPIO.output(MOTION_LED_PIN, GPIO.LOW)
-        GPIO.output(BUZZER_PIN, GPIO.LOW)
-
-        if motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:0\n")
-            motion_detected_flag = False
-
-    # 업데이트된 Gray 프레임 저장
-    prev_gray = gray.copy()
-
-cap.release()
-GPIO.cleanup()
+    if not detec
