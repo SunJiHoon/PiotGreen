@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Weather Forecast</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="/css/weather/all.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/weather/all.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <header class="header">
-  <h1>PiotGreen에 오신 것을 환영합니다</h1>
-  <p>일기예보 확인 페이지</p>
+    <h1>PiotGreen에 오신 것을 환영합니다</h1>
+    <p>일기예보 확인 페이지</p>
 </header>
 
 <button onclick="goToParent()">뒤로가기</button>
@@ -19,111 +19,113 @@
 <!-- - Base_time : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300 (1일 8회)-->
 <!-- 검색 폼 -->
 <form action="/weather/all" method="get">
-  <div class ="sero">
-    <label for="baseDate">Base Date:</label>
-    <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}" readonly>
-    <label for="baseTime">Base Time:</label>
-    <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}" readonly>
-  </div>
-  <div class ="sero">
-    <label for="city">City:</label>
-    <select id="city" name="city" onchange="updateCoordinates()">
-      <option value="">Select a city</option>
-      <option value="Seoul">서울</option>
-      <option value="Busan">부산</option>
-      <option value="Incheon">인천</option>
-      <option value="Daegu">대구</option>
-        <option value="Gwangju">광주</option>
-        <option value="Daejeon">대전</option>
-        <option value="Ulsan">울산</option>
-        <option value="Gyeonggi">경기</option>
-        <option value="Gangwon">강원</option>
-        <option value="Chungbuk">충북</option>
-        <option value="Chungnam">충남</option>
-        <option value="Jeonbuk">전북</option>
-        <option value="Jeonnam">전남</option>
-        <option value="Gyeongbuk">경북</option>
-        <option value="Gyeongnam">경남</option>
-        <option value="Jeju">제주</option>
-    </select>
-    <label for="nx">NX:</label>
-    <input type="text" id="nx" name="nx" th:value="${nx}" readonly>
-      <!-- JS로 자동으로 업데이트 -->
+    <div class="sero">
+        <label for="baseDate">Base Date:</label>
+        <input type="text" id="baseDate" name="baseDate" th:value="${baseDate}" readonly>
+        <label for="baseTime">Base Time:</label>
+        <input type="text" id="baseTime" name="baseTime" th:value="${baseTime}" readonly>
+    </div>
+    <div class="sero">
+        <label for="city">City:</label>
+        <select id="city" name="city" onchange="updateCoordinates()">
+            <option value="">Select a city</option>
+            <option value="Seoul">서울</option>
+            <option value="Busan">부산</option>
+            <option value="Incheon">인천</option>
+            <option value="Daegu">대구</option>
+            <option value="Gwangju">광주</option>
+            <option value="Daejeon">대전</option>
+            <option value="Ulsan">울산</option>
+            <option value="Gyeonggi">경기</option>
+            <option value="Gangwon">강원</option>
+            <option value="Chungbuk">충북</option>
+            <option value="Chungnam">충남</option>
+            <option value="Jeonbuk">전북</option>
+            <option value="Jeonnam">전남</option>
+            <option value="Gyeongbuk">경북</option>
+            <option value="Gyeongnam">경남</option>
+            <option value="Jeju">제주</option>
+        </select>
+        <label for="nx">NX:</label>
+        <input type="text" id="nx" name="nx" th:value="${nx}" readonly>
+        <!-- JS로 자동으로 업데이트 -->
 
-    <label for="ny">NY:</label>
-    <input type="text" id="ny" name="ny" th:value="${ny}" readonly>
-      <!-- JS로 자동으로 업데이트 -->
+        <label for="ny">NY:</label>
+        <input type="text" id="ny" name="ny" th:value="${ny}" readonly>
+        <!-- JS로 자동으로 업데이트 -->
 
-<!--    <label for="nx">NX:</label>-->
-<!--    <input type="text" id="nx" name="nx" th:value="${nx}">-->
-<!--    <label for="ny">NY:</label>-->
-<!--    <input type="text" id="ny" name="ny" th:value="${ny}">-->
-  </div>
-  <div class ="sero">
-    <button type="submit">Search</button>
-  </div>
+        <!--    <label for="nx">NX:</label>-->
+        <!--    <input type="text" id="nx" name="nx" th:value="${nx}">-->
+        <!--    <label for="ny">NY:</label>-->
+        <!--    <input type="text" id="ny" name="ny" th:value="${ny}">-->
+    </div>
+    <div class="sero">
+        <button type="submit">Search</button>
+    </div>
 </form>
 
 <div class="weather-chart-container">
-  <h2 style="color: #4CAF50; text-align: center">강수확률 그래프</h2>
-  <div class="container">
-    <div class="chart-container">
-      <canvas id="temperatureChart"></canvas>
+    <h2 style="color: #4CAF50; text-align: center">강수확률 그래프</h2>
+    <div class="container">
+        <div class="chart-container">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="windChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="cloudChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="weatherChart"></canvas>
+        </div>
     </div>
-    <div class="chart-container">
-      <canvas id="windChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <canvas id="cloudChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <canvas id="weatherChart"></canvas>
-    </div>
-  </div>
-<!--  <div class="container">-->
-<!--    <div class="component" style="width: 600px; height: 400px;">-->
-<!--      <canvas id="temperatureChart"></canvas>-->
-<!--    </div>-->
-<!--      <div class="component" style="width: 600px; height: 400px;">-->
-<!--        <canvas id="windChart"></canvas>-->
-<!--      </div>-->
-<!--      <div class="component" style="width: 600px; height: 400px;">-->
-<!--        <canvas id="cloudChart"></canvas>-->
-<!--      </div>-->
-<!--      <div class="component" style="width: 600px; height: 400px;">-->
-<!--        <canvas id="weatherChart"></canvas>-->
-<!--      </div>-->
-<!--  </div>-->
+    <!--  <div class="container">-->
+    <!--    <div class="component" style="width: 600px; height: 400px;">-->
+    <!--      <canvas id="temperatureChart"></canvas>-->
+    <!--    </div>-->
+    <!--      <div class="component" style="width: 600px; height: 400px;">-->
+    <!--        <canvas id="windChart"></canvas>-->
+    <!--      </div>-->
+    <!--      <div class="component" style="width: 600px; height: 400px;">-->
+    <!--        <canvas id="cloudChart"></canvas>-->
+    <!--      </div>-->
+    <!--      <div class="component" style="width: 600px; height: 400px;">-->
+    <!--        <canvas id="weatherChart"></canvas>-->
+    <!--      </div>-->
+    <!--  </div>-->
 </div>
 
 <!--하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)-->
 
 <!-- 날씨 데이터 테이블 -->
-<table>
-  <caption>Weather General Data</caption>
-  <thead>
-  <tr>
-    <th>날짜</th>
-    <th>시간</th>
-    <th>기온</th>
-    <th>풍속</th>
-    <th>구름</th>
-    <th>강수확률</th>
-    <th>강수량</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="weather : ${weatherGeneralDataList}">
-    <td th:text="${weather.fcstDate}"></td>
-    <td th:text="${weather.fcstTime}"></td>
-    <td th:text="${weather.temperature}"></td>
-    <td th:text="${weather.windSpeed}"></td>
-    <td th:text="${weather.skyCondition}"></td>
-    <td th:text="${weather.propabilityOfPrecipitation}"></td>
-    <td th:text="${weather.precipitation}"></td>
-  </tr>
-  </tbody>
-</table>
+<div class="scroll">
+    <table>
+        <caption>Weather General Data</caption>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>시간</th>
+            <th>기온</th>
+            <th>풍속</th>
+            <th>구름</th>
+            <th>강수확률</th>
+            <th>강수량</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="weather : ${weatherGeneralDataList}">
+            <td th:text="${weather.fcstDate}"></td>
+            <td th:text="${weather.fcstTime}"></td>
+            <td th:text="${weather.temperature}"></td>
+            <td th:text="${weather.windSpeed}"></td>
+            <td th:text="${weather.skyCondition}"></td>
+            <td th:text="${weather.propabilityOfPrecipitation}"></td>
+            <td th:text="${weather.precipitation}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <button onclick="goToParent()">뒤로가기</button>
 <script src="/js/weather/all.js"></script>
 

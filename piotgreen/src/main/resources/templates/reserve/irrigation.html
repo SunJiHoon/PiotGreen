@@ -15,8 +15,6 @@
 </header>
 
 
-
-
 <button onclick="goToParent()">뒤로가기</button>
 
 
@@ -46,7 +44,8 @@
     </div>
     <div class="sero">
         <label for="target-humidity">Set Humidity: </label>
-        <input type="range" id="target-humidity"  min="0" max="100" step="1" value="60" oninput="updateHumidityValue(this.value)">
+        <input type="range" id="target-humidity" min="0" max="100" step="1" value="60"
+               oninput="updateHumidityValue(this.value)">
         <span id="humidity-display">wantHumidity:60</span>
         <!-- Hidden input field to send commandValue -->
         <input type="hidden" id="commandValueInput" name="commandValue" value="wantHumidity:60">
@@ -57,36 +56,39 @@
 </form>
 
 <h2>Irrigation Command 예약 내역</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Category</th>
-        <th>Command</th>
-        <th>Value</th>
-        <th>Timestamp</th>
-        <th>Status</th>
-        <th>cancel</th>
+<div class="scroll">
+    <table>
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th>Command</th>
+            <th>Value</th>
+            <th>Timestamp</th>
+            <th>Status</th>
+            <th>cancel</th>
 
-    </tr>
-    </thead>
-    <tbody>
-    <!-- 타임리프 문법으로 데이터 반복 -->
-    <tr th:each="commandData : ${irrigationReserveCommandDataList}">
-        <td th:text="${commandData.category}">Category</td>
-        <td th:text="${commandData.command}">Command</td>
-        <td th:text="${commandData.value}">Value</td>
-        <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">Timestamp</td>
-        <td th:text="${commandData.status}">Status</td>
-        <td>
-            <form action="/reserve/irrigation/delete" method="post">
-                <input type="hidden" name="id" th:value="${commandData.id}" />
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 타임리프 문법으로 데이터 반복 -->
+        <tr th:each="commandData : ${irrigationReserveCommandDataList}">
+            <td th:text="${commandData.category}">Category</td>
+            <td th:text="${commandData.command}">Command</td>
+            <td th:text="${commandData.value}">Value</td>
+            <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">
+                Timestamp
+            </td>
+            <td th:text="${commandData.status}">Status</td>
+            <td>
+                <form action="/reserve/irrigation/delete" method="post">
+                    <input type="hidden" name="id" th:value="${commandData.id}"/>
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
 <button onclick="goToParent()">뒤로가기</button>

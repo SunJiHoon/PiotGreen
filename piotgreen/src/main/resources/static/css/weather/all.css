@@ -1,3 +1,8 @@
+.scroll {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
 /* 검색 폼 스타일 */
 /*form {*/
 /*    margin: 20px auto;*/
