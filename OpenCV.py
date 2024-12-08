@@ -140,7 +140,7 @@ while True:
         continue
 
     if not detection_enabled:
-        sock_send.send(b"intrusion_detection:safe:1\n")  # 감지되지 않을 때 안전 상태 전송
+        sock_send.send(b"intrusion_detection:danger:0\n")  # 감지되지 않을 때 안전 상태 전송
         continue
 
     frame = cv2.resize(frame, (frame_width, frame_height))
