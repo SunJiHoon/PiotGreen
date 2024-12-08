@@ -65,6 +65,7 @@ int main()
                 {
                     pwmWrite(LED1PINfir, 1024 - Value1 * 1024 / 100);
                     pwmWrite(LED1PINsec, 1024 - Value1 * 1024 / 100);
+                    printf("LED1: %d\n", 1024 - Value1 * 1024 / 100);
                     led1 = 1;
                 }
                 else
@@ -77,6 +78,7 @@ int main()
                 {
                     pwmWrite(LED2PINfir, 1024 - Value2 * 1024 / 100);
                     pwmWrite(LED2PINsec, 1024 - Value2 * 1024 / 100);
+                    printf("LED2: %d\n", 1024 - Value2 * 1024 / 100);
                     led2 = 1;
                 }
                 else
