@@ -175,6 +175,10 @@ while True:
         if not motion_detected_flag:
             sock_send.send(b"intrusion_detection:danger:1\n")
             motion_detected_flag = True
+
+        # Bounding Box 좌표 출력
+        x, y, w, h = cv2.boundingRect(largest_contour)
+        print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
@@ -183,6 +187,7 @@ while True:
             sock_send.send(b"intrusion_detection:danger:0\n")
             motion_detected_flag = False
 
+    # 업데이트된 Gray 프레임 저장
     prev_gray = gray.copy()
 
 cap.release()
