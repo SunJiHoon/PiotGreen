@@ -3,6 +3,8 @@ import numpy as np
 import socket
 import threading
 import RPi.GPIO as GPIO
+import requests
+import time
 
 # GPIO 설정
 GPIO.setmode(GPIO.BCM)
@@ -23,19 +25,61 @@ GPIO.output(MOTION_LED_PIN, GPIO.LOW)
 GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
 GPIO.output(BUZZER_PIN, GPIO.LOW)
 
+# 날씨 API 설정
+WEATHER_API_KEY = "e548fb177a976133d31021053019b35d"  # OpenWeatherMap API 키 입력
+CITY = "Seoul"
+WEATHER_API_URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={WEATHER_API_KEY}"
+
+weather_data = {}
+motion_threshold = 30
+min_area = 1500
+
+def fetch_weather():
+    global motion_threshold, min_area, weather_data
+    while True:
+        try:
+            response = requests.get(WEATHER_API_URL)
+            weather_data = response.json()
+            weather_conditions = [w['main'].lower() for w in weather_data['weather']]
+            wind_speed = weather_data['wind']['speed']
+
+            # 날씨 조건에 따른 민감도 조정
+            if 'snow' in weather_conditions:
+                motion_threshold = 50  # 눈: 민감도 낮춤
+                min_area = 2000
+            elif 'rain' in weather_conditions:
+                motion_threshold = 60  # 비: 민감도 더 낮춤
+                min_area = 2500
+            elif wind_speed > 10:  # 바람이 많이 부는 경우
+                motion_threshold = 80
+                min_area = 3000
+            else:
+                motion_threshold = 30  # 기본 민감도
+                min_area = 1500
+
+            print(f"Weather updated: {weather_conditions}, Wind Speed: {wind_speed}, "
+                  f"Motion Threshold: {motion_threshold}, Min Area: {min_area}")
+        except Exception as e:
+            print(f"Failed to fetch weather data: {e}")
+
+        time.sleep(300)  # 5분 간격으로 날씨 데이터 갱신
+
+# 날씨 업데이트 스레드 시작
+weather_thread = threading.Thread(target=fetch_weather, daemon=True)
+weather_thread.start()
+
 # 소켓 통신 설정
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('0.0.0.0', 8089))
-server_socket.listen(1)  # 하나의 클라이언트 연결 대기
+server_socket.listen(1)
 
 print("Waiting for a connection...")
 conn, addr = server_socket.accept()
 print(f"Connected to {addr}")
 
 sock_send = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock_send.connect(('main.putiez.com', 8088))  # 수신 측 IP와 포트 설정
+sock_send.connect(('main.putiez.com', 8088))
 
-# 카메라 스트림 설정
 stream_url = "http://192.168.137.223:8081/"
 cap = cv2.VideoCapture(stream_url)
 
@@ -45,7 +89,6 @@ if not cap.isOpened():
 
 frame_width, frame_height = 640, 480
 
-# 초기 프레임 설정
 ret, prev_frame = cap.read()
 if not ret:
     print("Cannot get the initial frame.")
@@ -59,17 +102,15 @@ frame_skip = 2
 frame_count = 0
 detection_enabled = False
 motion_detected_flag = False
-motion_threshold = 30  # 움직임 감지 민감도
-min_area = 1500  # 최소 감지 면적
 
 def receive_commands():
     global detection_enabled
     while True:
         try:
-            data = conn.recv(1024).decode('utf-8')  # TCP 데이터 수신
+            data = conn.recv(1024).decode('utf-8')
             if not data:
                 break
-            print(f"Received command: {data}")  # 받은 데이터를 출력
+            print(f"Received command: {data}")
             if "intrusion_detection:danger:on" in data:
                 detection_enabled = True
                 print("Detection enabled")
@@ -105,17 +146,14 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # 프레임 차이 계산
     frame_delta = cv2.absdiff(prev_gray, gray)
     _, thresh = cv2.threshold(frame_delta, motion_threshold, 255, cv2.THRESH_BINARY)
     thresh = cv2.dilate(thresh, None, iterations=2)
 
-    # 컨투어 탐지
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     largest_contour = None
     max_area = 0
 
-    # 가장 큰 물체 탐지
     for contour in contours:
         area = cv2.contourArea(contour)
         if area > min_area and area > max_area:
@@ -123,7 +161,6 @@ while True:
             max_area = area
 
     if largest_contour is not None:
-        # 움직임 감지 표시
         GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
         GPIO.output(BUZZER_PIN, GPIO.HIGH)
 
@@ -135,7 +172,6 @@ while True:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
-        # 움직임 없을 때
         GPIO.output(MOTION_LED_PIN, GPIO.LOW)
         GPIO.output(BUZZER_PIN, GPIO.LOW)
 
