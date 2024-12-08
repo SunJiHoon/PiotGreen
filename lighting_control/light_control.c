@@ -29,7 +29,7 @@ int main()
     sqlite3 *db;
     sqlite3_stmt *stmt1;
 
-    char *err_msg = 0, user_input;
+    char *err_msg = 0;
     int rc = sqlite3_open("light.db", &db);
 
     if (rc != SQLITE_OK) // 오류처리구문
@@ -41,7 +41,6 @@ int main()
 
     const char *sql_sel = "SELECT * FROM LIGHT;";
     const char *sql_upd = "UPDATE LIGHT SET Led1 = ?, Led2 = ? WHERE rowid = 1;";
-    int led1 = 0, led2 = 0;
 
     while (1)
     {
