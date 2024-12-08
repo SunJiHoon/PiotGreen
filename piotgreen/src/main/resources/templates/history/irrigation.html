@@ -15,7 +15,6 @@
 </header>
 
 
-
 <div class="calendar-controls">
     <button id="prev-month" onclick="changeMonth(-1)">◀ 이전</button>
     <span id="current-month">2024년 12월</span>
@@ -32,8 +31,6 @@
 </div>
 <!--<button onclick="goBack()">뒤로가기</button>-->
 <button onclick="goToParent()">뒤로가기</button>
-
-
 
 
 <!-- 연도와 월 선택 폼 -->
@@ -69,22 +66,24 @@
 
 <div class="data-display">
     <h1>Irrigation Data History</h1>
-    <table border="1" class="irrigation-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Moisture Level</th>
-            <th>Timestamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="irrigation : ${irrigationDataList}">
-            <td th:text="${irrigation.id}"></td>
-            <td th:text="${irrigation.moistureLevel}"></td>
-            <td th:text="${irrigation.timestamp}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="irrigation-table">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Moisture Level</th>
+                <th>Timestamp</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="irrigation : ${irrigationDataList}">
+                <td th:text="${irrigation.id}"></td>
+                <td th:text="${irrigation.moistureLevel}"></td>
+                <td th:text="${irrigation.timestamp}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!--<button onclick="goBack()">뒤로가기</button>-->

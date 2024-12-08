@@ -24,7 +24,7 @@
 
 <div class="chart-container">
     <h2>일별 평균 일광량</h2>
-<!--    <canvas id="lightChart"></canvas>-->
+    <!--    <canvas id="lightChart"></canvas>-->
     <div style="width: 600px; height: 400px;">
         <canvas id="lightChart"></canvas>
     </div>
@@ -37,8 +37,8 @@
 
 <!-- 연도와 월 선택 폼 -->
 <form action="/history/lighting" method="get">
-<!--    <label for="year">Year:</label>-->
-<!--    <input type="number" id="year" name="year" value="${year}">-->
+    <!--    <label for="year">Year:</label>-->
+    <!--    <input type="number" id="year" name="year" value="${year}">-->
     <label for="year">Year:</label>
     <select id="year" name="year">
         <!-- 연도 선택 -->
@@ -50,8 +50,8 @@
     </select>
 
 
-<!--    <label for="month">Month:</label>-->
-<!--    <input type="number" id="month" name="month" value="${month}">-->
+    <!--    <label for="month">Month:</label>-->
+    <!--    <input type="number" id="month" name="month" value="${month}">-->
     <label for="month">Month:</label>
     <select id="month" name="month">
         <!-- 월 선택 -->
@@ -70,44 +70,47 @@
     <h1>Lighting Data History</h1>
 
     <h2>LED Data</h2>
-    <table border="1" class="LED-data-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>LED 1</th>
-            <th>LED 2</th>
-            <th>Timestamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="led : ${ledDataList}">
-            <td th:text="${led.id}"></td>
-            <td th:text="${led.led1}"></td>
-            <td th:text="${led.led2}"></td>
-            <td th:text="${led.timestamp}"></td>
-        </tr>
-        </tbody>
-    </table>
-
+    <div class="LED-data-table">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>LED 1</th>
+                <th>LED 2</th>
+                <th>Timestamp</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="led : ${ledDataList}">
+                <td th:text="${led.id}"></td>
+                <td th:text="${led.led1}"></td>
+                <td th:text="${led.led2}"></td>
+                <td th:text="${led.timestamp}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <h2>Light Data</h2>
-    <table border="1" class="LED-data-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Light Level 1</th>
-            <th>Light Level 2</th>
-            <th>Timestamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="light : ${lightDataList}">
-            <td th:text="${light.id}"></td>
-            <td th:text="${light.lightLevel1}"></td>
-            <td th:text="${light.lightLevel2}"></td>
-            <td th:text="${light.timestamp}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="LED-data-table">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Light Level 1</th>
+                <th>Light Level 2</th>
+                <th>Timestamp</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="light : ${lightDataList}">
+                <td th:text="${light.id}"></td>
+                <td th:text="${light.lightLevel1}"></td>
+                <td th:text="${light.lightLevel2}"></td>
+                <td th:text="${light.timestamp}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!--<button onclick="goBack()">뒤로가기</button>-->
