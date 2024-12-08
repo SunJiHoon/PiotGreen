@@ -42,6 +42,9 @@ PiotGreen은 Raspberry Pi를 활용하여 IoT 기술을 농업에 적용한 스�
 ### 2.1 프로젝트 개요
 PiotGreen 프로젝트는 농업의 생산성과 효율성을 높이기 위해 IoT 기술을 접목한 스마트 농업 시스템입니다. Raspberry Pi와 다양한 센서를 통해 작물 재배 환경을 실시간으로 모니터링하고 자동 관리가 가능하도록 설계되었습니다. 사용자는 실시간으로 데이터를 확인하고 야생동물 침입 감지, 토양 수분 관리, 광량 조절 등의 기능을 통해 편리하게 농업 관리를 할 수 있습니다.
 
+![image](https://github.com/user-attachments/assets/e6d98615-1bcd-4cdd-ba4a-006804013d73)
+
+
 ### 2.2 프로젝트 동기
 기후 변화와 노동력 감소로 농업의 디지털 전환이 요구되고 있습니다. 특히 소규모 농장에서는 고가의 스마트 농업 장비 도입이 어렵기 때문에, 경제적이면서도 기능적인 IoT 농업 솔루션의 필요성이 증가하고 있습니다. Raspberry Pi와 저비용 센서를 활용하여 누구나 접근할 수 있는 IoT 농업 시스템을 개발하여 농업 관리의 부담을 줄이고 생산성을 높이고자 합니다.
 
@@ -92,33 +95,111 @@ PiotGreen은 기능별로 모듈화된 구조를 채택하여, 독립적으로 �
 
 ### 서브 라즈베리 파이 제어 기능 (웹)
 - **실시간 데이터 조회**: 현재 광원량, 흙 습도, 침입 감지 여부 등을 확인 가능.
+
+![image](https://github.com/user-attachments/assets/7c7dae74-96c0-460a-8ea1-33681769d078)
+
+
 - **관리하기 기능**:
+
+![image](https://github.com/user-attachments/assets/f7c04455-e297-4db0-af22-e6c35cb084d7)
+
+
   - **광량 데이터 조회 및 LED 자동 제어**:
     - LED On/Off 수동 제어.
+
+![image](https://github.com/user-attachments/assets/125161f7-589b-4824-b8f3-9f35201a0670)
+
+![image](https://github.com/user-attachments/assets/cea2f5e0-2a5b-4284-bd54-88ca16d47d06)
+
+
   - **관수 데이터 조회 및 자동 제어**:
     - 관수 수동 제어.
+   
+![image](https://github.com/user-attachments/assets/19cf747d-bd72-46c2-8ff2-343762d46a2f)
+
+![image](https://github.com/user-attachments/assets/fe1e5e28-0ff4-440e-8292-7607d89979cf)
+
+   
+
   - **영상 데이터 조회**.
-  - **위험 감지 기능 On/Off**.
+    - 위험 감지 기능 On/Off.
+
+![image](https://github.com/user-attachments/assets/6a2b4776-5ab7-4f6c-a757-ad87de38c12f)
+
+![image](https://github.com/user-attachments/assets/60687b81-bdcf-4d45-ac45-6fcc9ab70160)
+
+
 
 - **제어 명령 예약하기**:
+
+![image](https://github.com/user-attachments/assets/28665fe7-b7d1-48ba-bbb0-11d5e3dcad4f)
+
   - **광량 제어 명령어 예약**:
     - 예약 내역 확인.
+  
+![image](https://github.com/user-attachments/assets/d13a5ec0-77fa-418c-8421-bf0e559817d3)
+
+![image](https://github.com/user-attachments/assets/88c41a80-c2b1-4fee-bab7-391fe9e38da1)
+
+
   - **관수 제어 명령어 예약**:
     - 예약 내역 확인.
+   
+![image](https://github.com/user-attachments/assets/03afc3dd-db14-4adc-a058-82e439b224b7)
+
+![image](https://github.com/user-attachments/assets/889c086b-5404-4774-b64d-8e2f6930b703)
+
+
+  
   - **침입 감지 관련 명령어 예약**:
     - 예약 내역 확인.
 
+![image](https://github.com/user-attachments/assets/881d68cf-8463-43d5-9726-2853bfc27899)
+
+![image](https://github.com/user-attachments/assets/3c3f9fc1-3bc5-4f30-84b6-21b63234c612)
+
+  
 - **기록 조회하기**:
+
+![image](https://github.com/user-attachments/assets/8ad2a6b2-1b4b-4e23-a1ce-330e372a27bf)
+
   - **감지한 광량 기록 차트**.
+
+![image](https://github.com/user-attachments/assets/bc076a83-e525-49c8-a591-e692a90f7994)
+
   - **감지한 광량 기록**.
+
+![image](https://github.com/user-attachments/assets/a4f8a205-1886-41ae-a7e7-e0abc3898fa9)
+
   - **감지한 습도량 기록 차트**.
+
+![image](https://github.com/user-attachments/assets/95801b9e-d64e-483c-9334-c8b3a95975ab)
+
   - **감지한 습도량 기록**.
+
+![image](https://github.com/user-attachments/assets/7a1de142-ac50-44b2-97df-4672b70d3ac1)
+
   - **감지한 위험 기록**.
 
+![image](https://github.com/user-attachments/assets/77aeeea0-b6db-40d6-912f-d2919fc0afc4)
+
+
 - **날씨 조회하기**
+
+![image](https://github.com/user-attachments/assets/80ebc101-3dbb-4391-b954-fb2df72a45ac)
+
   - **지역별 날씨 조회 창**.
+
+![image](https://github.com/user-attachments/assets/10841bc0-31d4-42b9-824a-34e281c5fa7f)
+
   - **날씨 정보에 따른 차트**.
+
+![image](https://github.com/user-attachments/assets/56183b6f-5f84-4a35-a9e4-eb7c1235c4df)
+
   - **날씨 정보의 시간별 상세 데이터**.
+
+![image](https://github.com/user-attachments/assets/a9bdf542-a2e2-4a22-ad20-31224b557513)
+
 
 ### 주요 시스템
 - **카메라를 이용한 야생동물 침입 감지 시스템**.
