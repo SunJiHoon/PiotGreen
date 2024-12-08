@@ -147,4 +147,6 @@ while True:
     if frame_count % frame_skip != 0:
         continue
 
-    if not detec
+    if not detection_enabled:  # 잘못된 변수명을 수정
+        continue
+
