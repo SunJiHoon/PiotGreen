@@ -39,18 +39,27 @@
 </section>
 
 <section class="real-time-monitor">
-    <div class="monitor-item">
-        <h2>침입 감지</h2>
+    <div class="monitor-item" >
+<!--        <h2>침입 감지</h2>-->
+        <p>
+            <strong>침입 감지:</strong>
+<!--            <span id="intrusion-level-199" class="intrusion-level" th:text="${intrusionData.dangerLevel}"></span>-->
+            <span id="intrusion-level-199" class="intrusion-level" th:text="${intrusionData.dangerLevel == 'danger' ? 'DANGER' : 'SAFE'}"></span>
+        </p>
         <div class="intrusion-sections-container">
-            <div id="intrusion-section-1" class="intrusion-container">
-                <p>
-                    <strong>위험 경보:</strong>
-                    <span id="intrusion-level-1" class="intrusion-level" th:text="${intrusionData.dangerLevel}"></span>
-                    <div id="intrusion-indicator"
-                         class="indicator"
-                         th:classappend="${intrusionData.dangerLevel}">
-                    </div>
-                </p>
+<!--            id="intrusion-indicator2"-->
+            <div id="intrusion-section-1" class="intrusion-container"  th:classappend="${intrusionData.dangerLevel}">
+                <br><br><br>
+
+
+<!--                <p>-->
+<!--                    <strong>위험 경보:</strong>-->
+<!--                    <span id="intrusion-level-1" class="intrusion-level" th:text="${intrusionData.dangerLevel}"></span>-->
+<!--                    <div id="intrusion-indicator"-->
+<!--                         class="indicator"-->
+<!--                         th:classappend="${intrusionData.dangerLevel}">-->
+<!--                    </div>-->
+<!--                </p>-->
             </div>
         </div>
     </div>

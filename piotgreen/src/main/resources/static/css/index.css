@@ -58,6 +58,17 @@
     animation: blink 1s infinite; /* 1초마다 깜빡이고 무한 반복 */
 }
 
+
+.intrusion-container.safe {
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.intrusion-container.danger {
+    background-color: red;
+    animation: blink 1s infinite; /* 1초마다 깜빡이고 무한 반복 */
+}
+
 @keyframes blink {
     0% {
         opacity: 1; /* 보임 */
