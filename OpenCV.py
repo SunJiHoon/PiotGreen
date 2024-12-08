@@ -39,30 +39,38 @@ def fetch_weather():
     while True:
         try:
             response = requests.get(WEATHER_API_URL)
-            weather_data = response.json()
-            weather_conditions = [w['main'].lower() for w in weather_data['weather']]
-            wind_speed = weather_data['wind']['speed']
+            if response.status_code == 200:
+                # JSON 데이터 출력 (디버깅)
+                print("Weather API Response:", response.json())
+                weather_data = response.json()
 
-            # 날씨 조건에 따른 민감도 조정
-            if 'snow' in weather_conditions:
-                motion_threshold = 50  # 눈: 민감도 낮춤
-                min_area = 2000
-            elif 'rain' in weather_conditions:
-                motion_threshold = 60  # 비: 민감도 더 낮춤
-                min_area = 2500
-            elif wind_speed > 10:  # 바람이 많이 부는 경우
-                motion_threshold = 80
-                min_area = 3000
+                # JSON 구조 확인 후 데이터 추출
+                weather_conditions = [w['main'].lower() for w in weather_data.get('weather', [])]
+                wind_speed = weather_data.get('wind', {}).get('speed', 0)
+
+                # 날씨 조건에 따른 민감도 조정
+                if 'snow' in weather_conditions:
+                    motion_threshold = 50  # 눈: 민감도 낮춤
+                    min_area = 2000
+                elif 'rain' in weather_conditions:
+                    motion_threshold = 60  # 비: 민감도 더 낮춤
+                    min_area = 2500
+                elif wind_speed > 10:  # 바람이 많이 부는 경우
+                    motion_threshold = 80
+                    min_area = 3000
+                else:
+                    motion_threshold = 30  # 기본 민감도
+                    min_area = 1500
+
+                print(f"Weather updated: {weather_conditions}, Wind Speed: {wind_speed}, "
+                      f"Motion Threshold: {motion_threshold}, Min Area: {min_area}")
             else:
-                motion_threshold = 30  # 기본 민감도
-                min_area = 1500
-
-            print(f"Weather updated: {weather_conditions}, Wind Speed: {wind_speed}, "
-                  f"Motion Threshold: {motion_threshold}, Min Area: {min_area}")
+                print(f"Failed to fetch weather data: HTTP {response.status_code}")
         except Exception as e:
-            print(f"Failed to fetch weather data: {e}")
+            print(f"Error fetching weather data: {e}")
 
-        time.sleep(300)  # 5분 간격으로 날씨 데이터 갱신
+        time.sleep(3600)  # 5분 간격으로 날씨 데이터 갱신
+
 
 # 날씨 업데이트 스레드 시작
 weather_thread = threading.Thread(target=fetch_weather, daemon=True)
