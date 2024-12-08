@@ -1,5 +1,6 @@
 package com.piotgreen.piotgreen.service;
 
+import com.piotgreen.piotgreen.entity.MessageLog;
 import com.piotgreen.piotgreen.repository.MessageLogRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -170,6 +171,11 @@ public class SocketServerService {
             if(!messageLogRepository.existsRecentMessage(LocalDateTime.now().minusMinutes(10)) && "danger".equals(dangerLevel)){
                 String dangerMessage = "위험 발생: 불법 침입 감지!";
                 managerDataStorageService.sendMessageToAllManger(dangerMessage);
+                // 메시지 기록
+                MessageLog log = new MessageLog();
+                log.setTimestamp(LocalDateTime.now());
+                log.setMessage(dangerMessage);
+                messageLogRepository.save(log);
             }
             else {
                 System.out.println("danger이 아니거나, 최근 10분 이내 메시지를 보내서 알림을 보내지 않습니다.");
