@@ -143,6 +143,7 @@ while True:
     if not detection_enabled:
         # 0.5초마다 "safe" 상태 전송
         if time.time() - last_sent_time >= 0.5:
+            print("No detection. Sending safe state.")
             sock_send.send(b"intrusion_detection:safe:1\n")
             last_sent_time = time.time()
         continue
@@ -170,6 +171,7 @@ while True:
         if time.time() - last_sent_time >= 0.5:
             GPIO.output(MOTION_LED_PIN, GPIO.HIGH)
             GPIO.output(BUZZER_PIN, GPIO.HIGH)
+            print("Motion detected. Sending danger state.")
             sock_send.send(b"intrusion_detection:danger:1\n")
             last_sent_time = time.time()
 
@@ -180,6 +182,7 @@ while True:
         if time.time() - last_sent_time >= 0.5:
             GPIO.output(MOTION_LED_PIN, GPIO.LOW)
             GPIO.output(BUZZER_PIN, GPIO.LOW)
+            print("No motion detected. Sending safe state.")
             sock_send.send(b"intrusion_detection:safe:1\n")
             last_sent_time = time.time()
 
