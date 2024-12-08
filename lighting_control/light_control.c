@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define THRESHOLD 40
+#define THRESHOLD 60
 #define LED1PINfir 1
 #define LED2PINfir 23
 #define LED1PINsec 26
