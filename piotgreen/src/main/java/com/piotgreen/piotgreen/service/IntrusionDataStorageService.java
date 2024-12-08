@@ -82,4 +82,12 @@ public class IntrusionDataStorageService {
         return intrusionDataRepository.findMostRecentIntrusionData();
     }
 
+    public boolean canSendDangerAlert() {
+        // 현재 시간 기준으로 10분 전 계산
+        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(10);
+
+        // 10분 이내 danger 상태가 있는지 확인
+        return !intrusionDataRepository.existsDangerWithinLast10Minutes(tenMinutesAgo);
+    }
+
 }
