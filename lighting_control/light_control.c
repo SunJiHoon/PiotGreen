@@ -63,9 +63,9 @@ int main()
                 // 자동모드
                 if (Value1 < THRESHOLD)
                 {
-                    pwmWrite(LED1PINfir, 60 - Value1 * 1024 / 100);
-                    pwmWrite(LED1PINsec, 60 - Value1 * 1024 / 100);
-                    printf("LED1: %d\n", 60 - Value1 * 1024 / 100);
+                    pwmWrite(LED1PINfir, 60 - Value1);
+                    pwmWrite(LED1PINsec, 60 - Value1);
+                    printf("LED1: %d\n", 60 - Value1);
                     led1 = 1;
                 }
                 else
@@ -76,9 +76,9 @@ int main()
                 }
                 if (Value2 < THRESHOLD)
                 {
-                    pwmWrite(LED2PINfir, 60 - Value2 * 1024 / 100);
-                    pwmWrite(LED2PINsec, 60 - Value2 * 1024 / 100);
-                    printf("LED2: %d\n", 60 - Value2 * 1024 / 100);
+                    pwmWrite(LED2PINfir, 60 - Value2);
+                    pwmWrite(LED2PINsec, 60 - Value2);
+                    printf("LED2: %d\n", 60 - Value2);
                     led2 = 1;
                 }
                 else
@@ -104,8 +104,8 @@ int main()
                 // 수동모드
                 if (led1 == 1)
                 {
-                    pwmWrite(LED1PINfir, 1024);
-                    pwmWrite(LED1PINsec, 1024);
+                    pwmWrite(LED1PINfir, 60);
+                    pwmWrite(LED1PINsec, 60);
                 }
                 else
                 {
@@ -114,8 +114,8 @@ int main()
                 }
                 if (led2 == 1)
                 {
-                    pwmWrite(LED2PINfir, 1024);
-                    pwmWrite(LED2PINsec, 1024);
+                    pwmWrite(LED2PINfir, 60);
+                    pwmWrite(LED2PINsec, 60);
                 }
                 else
                 {
