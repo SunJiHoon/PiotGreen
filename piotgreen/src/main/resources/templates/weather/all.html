@@ -99,33 +99,31 @@
 <!--하늘상태(SKY) 코드 : 맑음(1), 구름많음(3), 흐림(4)-->
 
 <!-- 날씨 데이터 테이블 -->
-<div class="scroll">
-    <table>
-        <caption>Weather General Data</caption>
-        <thead>
-        <tr>
-            <th>날짜</th>
-            <th>시간</th>
-            <th>기온</th>
-            <th>풍속</th>
-            <th>구름</th>
-            <th>강수확률</th>
-            <th>강수량</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="weather : ${weatherGeneralDataList}">
-            <td th:text="${weather.fcstDate}"></td>
-            <td th:text="${weather.fcstTime}"></td>
-            <td th:text="${weather.temperature}"></td>
-            <td th:text="${weather.windSpeed}"></td>
-            <td th:text="${weather.skyCondition}"></td>
-            <td th:text="${weather.propabilityOfPrecipitation}"></td>
-            <td th:text="${weather.precipitation}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<table>
+    <caption>Weather General Data</caption>
+    <thead>
+    <tr>
+        <th>날짜</th>
+        <th>시간</th>
+        <th>기온</th>
+        <th>풍속</th>
+        <th>구름</th>
+        <th>강수확률</th>
+        <th>강수량</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="weather : ${weatherGeneralDataList}">
+        <td th:text="${weather.fcstDate}"></td>
+        <td th:text="${weather.fcstTime}"></td>
+        <td th:text="${weather.temperature}"></td>
+        <td th:text="${weather.windSpeed}"></td>
+        <td th:text="${weather.skyCondition}"></td>
+        <td th:text="${weather.propabilityOfPrecipitation}"></td>
+        <td th:text="${weather.precipitation}"></td>
+    </tr>
+    </tbody>
+</table>
 <button onclick="goToParent()">뒤로가기</button>
 <script src="/js/weather/all.js"></script>
 

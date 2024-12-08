@@ -42,39 +42,37 @@
 
 
 <h2>Lighting Command 예약 내역</h2>
-<div class="scroll">
-    <table>
-        <thead>
-        <tr>
-            <th>Category</th>
-            <th>Command</th>
-            <th>Value</th>
-            <th>Timestamp</th>
-            <th>Status</th>
-            <th>Cancel</th>
+<table>
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th>Command</th>
+        <th>Value</th>
+        <th>Timestamp</th>
+        <th>Status</th>
+        <th>Cancel</th>
 
-        </tr>
-        </thead>
-        <tbody>
-        <!-- 타임리프 문법으로 데이터 반복 -->
-        <tr th:each="commandData : ${lightingReserveCommandDataList}">
-            <td th:text="${commandData.category}">Category</td>
-            <td th:text="${commandData.command}">Command</td>
-            <td th:text="${commandData.value}">Value</td>
-            <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">
-                Timestamp
-            </td>
-            <td th:text="${commandData.status}">Status</td>
-            <td>
-                <form action="/reserve/lighting/delete" method="post">
-                    <input type="hidden" name="id" th:value="${commandData.id}"/>
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 타임리프 문법으로 데이터 반복 -->
+    <tr th:each="commandData : ${lightingReserveCommandDataList}">
+        <td th:text="${commandData.category}">Category</td>
+        <td th:text="${commandData.command}">Command</td>
+        <td th:text="${commandData.value}">Value</td>
+        <td th:text="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(commandData.timestamp)}">
+            Timestamp
+        </td>
+        <td th:text="${commandData.status}">Status</td>
+        <td>
+            <form action="/reserve/lighting/delete" method="post">
+                <input type="hidden" name="id" th:value="${commandData.id}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 
 <button onclick="goToParent()">뒤로가기</button>
