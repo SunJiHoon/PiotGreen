@@ -110,7 +110,7 @@ while True:
     mask[:, frame_width // 2:] = 255
 
     frame_delta = cv2.absdiff(prev_gray, gray)
-    frame_delta = cv2.bitwise_and(frame_delta, frame_delta, mask=mask)
+    #frame_delta = cv2.bitwise_and(frame_delta, frame_delta, mask=mask)
 
     motion_mask = frame_delta > 25
     motion_detected = np.sum(motion_mask) > 1000
