@@ -21,6 +21,7 @@ public class SocketServerService {
 //- irrigation: 8090
 //- lighting: 8091
     private static final int SERVER_PORT = 8088; // 서버 포트 설정
+    private final ManagerDataStorageService managerDataStorageService;
 
     private SimpMessagingTemplate messagingTemplate; // WebSocket 메시지 전송 템플릿
     private final LightingDataStorageService lightingDataStorageService;
@@ -162,7 +163,17 @@ public class SocketServerService {
         try {
 //            int dangerLevel = Integer.parseInt(data);
             String dangerLevel = data.compareTo("0") == 0 ? "safe" : "danger";
+
+            if(intrusionDataStorageService.canSendDangerAlert()){
+                String dangerMessage = "위험 발생: 불법 침입 감지!";
+                managerDataStorageService.sendMessageToAllManger(dangerMessage);
+            }
+            else {
+                System.out.println("최근 10분 이내 위험 상태가 감지되어 알림을 보내지 않습니다.");
+            }
+
             intrusionDataStorageService.saveIntrusionData(dangerLevel);
+
         } catch (NumberFormatException e) {
             System.out.println("Invalid intrusion data value: " + data);
         }
