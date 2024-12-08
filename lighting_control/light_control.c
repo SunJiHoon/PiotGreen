@@ -6,8 +6,8 @@
 #define THRESHOLD 40
 #define LED1PINfir 1
 #define LED2PINfir 23
-#define LED1PINsec 24
-#define LED2PINsec 26
+#define LED1PINsec 26
+#define LED2PINsec 24
 
 // 본 프로그램은 자동/수종모드 여부에 따라 led를 제어합니다.
 
