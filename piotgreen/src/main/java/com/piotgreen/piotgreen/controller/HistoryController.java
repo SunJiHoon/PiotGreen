@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -54,6 +55,9 @@ public class HistoryController {
         List<LedData> ledDataList = lightingDataStorageService.getLedDataByYearAndMonth(year, month);
         List<LightData> lightDataList = lightingDataStorageService.getLightDataByYearAndMonth(year, month);
 
+        Collections.reverse(ledDataList);
+        Collections.reverse(lightDataList);
+
         model.addAttribute("ledDataList", ledDataList);
         model.addAttribute("lightDataList", lightDataList);
         model.addAttribute("year", year);
@@ -77,6 +81,7 @@ public class HistoryController {
 
 
         List<IrrigationData> irrigationDataList = irrigationDataStorageService.getIrrigationDataByYearAndMonth(year, month);
+        Collections.reverse(irrigationDataList);
         model.addAttribute("irrigationDataList", irrigationDataList);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
@@ -98,6 +103,9 @@ public class HistoryController {
 
         // 서비스 계층에서 데이터 가져오기
         List<IntrusionData> intrusionDataList = intrusionDataStorageService.getIntrusionDataByYearAndMonth(year, month);
+        // 역순으로 정렬
+        Collections.reverse(intrusionDataList);
+
 
         // 모델에 데이터 추가
         model.addAttribute("intrusionDataList", intrusionDataList);
