@@ -1,3 +1,8 @@
+.irrigation-table {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
