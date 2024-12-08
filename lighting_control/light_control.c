@@ -20,7 +20,7 @@ int main()
     pinMode(LED2PINsec, PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(19);
-    pwmSetRange(1024);
+    pwmSetRange(60);
 
     sqlite3 *db;
     sqlite3_stmt *stmt1;
@@ -63,9 +63,9 @@ int main()
                 // 자동모드
                 if (Value1 < THRESHOLD)
                 {
-                    pwmWrite(LED1PINfir, 1024 - Value1 * 1024 / 100);
-                    pwmWrite(LED1PINsec, 1024 - Value1 * 1024 / 100);
-                    printf("LED1: %d\n", 1024 - Value1 * 1024 / 100);
+                    pwmWrite(LED1PINfir, 60 - Value1 * 1024 / 100);
+                    pwmWrite(LED1PINsec, 60 - Value1 * 1024 / 100);
+                    printf("LED1: %d\n", 60 - Value1 * 1024 / 100);
                     led1 = 1;
                 }
                 else
@@ -76,9 +76,9 @@ int main()
                 }
                 if (Value2 < THRESHOLD)
                 {
-                    pwmWrite(LED2PINfir, 1024 - Value2 * 1024 / 100);
-                    pwmWrite(LED2PINsec, 1024 - Value2 * 1024 / 100);
-                    printf("LED2: %d\n", 1024 - Value2 * 1024 / 100);
+                    pwmWrite(LED2PINfir, 60 - Value2 * 1024 / 100);
+                    pwmWrite(LED2PINsec, 60 - Value2 * 1024 / 100);
+                    printf("LED2: %d\n", 60 - Value2 * 1024 / 100);
                     led2 = 1;
                 }
                 else
