@@ -1,5 +1,6 @@
 package com.piotgreen.piotgreen.service;
 
+import com.piotgreen.piotgreen.repository.MessageLogRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +29,7 @@ public class SocketServerService {
     private final LightingDataStorageService lightingDataStorageService;
     private final IrrigationDataStorageService irrigationDataStorageService;
     private final IntrusionDataStorageService intrusionDataStorageService;
+    private final MessageLogRepository messageLogRepository;
 
     @PostConstruct
     public void startServer() {
@@ -164,12 +167,12 @@ public class SocketServerService {
 //            int dangerLevel = Integer.parseInt(data);
             String dangerLevel = data.compareTo("0") == 0 ? "safe" : "danger";
 
-            if(intrusionDataStorageService.canSendDangerAlert() && "danger".equals(dangerLevel)){
+            if(!messageLogRepository.existsRecentMessage(LocalDateTime.now().minusMinutes(10)) && "danger".equals(dangerLevel)){
                 String dangerMessage = "위험 발생: 불법 침입 감지!";
                 managerDataStorageService.sendMessageToAllManger(dangerMessage);
             }
             else {
-                System.out.println("최근 10분 이내 위험 상태가 감지되어 알림을 보내지 않습니다.");
+                System.out.println("danger이 아니거나, 최근 10분 이내 메시지를 보내서 알림을 보내지 않습니다.");
             }
 
             intrusionDataStorageService.saveIntrusionData(dangerLevel);
