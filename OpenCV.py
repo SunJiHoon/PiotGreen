@@ -176,7 +176,7 @@ while True:
         GPIO.output(BUZZER_PIN, GPIO.LOW)
 
         if motion_detected_flag:
-            sock_send.send(b"intrusion_detection:safe:1\n")
+            sock_send.send(b"intrusion_detection:danger:0\n")
             motion_detected_flag = False
 
     prev_gray = gray.copy()
