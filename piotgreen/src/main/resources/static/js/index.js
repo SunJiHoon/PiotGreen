@@ -12,11 +12,10 @@
 
 const soilMoistureElement = document.getElementById("soil-moisture");
 const lightLevelElement = document.getElementById("light-level");
-const intrusionLevelElement = document.getElementById("intrusion-level-1");
+// const intrusionLevelElement = document.getElementById("intrusion-level-1");
 const intrusionLevelElement99 = document.getElementById("intrusion-level-199");
-const intrusionIndicatorElement = document.getElementById('intrusion-indicator');
-const intrusionIndicatorElement99 = document.getElementById('intrusion-indicator99');
-
+// const intrusionIndicatorElement = document.getElementById('intrusion-indicator');
+// const intrusionIndicatorElement99 = document.getElementById('intrusion-indicator99');
 const intrusionIndicatorElement2 = document.getElementById('intrusion-section-1');
 
 const socket = new SockJS('/websocket');
@@ -86,16 +85,16 @@ stompClient.connect({}, function () {
                     if (data !== undefined) {
                         // intrusionLevelElement.textContent = data;
                         if (data === "0") {
-                            intrusionLevelElement.textContent = "SAFE";
-                            intrusionIndicatorElement.className = "indicator safe";
+                            // intrusionLevelElement.textContent = "SAFE";
+                            // intrusionIndicatorElement.className = "indicator safe";
                             intrusionIndicatorElement2.className = "intrusion-container safe"
-                            intrusionIndicatorElement99.className ="indicator safe";
+                            // intrusionIndicatorElement99.className ="indicator safe";
                             intrusionLevelElement99.textContent = "SAFE";
                         } else if (data === "1") {
-                            intrusionLevelElement.textContent = "DANGER";
-                            intrusionIndicatorElement.className = "indicator danger";
+                            // intrusionLevelElement.textContent = "DANGER";
+                            // intrusionIndicatorElement.className = "indicator danger";
                             intrusionIndicatorElement2.className = "intrusion-container danger"
-                            intrusionIndicatorElement99.className ="indicator danger";
+                            // intrusionIndicatorElement99.className ="indicator danger";
                             intrusionLevelElement99.textContent = "DANGER";
                         }
 
