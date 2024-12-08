@@ -11,7 +11,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 SECURITY_LED_PIN = 23  # 보안 모드 활성화 LED
-MOTION_LED_PIN = 24    # 움직임 감지 LED
+MOTION_LED_PIN = 14    # 움직임 감지 LED (빨간색)
 SECURITY_OFF_LED_PIN = 25  # 보안 모드 비활성화 LED
 BUZZER_PIN = 8         # 움직임 감지 시 부저
 
@@ -26,9 +26,9 @@ GPIO.output(SECURITY_OFF_LED_PIN, GPIO.LOW)
 GPIO.output(BUZZER_PIN, GPIO.LOW)
 
 # 날씨 API 설정
-WEATHER_API_KEY = "e548fb177a976133d31021053019b35d"  # OpenWeatherMap API 키
-LAT = "37.5665"  # 서울의 위도
-LON = "126.9780"  # 서울의 경도
+WEATHER_API_KEY = "e548fb177a976133d31021053019b35d"
+LAT = "37.5665"
+LON = "126.9780"
 WEATHER_API_URL = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={WEATHER_API_KEY}"
 
 weather_data = {}
@@ -39,44 +39,36 @@ def fetch_weather():
     global motion_threshold, min_area, weather_data
     while True:
         try:
-            print("Fetching weather data...")
             response = requests.get(WEATHER_API_URL)
             if response.status_code == 200:
-                # 응답 처리
                 weather_data = response.json()
                 weather_conditions = [w['main'].lower() for w in weather_data.get('weather', [])]
                 wind_speed = weather_data.get('wind', {}).get('speed', 0)
 
                 # 날씨 조건에 따른 민감도 조정
                 if 'snow' in weather_conditions:
-                    motion_threshold = 50  # 눈: 민감도 낮춤
+                    motion_threshold = 50
                     min_area = 2000
                 elif 'rain' in weather_conditions:
-                    motion_threshold = 60  # 비: 민감도 더 낮춤
+                    motion_threshold = 60
                     min_area = 2500
-                elif wind_speed > 10:  # 바람이 많이 부는 경우
+                elif wind_speed > 10:
                     motion_threshold = 80
                     min_area = 3000
                 else:
-                    motion_threshold = 30  # 기본 민감도
+                    motion_threshold = 30
                     min_area = 1500
-
                 print(f"Weather updated: {weather_conditions}, Wind Speed: {wind_speed}, "
                       f"Motion Threshold: {motion_threshold}, Min Area: {min_area}")
-            elif response.status_code == 401:
-                print("Unauthorized: Check your API key.")
             else:
                 print(f"Failed to fetch weather data: HTTP {response.status_code}")
         except Exception as e:
             print(f"Error fetching weather data: {e}")
+        time.sleep(300)
 
-        time.sleep(300)  # 5분 간격으로 날씨 데이터 갱신
-
-# 날씨 업데이트 스레드 시작
 weather_thread = threading.Thread(target=fetch_weather, daemon=True)
 weather_thread.start()
 
-# 소켓 통신 설정
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('0.0.0.0', 8089))
 server_socket.listen(1)
@@ -148,6 +140,7 @@ while True:
         continue
 
     if not detection_enabled:
+        sock_send.send(b"intrusion_detection:safe:1\n")  # 감지되지 않을 때 안전 상태 전송
         continue
 
     frame = cv2.resize(frame, (frame_width, frame_height))
@@ -176,7 +169,6 @@ while True:
             sock_send.send(b"intrusion_detection:danger:1\n")
             motion_detected_flag = True
 
-        # Bounding Box 좌표 출력
         x, y, w, h = cv2.boundingRect(largest_contour)
         print(f"Motion detected: Bounding box=(({x}, {y}), ({x+w}, {y+h}))")
     else:
@@ -184,10 +176,9 @@ while True:
         GPIO.output(BUZZER_PIN, GPIO.LOW)
 
         if motion_detected_flag:
-            sock_send.send(b"intrusion_detection:danger:0\n")
+            sock_send.send(b"intrusion_detection:safe:1\n")
             motion_detected_flag = False
 
-    # 업데이트된 Gray 프레임 저장
     prev_gray = gray.copy()
 
 cap.release()
