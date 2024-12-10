@@ -203,8 +203,17 @@ PiotGreen은 기능별로 모듈화된 구조를 채택하여, 독립적으로 �
 
 ### 주요 시스템
 - **카메라를 이용한 야생동물 침입 감지 시스템**.
+
+![image](https://github.com/user-attachments/assets/6bd3c8c6-f3e0-4739-8bc1-099fd060584b)
+
+![image](https://github.com/user-attachments/assets/3661e602-3dea-4fce-8d1f-6c5a7783a497)
+
 - **토양 수분 모니터링 및 자동 관수 시스템**.
 - **조도 센서와 LED를 활용한 광량 제어 시스템**.
+
+![image](https://github.com/user-attachments/assets/3f6c78d0-8453-4ada-a092-0ecf8692659b)
+
+![image](https://github.com/user-attachments/assets/a5acb801-c362-4ca4-bc18-197614732a39)
 
 ---
 
