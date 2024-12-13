@@ -110,6 +110,11 @@ def read_adc_per(channel):
     response = spi.xfer2(buf)
     adc_value = ((response[1] & 3) << 8) + response[2]
     percentage = (1023 - adc_value) * 100 // 1023
+    
+    if percentage >= 69:
+        percentage *= 1.2
+    elif percentage >= 59:
+        percentage *= 1.1
 
     return percentage
 

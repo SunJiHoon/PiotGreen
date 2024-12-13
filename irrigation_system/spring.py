@@ -9,8 +9,8 @@ current_time = current_datetime.strftime("%H%M")
 url = "http://localhost:8080/weather/json"
 
 params = {
-        "baseDate": "20241202",
-        "baseTime": "1400",
+        "baseDate": today_date,
+        "baseTime": current_time,
         "nx": "55",
         "ny": "127"
         }

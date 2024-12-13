@@ -35,23 +35,23 @@ int read_adc(int channel) {
 }
 
 // ADC 값을 읽어와 출력값을 설정하는 함수
-void return_value(int* val, float* percent) {
-    int adc_value = read_adc(0); // 채널 0에서 읽음
+void return_value(int* val, int* percent) {
+    int adc_value = read_adc(SPI_CHANNEL); // 채널 0에서 읽음
     if (adc_value == -1) {
         printf("ADC 읽기 오류\n");
         *val = -1;
-        *percent = 0.0f;
+        *percent = 0;
         return;
     }
-
-    double percentage = (1023 - adc_value) * 100 / 1023;
+    int percentage = (1023 - adc_value) * 100 / 1023;
     *val = adc_value;
     *percent = percentage;
+
 }
 
 int main(int argc, char** argv) {
     int soil_value;
-    float percent;
+    int percent;
 
     int sockfd;
     struct sockaddr_in server_addr;
@@ -105,9 +105,9 @@ int main(int argc, char** argv) {
         }
 
         // 전송할 문자열 준비
-	printf("토양 수분 값:%d\n", soil_value);
+	//printf("토양 수분 값:%d\n", soil_value);
         char str_val[50]; // 동적 메모리 대신 정적 크기의 배열 사용
-        snprintf(str_val, sizeof(str_val), "irrigation_system:moisture:%.1f\n", percent);
+        snprintf(str_val, sizeof(str_val), "irrigation_system:moisture:%d\n", percent);
 
 
         // 문자열을 소켓으로 전송
